@@ -12,8 +12,8 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-	private static Camera mainCam;
-	private CameraPreview camView;
+
+	
 	private Button goToCam;
 
 	@Override
