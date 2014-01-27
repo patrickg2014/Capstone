@@ -1,4 +1,0 @@
-Capstone
-========
-
-Capstone Project Repository
