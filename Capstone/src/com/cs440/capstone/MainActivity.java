@@ -55,10 +55,6 @@ public class MainActivity extends Activity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 17));
 
         map.addMarker(new MarkerOptions()
-                .title("Puget Sound")
-                .snippet("Where our tour is.")
-                .position(pugetsound));
-        map.addMarker(new MarkerOptions()
         .title("Wheelock")
         .snippet("stuff")
         .position(wheelock));
