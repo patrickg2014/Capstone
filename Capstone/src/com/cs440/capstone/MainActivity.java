@@ -39,17 +39,24 @@ public class MainActivity extends Activity {
 		
 
         // Get a handle to the Map Fragment
+		
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
+        
+        //map.setMyLocationEnabled(true);
 
-        LatLng sydney = new LatLng(-33.867, 151.206);
+        
+        LatLng sydney = new LatLng(47.2626, -122.4817);
+        
+        //LatLng sydney = new LatLng(map.getMyLocation().getLatitude(),
+        //1		map.getMyLocation().getLatitude());
 
         map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17));
 
         map.addMarker(new MarkerOptions()
-                .title("Sydney")
-                .snippet("The most populous city in Australia.")
+                .title("Puget Sound")
+                .snippet("Where our tour is.")
                 .position(sydney));
     	}
 
