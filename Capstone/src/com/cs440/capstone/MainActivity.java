@@ -46,18 +46,22 @@ public class MainActivity extends Activity {
         //map.setMyLocationEnabled(true);
 
         
-        LatLng sydney = new LatLng(47.2626, -122.4817);
-        
+        LatLng pugetsound = new LatLng(47.2626, -122.4817);
+        LatLng wheelock = new LatLng(47.263139,-122.478933);
         //LatLng sydney = new LatLng(map.getMyLocation().getLatitude(),
         //1		map.getMyLocation().getLatitude());
 
         map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 17));
 
         map.addMarker(new MarkerOptions()
                 .title("Puget Sound")
                 .snippet("Where our tour is.")
-                .position(sydney));
+                .position(pugetsound));
+        map.addMarker(new MarkerOptions()
+        .title("Wheelock")
+        .snippet("stuff")
+        .position(wheelock));
     	}
 
 	

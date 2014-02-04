@@ -3,6 +3,7 @@
 	<name>google-play-services_lib</name>
 	<comment></comment>
 	<projects>
+		<project>Capstone</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
