@@ -2,6 +2,7 @@ package com.cs440.capstone;
 
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,10 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+
+@SuppressLint("NewApi")
 public class MainActivity extends Activity {
 
 
@@ -29,7 +34,32 @@ public class MainActivity extends Activity {
 				cameraActivity();
 			}
 		});
-	}
+		
+		// Map
+		
+
+        // Get a handle to the Map Fragment
+		
+        GoogleMap map = ((MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map)).getMap();
+        
+        //map.setMyLocationEnabled(true);
+
+        
+        LatLng sydney = new LatLng(47.2626, -122.4817);
+        
+        //LatLng sydney = new LatLng(map.getMyLocation().getLatitude(),
+        //1		map.getMyLocation().getLatitude());
+
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17));
+
+        map.addMarker(new MarkerOptions()
+                .title("Puget Sound")
+                .snippet("Where our tour is.")
+                .position(sydney));
+    	}
+
 	
 	public void cameraActivity(){
 		Intent intent = new Intent(this, CameraActivity.class);
