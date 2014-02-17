@@ -12,12 +12,13 @@ public class CampusInfo {
 	
 	public ArrayList<ArrayList<Marker>> keepers= new ArrayList();
 	 public ArrayList<ArrayList> listoflists = new ArrayList();
-	 ArrayList<Marker> allMarkers = new ArrayList ();
+	 static ArrayList<Marker> allMarkers = new ArrayList ();
 	 ArrayList<Marker> currentlyvisable = new ArrayList();
-	 GoogleMap map = null;
+	 public GoogleMap map = null;
 	 
 	 public CampusInfo(GoogleMap map){
 		 this.map = map;
+		 createMarkers();
 	 }
 	
 	public void createMarkers(){
@@ -222,5 +223,9 @@ public class CampusInfo {
 			
 			}
 		}
+	public static ArrayList getall()
+	{
+		return allMarkers;
+	}
 
 }

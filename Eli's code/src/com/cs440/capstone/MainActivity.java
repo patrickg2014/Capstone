@@ -54,24 +54,6 @@ public class MainActivity extends Activity {
         CampusInfo campusInfo = new CampusInfo(map);
         campusInfo.showMarkers();
     	}
-	
-	public void whatshouldwesee()
-	{
-		Location myloc= map.getMyLocation();
-		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
-		currentlyvisable.clear();
-		for(Marker m: allMarkers){
-			double longi= m.getPosition().longitude;
-			double lati = m.getPosition().latitude;
-			double longi1= mylatlng.longitude;
-			double lati1 =mylatlng.latitude;
-			if((longi1+lati1)-(longi-lati)<=.001)
-			{
-				currentlyvisable.add(m);
-			}
-			
-		}
-	}
 
 	
 	public void cameraActivity(){
