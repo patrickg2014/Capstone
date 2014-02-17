@@ -90,6 +90,17 @@ containing a value of this type.
 <colgroup align="left" />
 <colgroup align="left" />
 <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>left</code></td><td>0</td><td></td></tr>
+<tr><td><code>right</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static final int labelPosition=0x7f010012;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
 <tr><td><code>none</code></td><td>0</td><td></td></tr>
 <tr><td><code>normal</code></td><td>1</td><td></td></tr>
 <tr><td><code>satellite</code></td><td>2</td><td></td></tr>
@@ -98,6 +109,14 @@ containing a value of this type.
 </table>
          */
         public static final int mapType=0x7f010003;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int showText=0x7f010011;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -221,13 +240,16 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f050008;
-        public static final int button1=0x7f050005;
-        public static final int camera_layout=0x7f050007;
+        public static final int action_settings=0x7f05000b;
+        public static final int button1=0x7f050007;
+        public static final int camera_layout=0x7f050009;
         public static final int hybrid=0x7f050004;
-        public static final int map=0x7f050006;
+        public static final int left=0x7f050005;
+        public static final int map=0x7f050008;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
+        public static final int overlay_layout=0x7f05000a;
+        public static final int right=0x7f050006;
         public static final int satellite=0x7f050002;
         public static final int terrain=0x7f050003;
     }
@@ -445,6 +467,52 @@ containing a value of this type.
           @attr name com.cs440.capstone:adUnitId
         */
         public static final int AdsAttrs_adUnitId = 2;
+        /** Attributes that can be used with a CameraOverlay.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #CameraOverlay_labelPosition com.cs440.capstone:labelPosition}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraOverlay_showText com.cs440.capstone:showText}</code></td><td></td></tr>
+           </table>
+           @see #CameraOverlay_labelPosition
+           @see #CameraOverlay_showText
+         */
+        public static final int[] CameraOverlay = {
+            0x7f010011, 0x7f010012
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.cs440.capstone.R.attr#labelPosition}
+          attribute's value can be found in the {@link #CameraOverlay} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>left</code></td><td>0</td><td></td></tr>
+<tr><td><code>right</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name com.cs440.capstone:labelPosition
+        */
+        public static final int CameraOverlay_labelPosition = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.cs440.capstone.R.attr#showText}
+          attribute's value can be found in the {@link #CameraOverlay} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.cs440.capstone:showText
+        */
+        public static final int CameraOverlay_showText = 0;
         /** Attributes that can be used with a MapAttrs.
            <p>Includes the following attributes:</p>
            <table>

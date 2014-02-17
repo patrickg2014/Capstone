@@ -6,7 +6,9 @@ int attr cameraTargetLat 0x7f010005
 int attr cameraTargetLng 0x7f010006
 int attr cameraTilt 0x7f010007
 int attr cameraZoom 0x7f010008
+int attr labelPosition 0x7f010012
 int attr mapType 0x7f010003
+int attr showText 0x7f010011
 int attr uiCompass 0x7f010009
 int attr uiRotateGestures 0x7f01000a
 int attr uiScrollGestures 0x7f01000b
@@ -58,13 +60,16 @@ int drawable ic_plusone_medium_off_client 0x7f020019
 int drawable ic_plusone_small_off_client 0x7f02001a
 int drawable ic_plusone_standard_off_client 0x7f02001b
 int drawable ic_plusone_tall_off_client 0x7f02001c
-int id action_settings 0x7f050008
-int id button1 0x7f050005
-int id camera_layout 0x7f050007
+int id action_settings 0x7f05000b
+int id button1 0x7f050007
+int id camera_layout 0x7f050009
 int id hybrid 0x7f050004
-int id map 0x7f050006
+int id left 0x7f050005
+int id map 0x7f050008
 int id none 0x7f050000
 int id normal 0x7f050001
+int id overlay_layout 0x7f05000a
+int id right 0x7f050006
 int id satellite 0x7f050002
 int id terrain 0x7f050003
 int integer google_play_services_version 0x7f070000
@@ -107,6 +112,9 @@ int[] styleable AdsAttrs { 0x7f010000, 0x7f010001, 0x7f010002 }
 int styleable AdsAttrs_adSize 0
 int styleable AdsAttrs_adSizes 1
 int styleable AdsAttrs_adUnitId 2
+int[] styleable CameraOverlay { 0x7f010011, 0x7f010012 }
+int styleable CameraOverlay_labelPosition 1
+int styleable CameraOverlay_showText 0
 int[] styleable MapAttrs { 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f, 0x7f010010 }
 int styleable MapAttrs_cameraBearing 1
 int styleable MapAttrs_cameraTargetLat 2
