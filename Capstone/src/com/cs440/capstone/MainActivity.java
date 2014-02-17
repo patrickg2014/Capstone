@@ -10,9 +10,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.app.ActionBar;
 
 import com.google.android.gms.maps.*;
@@ -26,12 +28,16 @@ public class MainActivity extends Activity {
 	 ArrayList<Marker> allMarkers = new ArrayList ();
 	 ArrayList<Marker> currentlyvisable = new ArrayList();
 	private Button goToCam;
+	private EditText edittext;
+	
+	private Location currentLocation;
 	GoogleMap map =null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		edittext = (EditText) findViewById(R.id.editText1);
 		goToCam = (Button) findViewById(R.id.button1);
 		goToCam.setOnClickListener(new View.OnClickListener() {
 			
@@ -50,7 +56,9 @@ public class MainActivity extends Activity {
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
         
-        //map.setMyLocationEnabled(true);
+        
+        
+       // map.setMyLocationEnabled(true);
 
         
         LatLng pugetsound = new LatLng(47.2626, -122.4817);
@@ -78,6 +86,20 @@ public class MainActivity extends Activity {
         //1		map.getMyLocation().getLatitude());
 
         map.setMyLocationEnabled(true);
+        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+			
+			@Override
+			public void onMyLocationChange(Location location) {
+				if(currentLocation != location)
+				{
+				currentLocation = location;
+				whatshouldwesee();
+			       for(Marker m: currentlyvisable)
+			    	   Log.d("logout", m.getTitle());
+				}
+			}
+		});
+		
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));
         ArrayList<Marker> acadmicBuildings = new ArrayList ();
         ArrayList<Marker> dorms = new ArrayList ();
@@ -214,24 +236,53 @@ public class MainActivity extends Activity {
        allMarkers.add(kittredgeMarker); 
        addkeepers(allMarkers);
        showMarkers();
+       
+       ArrayList<Marker> v = visibility();
+       if(v.size() > 0)
+    	   edittext.setText(v.get(0).getTitle()); 
+       
+
+     
     	}
 	
 	public void whatshouldwesee()
 	{
-		Location myloc= map.getMyLocation();
+		//Location myloc= map.getMyLocation();
+		Location myloc = currentLocation;
 		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
+		
 		currentlyvisable.clear();
 		for(Marker m: allMarkers){
 			double longi= m.getPosition().longitude;
 			double lati = m.getPosition().latitude;
 			double longi1= mylatlng.longitude;
 			double lati1 =mylatlng.latitude;
-			if((longi1+lati1)-(longi-lati)<=.001)
+			
+			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)
+//					(longi1+lati1)-(longi-lati)<=.001)
 			{
 				currentlyvisable.add(m);
 			}
 			
 		}
+	}
+	
+	public ArrayList<Marker> visibility()
+	{
+		VisibleRegion vr = map.getProjection().getVisibleRegion();
+		/*
+		LatLng farleft = vr.farLeft;
+		LatLng nearleft = vr.nearLeft;
+		LatLng farright = vr.farRight;
+		LatLng nearright = vr.nearRight; */
+		LatLngBounds b = vr.latLngBounds; 
+		ArrayList<Marker> markersinbound = new ArrayList<Marker>();
+		for(Marker m: allMarkers)
+		{
+			if(b.contains(m.getPosition()))
+				markersinbound.add(m);
+		}
+		return markersinbound;
 	}
 
 	
