@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -14,6 +13,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.Camera;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,8 +31,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private CameraPreview camView;
 	private SensorManager mSensorManager;
 	public ArrayList<Marker> allMarkers = new ArrayList ();
+	public ArrayList<Marker> currentlyNear = new ArrayList();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
-	public ArrayList<Marker> currentlyvisable1 = new ArrayList();
 	public float heading;
 	public Location currentLocation;
 	private boolean mShowText;
@@ -46,34 +46,31 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	protected void onCreate(Bundle savedInstanceState) {
 
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.camera_layout);
-		getCameraInstance();
-		camView = new CameraPreview(this, mainCam);
-		FrameLayout preview = (FrameLayout)findViewById(R.id.camera_layout);
-		preview.addView(camView);
-		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		currentLocation=getGPS();
-		camover = (CameraOverlay)findViewById(R.id.overlay_layout);
+		super.onCreate(savedInstanceState);	//pulls and saved state for the activity
+		setContentView(R.layout.camera_layout);	// sets the layout
+		getCameraInstance();	//calls to start up the camera
+		camView = new CameraPreview(this, mainCam);	// allows the screen to see what the camera sensor is seeing
+		FrameLayout preview = (FrameLayout)findViewById(R.id.camera_layout);	// updates the layout
+		preview.addView(camView);	
+		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);// sets up a sensor manager to help with gps and comapss data
+		currentLocation=getGPS();	// gets our current location
+		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		
 		
 		
 		Log.d("Changing", "LETS GO!");
 	}
 
-	public static Camera getCameraInstance(){
+	public static Camera getCameraInstance() //starts up a camera if the device has one available 
+		{
 		mainCam = null;
 		try{
-			
-			
 			mainCam = Camera.open();
-	
-			
+
 		}catch(Exception e){
 			//Camera is not available
 		}
 		return mainCam;
-		
 	}
 
 	/* (non-Javadoc)
@@ -124,42 +121,55 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		Location myloc = currentLocation;
    		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
    		
+   		currentlyNear.clear();
    		currentlyvisable.clear();
    		ArrayList<Marker>  marks= CampusInfo.getall();
-   		for(Marker m: marks){
-   			double longi= m.getPosition().longitude;
+   		for(Marker m: marks)	//loops through all a markers to see which ones are within a certain radius of us
+   		{
+   			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
    			double lati = m.getPosition().latitude;
    			double longi1= mylatlng.longitude;
    			double lati1 =mylatlng.latitude;
-   			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)
+   			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)	//check to make sure they are in the radius
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
-   				currentlyvisable.add(m);
+   				currentlyNear.add(m);	//if it is add it to the array
    			}
    			
    		}
-   		float mybearing =heading;
-   		for(Marker m: currentlyvisable){
+   		
+   		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
+   		{
    			Location location = new Location("mloc");
    			  location.setLatitude(m.getPosition().latitude);
    			  location.setLongitude(m.getPosition().longitude);
-   			if(Math.abs(myloc.bearingTo(location)-mybearing)<60)
+   			if(Math.abs(myloc.bearingTo(location)-heading)<60)	//the check to see which ones are
    			{
-   				currentlyvisable1.add(m);
-   				Log.d("near", m.getTitle() + " is near");
+   				currentlyvisable.add(m);
+   				Log.d("near", m.getTitle());
+   				camover.setDisplayText(m.getTitle()); // update the text being written
    				
    			}
-   			camover.setDisplayText(m.getTitle());
+   			if(currentlyvisable.size()==0)
+   					{
+   				camover.setDisplayText("");
+   					}
    		}
    	}
    		public void onMyLocationChange(Location location) {
-   			if(currentLocation != location)
+   			if(currentLocation != location)	//adjust the heading to account for magnetic north vs true north
    			{
-   			currentLocation = location;
-   			whatshouldwesee();
-   		       for(Marker m: currentlyvisable)
-   		    	   Log.d("logout", m.getTitle());
+   				GeomagneticField geoField = new GeomagneticField(
+   		         Double.valueOf(location.getLatitude()).floatValue(),
+   		         Double.valueOf(location.getLongitude()).floatValue(),
+   		         Double.valueOf(location.getAltitude()).floatValue(),
+   		         System.currentTimeMillis()
+   		      );
+   				heading= heading+ geoField.getDeclination();	//add the adjustment value for true north magnetic north difference 
+   			currentLocation = location;	//update our location
+   			whatshouldwesee();	//update the markers that we are near and should be able to view
    			}
+   		       
    		}
 
 	@Override
@@ -170,16 +180,16 @@ public class CameraActivity extends Activity implements SensorEventListener{
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		// TODO Auto-generated method stub
 		
-		heading = Math.round(event.values[0]);
+		heading = Math.round(event.values[0]); //Rounds the current heading to full degrees
 		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
-		if(currentLocation != null)
+		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
-			whatshouldwesee();
+			whatshouldwesee();// update the information about what we are near and what is in our view 
 		}
 	}
-	private Location getGPS() {
+	private Location getGPS() 	// get the current gps location of our device
+		{
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
         List<String> providers = lm.getProviders(true);
 

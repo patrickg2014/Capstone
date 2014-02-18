@@ -20,50 +20,49 @@ import com.google.android.gms.maps.model.*;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
-	
-	 public ArrayList<ArrayList<Marker>> keepers= new ArrayList();
-	 public ArrayList<ArrayList> listoflists = new ArrayList();
-	 ArrayList<Marker> allMarkers = new ArrayList ();
-	 ArrayList<Marker> currentlyvisable = new ArrayList();
+
+	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
+	public ArrayList<ArrayList> listoflists = new ArrayList();
+	ArrayList<Marker> allMarkers = new ArrayList();
+	ArrayList<Marker> currentlyvisable = new ArrayList();
 	private Button goToCam;
-	GoogleMap map =null;
+	GoogleMap map = null;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) //where our app sets up
+		{
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_main);
-		goToCam = (Button) findViewById(R.id.button1);
-		goToCam.setOnClickListener(new View.OnClickListener() {
-			
+		goToCam = (Button) findViewById(R.id.button1);	//sets up the button for going to the camera view this may switch to simply rotating the phone
+		goToCam.setOnClickListener(new View.OnClickListener() //sets up a listener for that button
+		{
+
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) //on click we will go to the cameraActivity
+			{
 				// TODO Auto-generated method stub
 				cameraActivity();
 			}
 		});
-		
+
 		// Map
-		
 
-        // Get a handle to the Map Fragment
-		
-        map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map)).getMap();
-        
-        CampusInfo campusInfo = new CampusInfo(map);
-        campusInfo.showMarkers();
-    	}
+		// Get a handle to the Map Fragment
 
-	
-	public void cameraActivity(){
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
+				.getMap();
+
+		CampusInfo campusInfo = new CampusInfo(map);
+		campusInfo.showMarkers();
+	}
+
+	public void cameraActivity() //what allows us to switch to the camera activity on button click
+	{
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
 
-	
-	
-	
 	public boolean checkCameraHardware(Context context) {
 		if (context.getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA)) {
@@ -79,10 +78,5 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	
-	
-		
+
 }
-
-
