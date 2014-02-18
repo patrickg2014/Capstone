@@ -86,19 +86,7 @@ public class MainActivity extends Activity {
         //1		map.getMyLocation().getLatitude());
 
         map.setMyLocationEnabled(true);
-        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-			
-			@Override
-			public void onMyLocationChange(Location location) {
-				if(currentLocation != location)
-				{
-				currentLocation = location;
-				whatshouldwesee();
-			       for(Marker m: currentlyvisable)
-			    	   Log.d("logout", m.getTitle());
-				}
-			}
-		});
+
 		
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));
         ArrayList<Marker> acadmicBuildings = new ArrayList ();
@@ -237,12 +225,26 @@ public class MainActivity extends Activity {
        addkeepers(allMarkers);
        showMarkers();
        
+       map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+			
+			@Override
+			public void onMyLocationChange(Location location) {
+				if(!currentLocation.equals(location))
+				{
+				currentLocation = location;
+				whatshouldwesee();
+			       for(Marker m: currentlyvisable)
+			    	   Log.d("logout", m.getTitle());
+				}
+			}
+		});
+       
        ArrayList<Marker> v = visibility();
        if(v.size() > 0)
+       {
+    	   Log.d("logout", v.get(0).getTitle());
     	   edittext.setText(v.get(0).getTitle()); 
-       
-
-     
+       }
     	}
 	
 	public void whatshouldwesee()
@@ -263,6 +265,7 @@ public class MainActivity extends Activity {
 			{
 				currentlyvisable.add(m);
 			}
+		
 			
 		}
 	}
