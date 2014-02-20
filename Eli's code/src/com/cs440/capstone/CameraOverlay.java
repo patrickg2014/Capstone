@@ -16,6 +16,8 @@ public class CameraOverlay extends View {
 	private boolean mShowText;
 	private int mTextPos;
 	private String displayText="";
+	public float xPos=0;
+	public float yPos=0;
 
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -46,9 +48,9 @@ public class CameraOverlay extends View {
 		Log.d("draw", "WE ARE DRAWING!!");
 		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.STROKE);
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
-		canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
+		canvas.drawText(displayText, xPos, 300, paint);//draws text at x,y position
 		super.onDraw(canvas);
 	}
 	

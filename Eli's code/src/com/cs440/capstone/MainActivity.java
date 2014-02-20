@@ -3,6 +3,7 @@ package com.cs440.capstone;
 import java.util.ArrayList;
 
 import android.hardware.Camera;
+import android.hardware.SensorEvent;
 import android.location.Location;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -10,7 +11,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.Menu;
+import android.view.OrientationListener;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.app.ActionBar;
@@ -26,7 +30,9 @@ public class MainActivity extends Activity {
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
 	private Button goToCam;
+	public OrientationListener listen;
 	GoogleMap map = null;
+	private SurfaceHolder mHolder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
@@ -56,7 +62,8 @@ public class MainActivity extends Activity {
 		CampusInfo campusInfo = new CampusInfo(map);
 		campusInfo.showMarkers();
 	}
-
+	
+		
 	public void cameraActivity() //what allows us to switch to the camera activity on button click
 	{
 		Intent intent = new Intent(this, CameraActivity.class);

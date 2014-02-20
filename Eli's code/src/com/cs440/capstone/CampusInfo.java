@@ -51,35 +51,12 @@ public class CampusInfo {
 		LatLng kittredge = new LatLng(47.263905, -122.478966);
 
 		map.setMyLocationEnabled(true);
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));// sets
-																			// where
-																			// the
-																			// cameras
-																			// focus
-																			// starts
-																			// and
-																			// how
-																			// zoomed
-																			// out
-																			// we
-																			// are
-																			// we
-																			// may
-																			// want
-																			// to
-																			// use
-																			// this
-																			// to
-																			// zoom
-																			// in
-																			// on
-																			// builds
-																			// when
-																			// you
-																			// enter
-																			// them
-																			// later
-		// arraylists of different categories as to allow sorting later
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));
+		/*
+		 *sets where the cameras focus starts and how zoomed out we are we may want to use this to 
+		 *zoom in on builds when you enter them later arraylists of different categories as to allow sorting later 
+		 */
+
 		ArrayList<Marker> acadmicBuildings = new ArrayList();
 		ArrayList<Marker> dorms = new ArrayList();
 		ArrayList<Marker> art = new ArrayList();
@@ -92,7 +69,7 @@ public class CampusInfo {
 		general.add(subMarker);
 		allMarkers.add(subMarker);
 		Marker jonesMarker = map.addMarker(new MarkerOptions()
-				.title("Jones hall").snippet("some info").position(jones));
+		.title("Jones hall").snippet("some info").position(jones));
 		acadmicBuildings.add(jonesMarker);
 		art.add(jonesMarker);
 		general.add(jonesMarker);
@@ -104,13 +81,13 @@ public class CampusInfo {
 		general.add(mcintyreMarker);
 		allMarkers.add(mcintyreMarker);
 		Marker howarthMarker = map.addMarker(new MarkerOptions()
-				.title("Howarth hall").snippet("some info").position(howarth));
+		.title("Howarth hall").snippet("some info").position(howarth));
 		acadmicBuildings.add(howarthMarker);
 		general.add(howarthMarker);
 		allMarkers.add(howarthMarker);
 		Marker musicMarker = map.addMarker(new MarkerOptions()
-				.title("Music Building/Schneebeck Hall").snippet("some info")
-				.position(music));
+		.title("Music Building/Schneebeck Hall").snippet("some info")
+		.position(music));
 		acadmicBuildings.add(musicMarker);
 		art.add(musicMarker);
 		allMarkers.add(musicMarker);
@@ -120,32 +97,32 @@ public class CampusInfo {
 		acadmicBuildings.add(thompsonMarker);
 		allMarkers.add(thompsonMarker);
 		Marker harnedMarker = map.addMarker(new MarkerOptions()
-				.title("Harned Hall").snippet("some info").position(harned));
+		.title("Harned Hall").snippet("some info").position(harned));
 		acadmicBuildings.add(harnedMarker);
 		allMarkers.add(harnedMarker);
 		Marker collinsMarker = map.addMarker(new MarkerOptions()
-				.title("Collins Memorial Libary").snippet("some info")
-				.position(collins));
+		.title("Collins Memorial Libary").snippet("some info")
+		.position(collins));
 		acadmicBuildings.add(collinsMarker);
 		allMarkers.add(collinsMarker);
 		general.add(collinsMarker);
 		Marker wyattMarker = map.addMarker(new MarkerOptions()
-				.title("Wyatt Hall").snippet("some info").position(wyatt));
+		.title("Wyatt Hall").snippet("some info").position(wyatt));
 		acadmicBuildings.add(wyattMarker);
 		allMarkers.add(wyattMarker);
 		Marker poolMarker = map.addMarker(new MarkerOptions()
-				.title("Warner Hall & Wallace Pool").snippet("some info")
-				.position(pool));
+		.title("Warner Hall & Wallace Pool").snippet("some info")
+		.position(pool));
 		general.add(poolMarker);
 		allMarkers.add(poolMarker);
 		Marker wyerhaseuserMarker = map.addMarker(new MarkerOptions()
-				.title("Weyerhaseuser Hall").snippet("some info")
-				.position(weyerhaseuser));
+		.title("Weyerhaseuser Hall").snippet("some info")
+		.position(weyerhaseuser));
 		acadmicBuildings.add(wyerhaseuserMarker);
 		general.add(wyerhaseuserMarker);
 		allMarkers.add(wyerhaseuserMarker);
 		Marker toddMarker = map.addMarker(new MarkerOptions()
-				.title("Todd/Phibbs Hall").snippet("some info").position(todd));
+		.title("Todd/Phibbs Hall").snippet("some info").position(todd));
 		dorms.add(toddMarker);
 		allMarkers.add(toddMarker);
 		Marker regesterMarker = map
@@ -154,30 +131,30 @@ public class CampusInfo {
 		dorms.add(regesterMarker);
 		allMarkers.add(regesterMarker);
 		Marker sewardMarker = map.addMarker(new MarkerOptions()
-				.title("Seward Hall").snippet("some info").position(seward));
+		.title("Seward Hall").snippet("some info").position(seward));
 		dorms.add(sewardMarker);
 		allMarkers.add(sewardMarker);
 		Marker trimbleMarker = map.addMarker(new MarkerOptions()
-				.title("Trimble Hall").snippet("some info").position(trimble));
+		.title("Trimble Hall").snippet("some info").position(trimble));
 		dorms.add(trimbleMarker);
 		allMarkers.add(trimbleMarker);
 		Marker kilworthMarker = map.addMarker(new MarkerOptions()
-				.title("Kilworth Memorial Chapel").snippet("some info")
-				.position(kilworth));
+		.title("Kilworth Memorial Chapel").snippet("some info")
+		.position(kilworth));
 		general.add(kilworthMarker);
 		allMarkers.add(kilworthMarker);
 		Marker alMarker = map.addMarker(new MarkerOptions()
-				.title("Anderson/Langdon Hall").snippet("some info")
-				.position(al));
+		.title("Anderson/Langdon Hall").snippet("some info")
+		.position(al));
 		dorms.add(alMarker);
 		allMarkers.add(alMarker);
 		Marker schiffMarker = map.addMarker(new MarkerOptions()
-				.title("Schiff Hall").snippet("some info").position(schiff));
+		.title("Schiff Hall").snippet("some info").position(schiff));
 		dorms.add(schiffMarker);
 		allMarkers.add(schiffMarker);
 		Marker kittredgeMarker = map.addMarker(new MarkerOptions()
-				.title("Kittredge Gallery").snippet("some info")
-				.position(kittredge));
+		.title("Kittredge Gallery").snippet("some info")
+		.position(kittredge));
 		art.add(kittredgeMarker);
 		allMarkers.add(kittredgeMarker);
 		// adds all of the lists to a master list
