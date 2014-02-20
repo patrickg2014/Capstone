@@ -181,7 +181,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		
-		heading = Math.round(event.values[0]); //Rounds the current heading to full degrees
+		heading = (Math.round(event.values[0]+event.values[1])+90)%360; //Rounds the current heading to full degrees
 		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
 		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
