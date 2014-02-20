@@ -38,13 +38,14 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private boolean mShowText;
 	private int mTextPos;
 	public CameraOverlay camover;
+	float geo = 0;
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+			
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);	//pulls and saved state for the activity
 		setContentView(R.layout.camera_layout);	// sets the layout
@@ -143,7 +144,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			Location location = new Location("mloc");
    			  location.setLatitude(m.getPosition().latitude);
    			  location.setLongitude(m.getPosition().longitude);
-   			if(Math.abs(myloc.bearingTo(location)-heading)<60)	//the check to see which ones are
+   			
+   			if(Math.abs(myloc.bearingTo(location)-heading)<45)	//the check to see which ones are
    			{
    				currentlyvisable.add(m);
    				Log.d("near", m.getTitle());
@@ -165,7 +167,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		         Double.valueOf(location.getAltitude()).floatValue(),
    		         System.currentTimeMillis()
    		      );
-   				heading= heading+ geoField.getDeclination();	//add the adjustment value for true north magnetic north difference 
+   				geo=geoField.getDeclination();	//add the adjustment value for true north magnetic north difference 
    			currentLocation = location;	//update our location
    			whatshouldwesee();	//update the markers that we are near and should be able to view
    			}
@@ -181,7 +183,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		
-		heading = (Math.round(event.values[0]+event.values[1])+90)%360; //Rounds the current heading to full degrees
+		heading = ((Math.round(event.values[0]+event.values[1])+90)+geo)%360; //Rounds the current heading to full degrees
 		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
 		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
