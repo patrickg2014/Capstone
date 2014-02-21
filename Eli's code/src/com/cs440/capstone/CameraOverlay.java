@@ -1,10 +1,6 @@
 package com.cs440.capstone;
 
 
-import java.util.ArrayList;
-
-import com.google.android.gms.maps.model.Marker;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -20,7 +16,6 @@ public class CameraOverlay extends View {
 	private boolean mShowText;
 	private int mTextPos;
 	private String displayText="";
-	private ArrayList<Marker> nearList;
 
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -53,12 +48,7 @@ public class CameraOverlay extends View {
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(50);
-		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
-		int y= 300;
-		for(int i=0; i<nearList.size(); i++){
-			canvas.drawText(nearList.get(i).getTitle(), 300, y, paint);
-			y = y + 200;
-		}
+		canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		super.onDraw(canvas);
 	}
 	
@@ -75,11 +65,6 @@ public class CameraOverlay extends View {
 		mShowText = showText;
 		invalidate();
 		requestLayout();
-	}
-
-	public void setDisplayArray(ArrayList<Marker> currentlyNear) {
-		nearList = currentlyNear;
-		
 	}
 
 }
