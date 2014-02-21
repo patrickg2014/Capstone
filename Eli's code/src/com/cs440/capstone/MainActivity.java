@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -71,6 +72,17 @@ public class MainActivity extends Activity {
 			return false;
 		}
 	}
+	
+	/**
+	 * This method changes to the CameraActivity when the phone is rotated
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	  if(newConfig.orientation == newConfig.ORIENTATION_LANDSCAPE){
+		  cameraActivity();
+	  }
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,5 +90,6 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
 
 }

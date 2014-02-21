@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -23,6 +24,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class CameraActivity extends Activity implements SensorEventListener{
@@ -55,7 +57,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);// sets up a sensor manager to help with gps and comapss data
 		currentLocation=getGPS();	// gets our current location
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
-		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		
 		
 		Log.d("Changing", "LETS GO!");
@@ -73,19 +75,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		return mainCam;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onConfigurationChanged(android.content.res.Configuration)
-	 */
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		
-	}
 	
-    public static int getScreenOrientation(Activity activity) {
-		return 0;
-        
-      }
-    
     
 	
     @Override
@@ -155,6 +145,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				camover.setDisplayText("");
    					}
    		}
+   		camover.setDisplayArray(currentlyNear);
    	}
    		public void onMyLocationChange(Location location) {
    			if(currentLocation != location)	//adjust the heading to account for magnetic north vs true north
