@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 public class CameraOverlay extends View {
@@ -21,6 +22,7 @@ public class CameraOverlay extends View {
 	private int mTextPos;
 	private String displayText="";
 	private ArrayList<Marker> nearList;
+	private Button displayButton;
 
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -79,7 +81,12 @@ public class CameraOverlay extends View {
 
 	public void setDisplayArray(ArrayList<Marker> currentlyNear) {
 		nearList = currentlyNear;
-		
+	}
+	
+	//Writes the given button to the screen
+	public void setDisplayButton(Button btn){
+		displayButton = btn;
+		invalidate();
 	}
 
 }
