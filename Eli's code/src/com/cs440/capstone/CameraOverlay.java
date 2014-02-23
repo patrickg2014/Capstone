@@ -1,6 +1,8 @@
 package com.cs440.capstone;
 
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,18 +12,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+
+import com.google.android.gms.maps.model.Marker;
+
 
 public class CameraOverlay extends View {
 
 	private boolean mShowText;
 	private int mTextPos;
 	private String displayText="";
-<<<<<<< HEAD
+
 	private ArrayList<Marker> nearList;
 	private Button displayButton;
-=======
->>>>>>> e3c7e1e8202412dfdf70a23e1423bac068acc055
+
 
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -73,7 +76,7 @@ public class CameraOverlay extends View {
 		requestLayout();
 	}
 
-<<<<<<< HEAD
+
 	public void setDisplayArray(ArrayList<Marker> currentlyNear) {
 		nearList = currentlyNear;
 	}
@@ -84,6 +87,4 @@ public class CameraOverlay extends View {
 		invalidate();
 	}
 
-=======
->>>>>>> e3c7e1e8202412dfdf70a23e1423bac068acc055
 }
