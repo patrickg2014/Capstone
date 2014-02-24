@@ -13,6 +13,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -143,6 +144,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				Log.d("near", m.getTitle());
    				camover.setDisplayText(m.getTitle()); // update the text being written to the screen
    				Button btn = new Button(this); //create a new button
+   				btn.setText(m.getTitle()); // set the text of the button
+   				btn.setBackgroundColor(Color.RED); // set the color of the button
+   				btn.setTextColor(Color.WHITE); // set the color of the text
    				camover.setDisplayButton(btn); // set the button to the screen
    			}
    			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
