@@ -7,16 +7,21 @@
 //
 
 #import "BRViewController.h"
-#import <GoogleMaps/GoogleMaps.h>
+
+#define LOCATIONS 20
 
 @interface BRViewController ()
+{
+
+}
 
 @end
 
 @implementation BRViewController
 {
-    GMSMapView *mapView_;
+    CLLocationCoordinate2D theLocations[LOCATIONS];
     
+
 }
 
 - (void)viewDidLoad
@@ -45,38 +50,93 @@
     CLLocationCoordinate2D al = CLLocationCoordinate2DMake(47.264843, -122.480779);
     CLLocationCoordinate2D schiff = CLLocationCoordinate2DMake(47.265246, -122.480095);
     CLLocationCoordinate2D kittredge = CLLocationCoordinate2DMake(47.263905, -122.478966);
-
     
-    CLLocationCoordinate2D locations[] = {pugetsound, sub, jones, mcintyre, howarth, music, thompson, harned, collins,
+    
+    // Dumb way of initializing locations, but can't think of anything better at the moment.
+    CLLocationCoordinate2D initialize[] = {pugetsound, sub, jones, mcintyre, howarth, music, thompson, harned, collins,
         wyatt, pool, weyerhaseuser, todd, regester, seward, trimble, kilworth, al, schiff, kittredge};
+    
+    for(int i = 0; i < LOCATIONS; i++)
+    {
+        theLocations[i] = initialize[i];
+    }
     
     NSArray *names = @[@"pugetsound", @"sub", @"jones", @"mcintyre", @"howarth", @"music", @"thompson", @"harned", @"collins", @"wyatt", @"pool", @"weyerhauser", @"todd", @"regester", @"seward", @"trimble", @"kilworth", @"al", @"schiff", @"kittredge"];
 
 
     
+    
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget: pugetsound zoom: 15];
-    mapView_ = [GMSMapView mapWithFrame:CGRectZero camera:camera];
-    mapView_.myLocationEnabled = YES;
-    self.view = mapView_;
+    _mapview = [GMSMapView mapWithFrame: CGRectZero camera:camera];
+    _mapview.myLocationEnabled = YES;
+    self.view = _mapview;
     
     // Add markers
     
-    NSMutableArray *arrayOfMarkers = [[NSMutableArray alloc] init]; // Array of all markers
+    _arrayOfMarkers = [[NSMutableArray alloc] init]; // Array of all markers
     
     GMSMarker *marker;
     for(int i = 0; i < names.count; i++)
     {
         marker = [[GMSMarker alloc] init];
-        marker.position = locations[i];
+        marker.position = theLocations[i];
         marker.title = names[i];
         marker.snippet = names[i];
-        marker.map = mapView_;
+        marker.map = _mapview;
         
-        [arrayOfMarkers addObject: marker];
+        [_arrayOfMarkers addObject: marker];
     }
+    
+    _currentLocation = _mapview.myLocation;
+    
+    _nearby = [[NSMutableArray alloc] init];
 
     
+    [self startStandardUpdates];
     
+}
+
+- (void)startStandardUpdates
+{
+    // Create the location manager if this object does not
+    // already have one.
+
+    _locationManager = [[CLLocationManager alloc] init];
+    
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    
+    // Set a movement threshold for new events.
+    _locationManager.distanceFilter = 100; // meters
+    
+    [_locationManager startUpdatingLocation];
+}
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    _currentLocation = locations[0];
+    
+    if(_nearby == nil)
+        _nearby = [[NSMutableArray alloc] init];
+    
+    [_nearby removeAllObjects];
+    
+    for(GMSMarker *m in _arrayOfMarkers)
+    {
+        if(ABS(m.position.latitude - _currentLocation.coordinate.latitude) < .001
+           && ABS(m.position.longitude - _currentLocation.coordinate.longitude) < .001)
+        {
+            [_nearby addObject: m];
+            _label.text = m.title;
+        }
+    }
+            [_mapview addSubview: _label];
+    
+}
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+{
+    _currentHeading = newHeading;
 }
 
 
