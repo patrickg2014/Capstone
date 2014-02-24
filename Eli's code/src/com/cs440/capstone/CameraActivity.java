@@ -25,9 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
-
 
 public class CameraActivity extends Activity implements SensorEventListener{
 	
@@ -113,7 +111,6 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		Location myloc = currentLocation;
    		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
    		
-
    		currentlyNear.clear();
    		currentlyvisable.clear();
    		ArrayList<Marker>  marks= CampusInfo.getall();
@@ -126,7 +123,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)	//check to make sure they are in the radius
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
-
+   				currentlyNear.add(m);	//if it is add it to the array
    			}
    			
    		}
@@ -134,24 +131,21 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
    		{
    			Location location = new Location("mloc");
-   			location.setLatitude(m.getPosition().latitude);
-   			location.setLongitude(m.getPosition().longitude);
-   			
-   			if(Math.abs(myloc.bearingTo(location)-heading)<60)	//the check to see which ones are in view
+   			  location.setLatitude(m.getPosition().latitude);
+   			  location.setLongitude(m.getPosition().longitude);
+   			if(Math.abs(myloc.bearingTo(location)-heading)<60)	//the check to see which ones are
    			{
    				currentlyvisable.add(m);
    				Log.d("near", m.getTitle());
-   				camover.setDisplayText(m.getTitle()); // update the text being written to the screen
-   				Button btn = new Button(this); //create a new button
-   				camover.setDisplayButton(btn); // set the button to the screen
+   				camover.setDisplayText(m.getTitle()); // update the text being written
+   				
    			}
-   			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
+   			if(currentlyvisable.size()==0)
    					{
    				camover.setDisplayText("");
    					}
    		}
-   		camover.setDisplayArray(currentlyvisable);
-   		
+   		camover.setDisplayArray(currentlyNear);
    	}
    		public void onMyLocationChange(Location location) {
    			if(currentLocation != location)	//adjust the heading to account for magnetic north vs true north

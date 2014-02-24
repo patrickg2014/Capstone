@@ -49,7 +49,9 @@ public class CampusInfo {
 		LatLng al = new LatLng(47.264843, -122.480779);
 		LatLng schiff = new LatLng(47.265246, -122.480095);
 		LatLng kittredge = new LatLng(47.263905, -122.478966);
-
+		LatLng phiDelt = new LatLng(47.2622160, -122.4853220);
+		LatLng alphaPhi = new LatLng(47.262500, -122.4852470);
+		
 		map.setMyLocationEnabled(true);
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));// sets
 																			// where
@@ -180,6 +182,18 @@ public class CampusInfo {
 				.position(kittredge));
 		art.add(kittredgeMarker);
 		allMarkers.add(kittredgeMarker);
+		
+		
+	
+		Marker phiDeltMarker = map.addMarker(new MarkerOptions().title("Phi Delt")
+				.snippet("dorm").position(phiDelt));
+		general.add(phiDeltMarker);
+		allMarkers.add(phiDeltMarker);
+		Marker alphaPhiMarker = map.addMarker(new MarkerOptions().title("Alpha Phi")
+				.snippet("Dorm").position(alphaPhi));
+		general.add(alphaPhiMarker);
+		allMarkers.add(alphaPhiMarker);
+		
 		// adds all of the lists to a master list
 		listoflists.add(acadmicBuildings);
 		listoflists.add(dorms);
