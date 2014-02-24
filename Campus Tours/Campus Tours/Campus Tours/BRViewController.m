@@ -50,8 +50,7 @@
     CLLocationCoordinate2D locations[] = {pugetsound, sub, jones, mcintyre, howarth, music, thompson, harned, collins,
         wyatt, pool, weyerhaseuser, todd, regester, seward, trimble, kilworth, al, schiff, kittredge};
     
-    NSArray *names = @[@"pugetsound", @"sub", @"jones", @"howarth", @"music", @"thompson", @"harned", @"collins", @"wyatt",
-      @"pool", @"weyerhauser", @"todd", @"regester", @"seward", @"trimble", @"kilworth", @"al", @"schiff", @"kittredge"];
+    NSArray *names = @[@"pugetsound", @"sub", @"jones", @"mcintyre", @"howarth", @"music", @"thompson", @"harned", @"collins", @"wyatt", @"pool", @"weyerhauser", @"todd", @"regester", @"seward", @"trimble", @"kilworth", @"al", @"schiff", @"kittredge"];
 
 
     
@@ -59,6 +58,10 @@
     mapView_ = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView_.myLocationEnabled = YES;
     self.view = mapView_;
+    
+    // Add markers
+    
+    NSMutableArray *arrayOfMarkers = [[NSMutableArray alloc] init]; // Array of all markers
     
     GMSMarker *marker;
     for(int i = 0; i < names.count; i++)
@@ -68,7 +71,12 @@
         marker.title = names[i];
         marker.snippet = names[i];
         marker.map = mapView_;
+        
+        [arrayOfMarkers addObject: marker];
     }
+
+    
+    
 }
 
 
