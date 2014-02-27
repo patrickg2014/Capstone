@@ -8,6 +8,11 @@
 
 #import "BRViewController.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+#define LOCATIONS 20
+>>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
 =======
 
 #define LOCATIONS 20
@@ -34,8 +39,11 @@
 {
     [super viewDidLoad];
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// Do any additional setup after loading the view, typically from a nib.
 =======
+=======
+>>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
     
     
     
@@ -103,6 +111,7 @@
     
     [self startStandardUpdates];
     
+<<<<<<< HEAD
 >>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
 }
 
@@ -144,6 +153,48 @@
     
 }
 
+=======
+}
+
+- (void)startStandardUpdates
+{
+    // Create the location manager if this object does not
+    // already have one.
+
+    _locationManager = [[CLLocationManager alloc] init];
+    
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    
+    // Set a movement threshold for new events.
+    _locationManager.distanceFilter = 100; // meters
+    
+    [_locationManager startUpdatingLocation];
+}
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    _currentLocation = locations[0];
+    
+    if(_nearby == nil)
+        _nearby = [[NSMutableArray alloc] init];
+    
+    [_nearby removeAllObjects];
+    
+    for(GMSMarker *m in _arrayOfMarkers)
+    {
+        if(ABS(m.position.latitude - _currentLocation.coordinate.latitude) < .001
+           && ABS(m.position.longitude - _currentLocation.coordinate.longitude) < .001)
+        {
+            [_nearby addObject: m];
+            _label.text = m.title;
+        }
+    }
+            [_mapview addSubview: _label];
+    
+}
+
+>>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
 - (void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     _currentHeading = newHeading;
