@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -21,10 +22,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.BoringLayout.Metrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -43,6 +46,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private boolean mShowText;
 	private int mTextPos;
 	public CameraOverlay camover;
+	public int width=4;
+	public int height=4;
+	public int dens= 40;
+	public int theScale=1;
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 
@@ -61,7 +68,13 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		currentLocation=getGPS();	// gets our current location
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
-		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		width = size.x;
+		height = size.y;
+		dens=(int) getResources().getDisplayMetrics().xdpi;
+		screenScale();
 		
 		Log.d("Changing", "LETS GO!");
 	}
@@ -109,7 +122,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	
     }
     public void whatshouldwesee()
-   	{
+   	{	
    		//Location myloc= map.getMyLocation();
    		Location myloc = currentLocation;
    		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
@@ -132,7 +145,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			}
    			
    		}
-   		int dens=(int) getResources().getDisplayMetrics().density;
+   		
    		
    		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
    		{
@@ -140,16 +153,21 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  location.setLatitude(m.getPosition().latitude);
    			  location.setLongitude(m.getPosition().longitude);
    			int locHead=(int) myloc.bearingTo(location);
-   			 if((myloc.bearingTo(location)-heading)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			int headingOptimized=(int) heading;
+   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
    			 {
    				 locHead=(int)myloc.bearingTo(location)+360;	
    			 }
-   			  if(Math.abs(locHead-heading)<50)	// checks to see if it is in view
+   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+  			 {
+  				headingOptimized=(int)heading+360;	
+  			 }
+   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
    			  {
    				currentlyvisable.add(m);	//add it to the viewable array
    				Log.d("near", m.getTitle());
 
-   				camover.xPos.add((float) (((locHead - heading)+50))*(dens*4));	//hopefully DIP based
+   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale));	//hopefully DIP based
    				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
    				camover.setDisplayText(m.getTitle()); //rewrite the text
    			  }
@@ -162,11 +180,28 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		camover.setDisplayArray(currentlyvisable);
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
-   		public void onMyLocationChange(Location location) {				
-   			//add the adjustment value for true north magnetic north difference 
-   			currentLocation = location;	//update our location
-   			whatshouldwesee();	//update the markers that we are near and should be able to view
-   			}
+   		
+    
+    LocationListener onLocationChange=new LocationListener() {
+        public void onLocationChanged(Location loc) {
+            //sets and displays the lat/long when a location is provided
+            currentLocation=loc;
+            Log.d("location","location: " + loc.toString() );
+        }
+         
+        public void onProviderDisabled(String provider) {
+        // required for interface, not used
+        }
+         
+        public void onProviderEnabled(String provider) {
+        // required for interface, not used
+        }
+         
+        public void onStatusChanged(String provider, int status,
+        Bundle extras) {
+        // required for interface, not used
+        }
+    };
    		       
 
 	@Override
@@ -201,5 +236,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
     
         return l;
 }
+	private void screenScale()
+	{
+		theScale=(width)/100;
+		Log.d("DENS", ""+theScale);
+
+	}
 	
 }
