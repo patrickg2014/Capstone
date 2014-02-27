@@ -20,8 +20,10 @@ public class CameraOverlay extends View {
 	private boolean mShowText;
 	private int mTextPos;
 	private String displayText="";
-	private ArrayList<Marker> nearList;
-
+	private ArrayList<Marker> nearList=new ArrayList ();
+	public ArrayList<Float> xPos=new ArrayList ();
+	public ArrayList<Float> yPos=new ArrayList ();
+	
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -51,12 +53,13 @@ public class CameraOverlay extends View {
 		Log.d("draw", "WE ARE DRAWING!!");
 		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.STROKE);
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
+	
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 300;
 		for(int i=0; i<nearList.size(); i++){
-			canvas.drawText(nearList.get(i).getTitle(), 300, y, paint);
+			canvas.drawText(nearList.get(i).getTitle(), xPos.get(i), (float)y, paint);//draws text at x,y position
 			y = y + 200;
 		}
 		super.onDraw(canvas);
@@ -67,6 +70,7 @@ public class CameraOverlay extends View {
 		invalidate();
 	}
 
+	
 	public boolean isShowText() {
 		return mShowText;
 	}

@@ -13,6 +13,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -22,6 +23,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.BoringLayout.Metrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -82,14 +84,14 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+		mainCam.startPreview();
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
 	}
 
 	@Override
     protected void onPause() {
         super.onPause();      // if you are using MediaRecorder, release it first
-        releaseCamera();              // release the camera immediately on pause event
+        releaseCamera();  // release the camera immediately on pause event
         mSensorManager.unregisterListener(this);
 
     }
@@ -113,6 +115,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		
    		currentlyNear.clear();
    		currentlyvisable.clear();
+   		camover.xPos.clear();
+   		camover.yPos.clear();
    		ArrayList<Marker>  marks= CampusInfo.getall();
    		for(Marker m: marks)	//loops through all a markers to see which ones are within a certain radius of us
    		{
@@ -127,41 +131,52 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			}
    			
    		}
+   		int dens=(int) getResources().getDisplayMetrics().density;
    		
    		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
    		{
    			Location location = new Location("mloc");
    			  location.setLatitude(m.getPosition().latitude);
    			  location.setLongitude(m.getPosition().longitude);
-   			if(Math.abs(myloc.bearingTo(location)-heading)<60)	//the check to see which ones are
-   			{
-   				currentlyvisable.add(m);
+   			int locHead=(int) myloc.bearingTo(location);
+   			 if((myloc.bearingTo(location)-heading)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			 {
+   				 locHead=(int)myloc.bearingTo(location)+360;	
+   			 }
+   			  if(Math.abs(locHead-heading)<50)	// checks to see if it is in view
+   			  {
+   				currentlyvisable.add(m);	//add it to the viewable array
    				Log.d("near", m.getTitle());
-   				camover.setDisplayText(m.getTitle()); // update the text being written
-   				
+<<<<<<< HEAD
+   				camover.xPos.add((float) (((locHead - heading)+50))*(dens*4));	//hopefully DIP based
+   				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
+   				camover.setDisplayText(m.getTitle()); //rewrite the text
+   			  }
+   			
+   			if(currentlyvisable.size()==0)	//if nothing is in view reset to a blank string
+=======
+   				camover.setDisplayText(m.getTitle()); // update the text being written to the screen
+   				Button btn = new Button(this); //create a new button
+   				btn.setText(m.getTitle()); // set the text of the button
+   				btn.setBackgroundColor(Color.RED); // set the color of the button
+   				btn.setTextColor(Color.WHITE); // set the color of the text
+   				camover.setDisplayButton(btn); // set the button to the screen
    			}
-   			if(currentlyvisable.size()==0)
+   			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
+>>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
    					{
    				camover.setDisplayText("");
    					}
    		}
-   		camover.setDisplayArray(currentlyNear);
+   		camover.setDisplayArray(currentlyvisable);
+   		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
    	}
-   		public void onMyLocationChange(Location location) {
-   			if(currentLocation != location)	//adjust the heading to account for magnetic north vs true north
-   			{
-   				GeomagneticField geoField = new GeomagneticField(
-   		         Double.valueOf(location.getLatitude()).floatValue(),
-   		         Double.valueOf(location.getLongitude()).floatValue(),
-   		         Double.valueOf(location.getAltitude()).floatValue(),
-   		         System.currentTimeMillis()
-   		      );
-   				heading= heading+ geoField.getDeclination();	//add the adjustment value for true north magnetic north difference 
+   		public void onMyLocationChange(Location location) {				
+   			//add the adjustment value for true north magnetic north difference 
    			currentLocation = location;	//update our location
    			whatshouldwesee();	//update the markers that we are near and should be able to view
    			}
    		       
-   		}
 
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
@@ -172,8 +187,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		
-		heading = (Math.round(event.values[0]+event.values[1])+90)%360; //Rounds the current heading to full degrees
-		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
+		heading = ((Math.round(event.values[0]+event.values[1])+90)%360); //Rounds the current heading to full degrees
+		
 		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
 			whatshouldwesee();// update the information about what we are near and what is in our view 

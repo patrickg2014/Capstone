@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import <GoogleMaps/GoogleMaps.h>
 
-@interface BRViewController : UIViewController
+@interface BRViewController : UIViewController<CLLocationManagerDelegate>
+
+@property CLLocationManager *locationManager;
+@property CLLocation *currentLocation;
+@property CLHeading *currentHeading;
+@property NSMutableArray *arrayOfMarkers;
+@property NSMutableArray *nearby;
+@property (strong, nonatomic) IBOutlet UILabel *label;
+@property (strong, nonatomic) IBOutlet GMSMapView *mapview;
+@property (strong, nonatomic) IBOutlet UIView *view;
 
 @end
