@@ -27,6 +27,7 @@ import android.text.BoringLayout.Metrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 public class CameraActivity extends Activity implements SensorEventListener{
@@ -147,29 +148,19 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  {
    				currentlyvisable.add(m);	//add it to the viewable array
    				Log.d("near", m.getTitle());
-<<<<<<< HEAD
+
    				camover.xPos.add((float) (((locHead - heading)+50))*(dens*4));	//hopefully DIP based
    				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
    				camover.setDisplayText(m.getTitle()); //rewrite the text
    			  }
-   			
-   			if(currentlyvisable.size()==0)	//if nothing is in view reset to a blank string
-=======
-   				camover.setDisplayText(m.getTitle()); // update the text being written to the screen
-   				Button btn = new Button(this); //create a new button
-   				btn.setText(m.getTitle()); // set the text of the button
-   				btn.setBackgroundColor(Color.RED); // set the color of the button
-   				btn.setTextColor(Color.WHITE); // set the color of the text
-   				camover.setDisplayButton(btn); // set the button to the screen
-   			}
    			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
->>>>>>> 127eec836715416d4554a56fc0e7567743a67a2c
+
    					{
    				camover.setDisplayText("");
    					}
    		}
    		camover.setDisplayArray(currentlyvisable);
-   		Log.d("Heading","Heading: " + Float.toString(heading) + " degrees");
+   		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
    		public void onMyLocationChange(Location location) {				
    			//add the adjustment value for true north magnetic north difference 
