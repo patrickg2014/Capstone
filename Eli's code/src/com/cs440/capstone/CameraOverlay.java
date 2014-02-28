@@ -7,11 +7,15 @@ import com.google.android.gms.maps.model.Marker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -55,11 +59,13 @@ public class CameraOverlay extends View {
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
-	
+		Rect rect = new Rect();
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 300;
 		for(int i=0; i<nearList.size(); i++){
 			canvas.drawText(nearList.get(i).getTitle(), xPos.get(i), (float)y, paint);//draws text at x,y position
+			canvas.drawBitmap(bmp, xPos.get(i),(float)y, paint);
 			y = y + 200;
 		}
 		super.onDraw(canvas);
@@ -84,6 +90,31 @@ public class CameraOverlay extends View {
 	public void setDisplayArray(ArrayList<Marker> currentlyNear) {
 		nearList = currentlyNear;
 		
+	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		//Log.w("Touch","Hello !!!!!!!!!!!! AHHHHHHHH");
+		float x = event.getX();
+		float y = event.getY();
+	switch (event.getAction()) {
+	    case MotionEvent.ACTION_DOWN:
+	        // do something
+	        break;
+	    case MotionEvent.ACTION_MOVE:
+	        // do something
+	        break;
+	    case MotionEvent.ACTION_UP:
+	       //do something
+	    	for(int i=0; i<xPos.size(); i++){
+	    		if(x >= xPos.get(i)-200 && x <= xPos.get(i)+200){
+	    			if(y >= yPos.get(i)-50 && x <= yPos.get(i)+50){
+	    				Log.d("Touch", nearList.get(i).getTitle());
+	    			}
+	    		}
+	    	}
+	        break;
+	}
+	return true;
 	}
 
 }

@@ -167,7 +167,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				currentlyvisable.add(m);	//add it to the viewable array
    				Log.d("near", m.getTitle());
 
-   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale));	//hopefully DIP based
+   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*5);	//hopefully DIP based
    				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
    				camover.setDisplayText(m.getTitle()); //rewrite the text
    			  }
