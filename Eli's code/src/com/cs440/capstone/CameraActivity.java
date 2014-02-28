@@ -50,6 +50,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public int height=4;
 	public int dens= 40;
 	public int theScale=1;
+	
+	private LocationManager lm;
+	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 
@@ -75,6 +78,36 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		height = size.y;
 		dens=(int) getResources().getDisplayMetrics().xdpi;
 		screenScale();
+		
+		// Moving to constructor for use in GPS and location methods
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
+		   
+	    LocationListener onLocationChange = new LocationListener() {
+	        public void onLocationChanged(Location loc) {
+	            //sets and displays the lat/long when a location is provided
+	        	if(loc != null)
+	        	{
+	        		currentLocation=loc;
+	        		Log.d("onLocationChanged","location: " + loc.toString() );
+	        	}
+	        }
+	         
+	        public void onProviderDisabled(String provider) {
+	        // required for interface, not used
+	        }
+	         
+	        public void onProviderEnabled(String provider) {
+	        // required for interface, not used
+	        }
+	         
+	        public void onStatusChanged(String provider, int status,
+	        Bundle extras) {
+	        // required for interface, not used
+	        }
+	        
+	        
+	    };
+	    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 6000, 0, onLocationChange);
 		
 		Log.d("Changing", "LETS GO!");
 	}
@@ -181,27 +214,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
    		
-    
-    LocationListener onLocationChange=new LocationListener() {
-        public void onLocationChanged(Location loc) {
-            //sets and displays the lat/long when a location is provided
-            currentLocation=loc;
-            Log.d("location","location: " + loc.toString() );
-        }
-         
-        public void onProviderDisabled(String provider) {
-        // required for interface, not used
-        }
-         
-        public void onProviderEnabled(String provider) {
-        // required for interface, not used
-        }
-         
-        public void onStatusChanged(String provider, int status,
-        Bundle extras) {
-        // required for interface, not used
-        }
-    };
+ 
+ 
    		       
 
 	@Override
@@ -222,7 +236,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	}
 	private Location getGPS() 	// get the current gps location of our device
 		{
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
         List<String> providers = lm.getProviders(true);
 
         /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
