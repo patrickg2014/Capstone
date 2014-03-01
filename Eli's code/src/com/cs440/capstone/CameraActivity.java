@@ -88,6 +88,15 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	        	if(loc != null)
 	        	{
 	        		currentLocation=loc;
+	        		
+	        		// This is being called on heading updates, but should also
+	        		// be called whenever we get a new location update since
+	        		// you may not change headings but may change locations.
+	        		
+	        		if(currentLocation != null) //make sure that we dont get a null pointer 
+	        		{
+	        			whatshouldwesee();// update the information about what we are near and what is in our view 
+	        		}
 	        		Log.d("onLocationChanged","location: " + loc.toString() );
 	        	}
 	        }
