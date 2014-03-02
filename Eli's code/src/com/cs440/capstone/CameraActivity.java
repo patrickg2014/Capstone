@@ -116,7 +116,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	        
 	        
 	    };
-	    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 6000, 0, onLocationChange);
+	    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, onLocationChange);
 		
 		Log.d("Changing", "LETS GO!");
 	}
@@ -151,6 +151,14 @@ public class CameraActivity extends Activity implements SensorEventListener{
         mSensorManager.unregisterListener(this);
 
     }
+	@Override
+	   protected void onStop() {
+	       super.onStop();      // if you are using MediaRecorder, release it first
+	       releaseCamera();  // release the camera immediately on pause event
+	       mSensorManager.unregisterListener(this);
+	       finish();
+
+	   }
 
 
 
