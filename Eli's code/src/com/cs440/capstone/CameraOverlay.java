@@ -59,13 +59,19 @@ public class CameraOverlay extends View {
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
+	   ;
 		Rect rect = new Rect();
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 300;
 		for(int i=0; i<nearList.size(); i++){
 			canvas.drawBitmap(bmp, xPos.get(i),(float)y-75, paint);
+			 paint.setStrokeWidth(0);
+			 paint.setColor(Color.WHITE);
 			canvas.drawText(nearList.get(i).getTitle(), xPos.get(i)+bmp.getWidth(), (float)y, paint);//draws text at x,y position
+			 paint.setStrokeWidth(2);
+			 paint.setColor(Color.BLACK);
+			 canvas.drawText(nearList.get(i).getTitle(), xPos.get(i)+bmp.getWidth(), (float)y, paint);
 			
 			y = y + 200;
 		}
