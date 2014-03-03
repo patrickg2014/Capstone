@@ -161,15 +161,16 @@ public class CameraActivity extends Activity implements SensorEventListener{
 
 	   }
 	
+
 	/**
 	 * This method changes to the CameraActivity when the phone is rotated
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		Log.d("Billy", "Here!");
 	  super.onConfigurationChanged(newConfig);
 	  if(newConfig.orientation == newConfig.ORIENTATION_PORTRAIT){
 		  finish();
-		  MainAcivity();
 	  }
 	}
 
