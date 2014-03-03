@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.GeomagneticField;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -159,10 +160,27 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	       finish();
 
 	   }
+	
+	/**
+	 * This method changes to the CameraActivity when the phone is rotated
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	  if(newConfig.orientation == newConfig.ORIENTATION_PORTRAIT){
+		  finish();
+		  MainAcivity();
+	  }
+	}
 
 
 
-    private void releaseCamera(){
+    private void MainAcivity() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void releaseCamera(){
         if (mainCam != null){
         	mainCam.lock();  
             mainCam.release();        // release the camera for other applications

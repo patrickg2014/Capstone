@@ -61,6 +61,7 @@ int drawable ic_plusone_medium_off_client 0x7f02001a
 int drawable ic_plusone_small_off_client 0x7f02001b
 int drawable ic_plusone_standard_off_client 0x7f02001c
 int drawable ic_plusone_tall_off_client 0x7f02001d
+int drawable ups 0x7f02001e
 int id action_settings 0x7f05000b
 int id button1 0x7f050007
 int id camera_layout 0x7f050009

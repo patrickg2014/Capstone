@@ -60,7 +60,7 @@ public class CameraOverlay extends View {
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
 		Rect rect = new Rect();
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bubble);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 300;
 		for(int i=0; i<nearList.size(); i++){
