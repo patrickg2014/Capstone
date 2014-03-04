@@ -100,9 +100,10 @@ public class CameraOverlay extends View {
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//Log.w("Touch","Hello !!!!!!!!!!!! AHHHHHHHH");
+		//Log.d("Touch","Hello !!!!!!!!!!!! AHHHHHHHH");
 		float x = event.getX();
 		float y = event.getY();
+		Log.d("Touch",x+"   "+y);
 	switch (event.getAction()) {
 	    case MotionEvent.ACTION_DOWN:
 	        // do something
@@ -113,9 +114,10 @@ public class CameraOverlay extends View {
 	    case MotionEvent.ACTION_UP:
 	       //do something
 	    	for(int i=0; i<xPos.size(); i++){
-	    		if(x >= xPos.get(i)-200 && x <= xPos.get(i)+200){
-	    			if(y >= yPos.get(i)-50 && x <= yPos.get(i)+50){
-	    				Log.d("Touch", nearList.get(i).getTitle());
+	    		Log.d("Touch", nearList.get(i).getTitle()+ "  "+ xPos.get(i)+ "  "+yPos.get(i));
+	    		if(x+500 >= xPos.get(i) && x-500 <= xPos.get(i)){
+	    			if(y+200 >= yPos.get(i) && x-200 <= yPos.get(i)){
+	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked");
 	    			}
 	    		}
 	    	}

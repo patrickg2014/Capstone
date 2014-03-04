@@ -7,6 +7,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import android.R.anim;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -51,7 +52,6 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public int height=4;
 	public int dens= 40;
 	public int theScale=1;
-	
 	private LocationManager lm;
 	
 	@SuppressLint("NewApi")
@@ -63,6 +63,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);	//pulls and saved state for the activity
+		
 		setContentView(R.layout.camera_layout);	// sets the layout
 		getCameraInstance();	//calls to start up the camera
 		camView = new CameraPreview(this, mainCam);	// allows the screen to see what the camera sensor is seeing
@@ -73,6 +74,12 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		Display display = getWindowManager().getDefaultDisplay();
+		/*int orientation = display.getRotation();
+		if(orientation==0||orientation==4)
+		{
+			finish();
+		}*/
+		
 		Point size = new Point();
 		display.getSize(size);
 		width = size.x;
@@ -207,7 +214,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			double lati = m.getPosition().latitude;
    			double longi1= mylatlng.longitude;
    			double lati1 =mylatlng.latitude;
-   			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)	//check to make sure they are in the radius
+   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
+   			if(distance<=.00175)	//check to make sure they are in the radius
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
    				currentlyNear.add(m);	//if it is add it to the array
@@ -236,7 +244,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				currentlyvisable.add(m);	//add it to the viewable array
    				Log.d("near", m.getTitle());
 
-   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*5);	//hopefully DIP based
+   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
    				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
    				camover.setDisplayText(m.getTitle()); //rewrite the text
    			  }

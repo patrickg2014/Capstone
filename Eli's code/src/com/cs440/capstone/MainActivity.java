@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,13 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
-
+		Display display = getWindowManager().getDefaultDisplay();
+		int orientation = display.getRotation();
+		if(orientation==3||orientation==1)
+		{
+			finish();
+			cameraActivity();
+		}
 		setContentView(R.layout.activity_main);
 		goToCam = (Button) findViewById(R.id.button1);	//sets up the button for going to the camera view this may switch to simply rotating the phone
 		goToCam.setOnClickListener(new View.OnClickListener() //sets up a listener for that button
