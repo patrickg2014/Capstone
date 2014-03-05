@@ -23,10 +23,13 @@ public class CameraOverlay extends View {
 
 	private boolean mShowText;
 	private int mTextPos;
-	private String displayText="";
-	private ArrayList<Marker> nearList=new ArrayList ();
+	public String inside="";
+	private String displayText= "";
+	public boolean insidebool=false;
+	public ArrayList<Marker> nearList=new ArrayList ();
 	public ArrayList<Float> xPos=new ArrayList ();
 	public ArrayList<Float> yPos=new ArrayList ();
+
 	
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -59,7 +62,6 @@ public class CameraOverlay extends View {
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
-	   ;
 		Rect rect = new Rect();
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
@@ -75,17 +77,26 @@ public class CameraOverlay extends View {
 			
 			y = y + 200;
 		}
-		super.onDraw(canvas);
-	}
+			if(insidebool)
+				{
+		
+		 paint.setStrokeWidth(0);
+		 paint.setColor(Color.WHITE);
+		 canvas.drawText(inside, 100, 100, paint);//draws text at x,y position
+		 paint.setStrokeWidth(2);
+		 paint.setColor(Color.BLACK);
+		 canvas.drawText(inside, 100, 100, paint);
+					}
+				super.onDraw(canvas);
+			}
 	
-	public void setDisplayText(String setMe){
-		displayText = setMe;
-		invalidate();
-	}
-
 	
 	public boolean isShowText() {
 		return mShowText;
+	}
+	public void setDisplayText(String setText) {
+		displayText=setText;
+		invalidate();
 	}
 
 	public void setShowText(boolean showText) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
 import android.R.anim;
@@ -23,6 +24,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.GpsStatus.Listener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -45,6 +47,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
 	public float heading;
 	public Location currentLocation;
+	Location myloc;
 	private boolean mShowText;
 	private int mTextPos;
 	public CameraOverlay camover;
@@ -52,7 +55,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public int height=4;
 	public int dens= 40;
 	public int theScale=1;
+	private LocationListener onLocationChange;
 	private LocationManager lm;
+	public LatLng mylatlng;
 	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
@@ -74,11 +79,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		Display display = getWindowManager().getDefaultDisplay();
-		/*int orientation = display.getRotation();
+		int orientation = display.getRotation();
 		if(orientation==0||orientation==4)
 		{
 			finish();
-		}*/
+		}
 		
 		Point size = new Point();
 		display.getSize(size);
@@ -90,7 +95,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		// Moving to constructor for use in GPS and location methods
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
 		   
-	    LocationListener onLocationChange = new LocationListener() {
+	    onLocationChange = new LocationListener() {
 	        public void onLocationChanged(Location loc) {
 	            //sets and displays the lat/long when a location is provided
 	        	if(loc != null)
@@ -124,7 +129,12 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	        
 	        
 	    };
+	    if(lm.isProviderEnabled("GPS_PROVIDER")){
 	    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, onLocationChange);
+	    }
+	    else{
+	    	 lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 0, onLocationChange);
+	    }
 		
 		Log.d("Changing", "LETS GO!");
 	}
@@ -157,6 +167,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
         super.onPause();      // if you are using MediaRecorder, release it first
         releaseCamera();  // release the camera immediately on pause event
         mSensorManager.unregisterListener(this);
+        
 
     }
 	@Override
@@ -164,6 +175,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	       super.onStop();      // if you are using MediaRecorder, release it first
 	       releaseCamera();  // release the camera immediately on pause event
 	       mSensorManager.unregisterListener(this);
+	       
 	       finish();
 
 	   }
@@ -200,61 +212,16 @@ public class CameraActivity extends Activity implements SensorEventListener{
     public void whatshouldwesee()
    	{	
    		//Location myloc= map.getMyLocation();
-   		Location myloc = currentLocation;
-   		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
-   		
-   		currentlyNear.clear();
-   		currentlyvisable.clear();
-   		camover.xPos.clear();
-   		camover.yPos.clear();
-   		ArrayList<Marker>  marks= CampusInfo.getall();
-   		for(Marker m: marks)	//loops through all a markers to see which ones are within a certain radius of us
-   		{
-   			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
-   			double lati = m.getPosition().latitude;
-   			double longi1= mylatlng.longitude;
-   			double lati1 =mylatlng.latitude;
-   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
-   			if(distance<=.00175)	//check to make sure they are in the radius
-//   					(longi1+lati1)-(longi-lati)<=.001)
-   			{
-   				currentlyNear.add(m);	//if it is add it to the array
-   			}
-   			
-   		}
-   		
-   		
-   		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
-   		{
-   			Location location = new Location("mloc");
-   			  location.setLatitude(m.getPosition().latitude);
-   			  location.setLongitude(m.getPosition().longitude);
-   			int locHead=(int) myloc.bearingTo(location);
-   			int headingOptimized=(int) heading;
-   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
-   			 {
-   				 locHead=(int)myloc.bearingTo(location)+360;	
-   			 }
-   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
-  			 {
-  				headingOptimized=(int)heading+360;	
-  			 }
-   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
-   			  {
-   				currentlyvisable.add(m);	//add it to the viewable array
-   				Log.d("near", m.getTitle());
-
-   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
-   				camover.setDisplayText(m.getTitle()); //rewrite the text
-   			  }
-   			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
-
-   					{
-   				camover.setDisplayText("");
-   					}
-   		}
+    	checkCurrentlyNear();
+    	if(!camover.insidebool)
+    	{
+    		checkCurrentlyVisable();
+    	}
+    	else{
+    		insidecurrentlyVisable();
+    	}
    		camover.setDisplayArray(currentlyvisable);
+   		camover.invalidate();
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
    		
@@ -300,5 +267,132 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		Log.d("DENS", ""+theScale);
 
 	}
+	public void checkCurrentlyNear(){
+		myloc = currentLocation;
+   		mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
+   		
+   		currentlyNear.clear();
+   		currentlyvisable.clear();
+   		camover.xPos.clear();
+   		camover.yPos.clear();
+   		ArrayList<Marker>  marks= CampusInfo.getall();
+   		Marker m;
+   		for(int i=0; i<marks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
+   		{	m= marks.get(i);
+   			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
+   			double lati = m.getPosition().latitude;
+   			double longi1= mylatlng.longitude;
+   			double lati1 =mylatlng.latitude;
+   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
+   			if(distance<=.00175)	//check to make sure they are in the radius
+//   					(longi1+lati1)-(longi-lati)<=.001)
+   			{
+   				LatLngBounds b=CampusInfo.getBounds(i);
+   				if(b.contains(mylatlng))
+   						{
+   					
+   					camover.insidebool=true; 	
+   					camover.inside=("Inside "+m.getTitle());
+   					currentlyNear.clear();
+   					camover.invalidate();
+   					Log.d("Inside", "we should be inside");
+   					break;
+   						}
+   					else
+   						{
+   						currentlyNear.add(m);//if it is add it to the array
+   						camover.insidebool=false;
+   						}
+   			}
+   			
+   		}
+	}
+	public void checkCurrentlyVisable()
+	{
+		for(Marker m: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
+   		{
+   			Location location = new Location("mloc");
+   			  location.setLatitude(m.getPosition().latitude);
+   			  location.setLongitude(m.getPosition().longitude);
+   			int locHead=(int) myloc.bearingTo(location);
+   			int headingOptimized=(int) heading;
+   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			 {
+   				 locHead=(int)myloc.bearingTo(location)+360;	
+   			 }
+   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+  			 {
+  				headingOptimized=(int)heading+360;	
+  			 }
+   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
+   			  {
+   				currentlyvisable.add(m);	//add it to the viewable array
+   				Log.d("near", m.getTitle());
+
+   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
+   				 //rewrite the text
+   			  }
+   			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
+
+   					{
+   				camover.setDisplayText("");
+   					}
+   		}
+	}
+	public void insidecurrentlyVisable()
+	{	Marker m;
+		ArrayList<Marker> temp = new ArrayList();
+
+		for(int i=0; i<CampusInfo.insideMarks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
+   		{	
+			m= CampusInfo.insideMarks.get(i);
+   			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
+   			double lati = m.getPosition().latitude;
+   			double longi1= mylatlng.longitude;
+   			double lati1 =mylatlng.latitude;
+   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
+   			if(distance<=.00075)	//check to make sure they are in the radius
+//   					(longi1+lati1)-(longi-lati)<=.001)
+   			{
+   				temp.add(m);//if it is add it to the array
+   				
+   			
+   		}
 	
-}
+		for(Marker m1: temp)// a loop to see which of those currently near markers are within our angle of view
+   		{
+   			Location location = new Location("mloc");
+   			  location.setLatitude(m1.getPosition().latitude);
+   			  location.setLongitude(m1.getPosition().longitude);
+   			int locHead=(int) myloc.bearingTo(location);
+   			int headingOptimized=(int) heading;
+   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			 {
+   				 locHead=(int)myloc.bearingTo(location)+360;	
+   			 }
+   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+  			 {
+  				headingOptimized=(int)heading+360;	
+  			 }
+   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
+   			  {
+   				currentlyvisable.add(m1);	//add it to the viewable array
+   				Log.d("near", m1.getTitle());
+
+   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.yPos.add((float) (camover.xPos.size()*100)); //make sure that the text doesn't overlap
+   				 //rewrite the text
+   			  }
+   			if(currentlyvisable.size()==0) // if currentlyvisable is empty, display no text 
+
+   					{
+   				camover.setDisplayText("");
+   					}
+		}
+	}
+			
+	
+	}
+	}
+
