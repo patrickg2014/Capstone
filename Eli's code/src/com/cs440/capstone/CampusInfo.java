@@ -101,7 +101,7 @@ public class CampusInfo {
 				.snippet("Main building").position(test1));
 		
 		Marker subMarker = map.addMarker(new MarkerOptions().title("Wheelock Student Center")
-				.snippet("Main building").position(new LatLng(47.260125,-122.484523)));
+				.snippet("Main building").position(sub.getCenter()));
 		general.add(subMarker);
 		allMarkers.put(subMarker,sub);
 		bounds.add(sub);
