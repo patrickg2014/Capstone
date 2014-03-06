@@ -275,7 +275,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		currentlyvisable.clear();
    		camover.xPos.clear();
    		camover.yPos.clear();
-   		ArrayList<Marker>  marks= CampusInfo.getall();
+   		ArrayList<Marker>  marks= new ArrayList<Marker>();
+   		for(Marker m1: CampusInfo.insideMarkers.keySet())
+		{
+		marks.add(m1);	
+		}
    		Marker m;
    		for(int i=0; i<marks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	m= marks.get(i);
@@ -343,10 +347,14 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public void insidecurrentlyVisable()
 	{	Marker m;
 		ArrayList<Marker> temp = new ArrayList();
-
-		for(int i=0; i<CampusInfo.insideMarks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
+		for(Marker m1: CampusInfo.insideMarkers.keySet())
+		{
+		temp.add(m1);	
+		}
+			
+		for(int i=0; i<temp.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
-			m= CampusInfo.insideMarks.get(i);
+			m= temp.get(i);
    			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
    			double lati = m.getPosition().latitude;
    			double longi1= mylatlng.longitude;
