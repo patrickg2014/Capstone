@@ -58,6 +58,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private LocationListener onLocationChange;
 	private LocationManager lm;
 	public LatLng mylatlng;
+	private Marker insideMark;
 	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
@@ -296,6 +297,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					
    					camover.insidebool=true; 	
    					camover.inside=("Inside "+m.getTitle());
+   					insideMark=m;
    					currentlyNear.clear();
    					camover.invalidate();
    					Log.d("Inside", "we should be inside");
@@ -346,10 +348,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public void insidecurrentlyVisable()
 	{	Marker m;
 		ArrayList<Marker> temp = new ArrayList();
-
-		for(int i=0; i<CampusInfo.insideMarks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
+		
+		if(CampusInfo.insideMarkers.get(insideMark)!=null){
+		for(int i=0; i<CampusInfo.insideMarkers.get(insideMark).size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
-			m= CampusInfo.insideMarks.get(i);
+			m= CampusInfo.insideMarkers.get(insideMark).get(i);
    			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
    			double lati = m.getPosition().latitude;
    			double longi1= mylatlng.longitude;
@@ -390,6 +393,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					{
    				camover.setDisplayText("");
    					}
+   		}
 		}
 	}
 			

@@ -15,9 +15,8 @@ public class CampusInfo {
 	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
 	public ArrayList<ArrayList> listoflists = new ArrayList();
 	public static HashMap<Marker,LatLngBounds> allMarkers = new HashMap<Marker,LatLngBounds>();
-	public static HashMap<String,ArrayList<Marker>> InsideMarkers = new HashMap<String,ArrayList<Marker>>();
+	public static HashMap<Marker,ArrayList<Marker>> insideMarkers = new HashMap<Marker,ArrayList<Marker>>();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
-	public static ArrayList<Marker> insideMarks = new ArrayList();
 	public static ArrayList<LatLngBounds> bounds= new ArrayList();
 	
 	public GoogleMap map = null;
@@ -100,10 +99,7 @@ public class CampusInfo {
 		// catagories
 		Marker whale= map.addMarker(new MarkerOptions().title("Baby Grey whale")
 				.snippet("Main building").position(test1));
-		insideMarks.add(whale);
-		Marker diner= map.addMarker(new MarkerOptions().title("Dining Hall")
-				.snippet("Main building").position(sub.getCenter()));
-		insideMarks.add(diner);
+		
 		Marker subMarker = map.addMarker(new MarkerOptions().title("Wheelock Student Center")
 				.snippet("Main building").position(sub.getCenter()));
 		general.add(subMarker);
@@ -141,12 +137,19 @@ public class CampusInfo {
 						.snippet("some info").position(thompson.getCenter()));
 		acadmicBuildings.add(thompsonMarker);
 		allMarkers.put(thompsonMarker, thompson);
-		bounds.add(music);
+		ArrayList<Marker> thompsonMarks = new ArrayList();
+			Marker slater= map.addMarker(new MarkerOptions().title("Slater Museum of Natural History")
+					.snippet("Main building").position(new LatLng (47.263663,-122.482974)));
+		thompsonMarks.add(slater);
+		insideMarkers.put(thompsonMarker, thompsonMarks);
+		
 		Marker harnedMarker = map.addMarker(new MarkerOptions()
 				.title("Harned Hall").snippet("some info").position(harned.getCenter()));
 		acadmicBuildings.add(harnedMarker);
 		allMarkers.put(harnedMarker, harned);
-		bounds.add(harned);
+		ArrayList<Marker> harnedMarks = new ArrayList();
+		harnedMarks.add(whale);
+		insideMarkers.put(harnedMarker, harnedMarks);
 		Marker collinsMarker = map.addMarker(new MarkerOptions()
 				.title("Collins Memorial Libary").snippet("some info")
 				.position(collins.getCenter()));
