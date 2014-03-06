@@ -14,9 +14,9 @@ public class CampusInfo {
 
 	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
 	public ArrayList<ArrayList> listoflists = new ArrayList();
-	public static HashMap<Marker,LatLngBounds> allMarkers = new HashMap<Marker,LatLngBounds>();
-	public static HashMap<Marker,ArrayList<Marker>> insideMarkers = new HashMap<Marker,ArrayList<Marker>>();
+	static ArrayList<Marker> allMarkers = new ArrayList();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
+	public static ArrayList<Marker> insideMarks = new ArrayList();
 	public static ArrayList<LatLngBounds> bounds= new ArrayList();
 	
 	public GoogleMap map = null;
@@ -42,7 +42,7 @@ public class CampusInfo {
 		LatLngBounds mcintyre = new LatLngBounds(new LatLng(47.263945,-122.480714),new LatLng(47.264101,-122.480097));
 		LatLngBounds howarth = new LatLngBounds(new LatLng(47.263184,-122.480714),new LatLng(47.263337,-122.480119));
 		LatLngBounds music = new LatLngBounds(new LatLng(47.263453,-122.482463),new LatLng(47.263976,-122.482278));
-		LatLngBounds thompson = new LatLngBounds(new LatLng(47.263246,-122.483193),new LatLng(47.264087,-122.482823));
+		LatLngBounds thompson = new LatLngBounds(new LatLng(47.263246,-122.483193),new LatLng(47.264083,-122.482774));
 		LatLngBounds harned = new LatLngBounds(new LatLng(47.263249,-122.483686),new LatLng(47.264076,-122.483209));
 		LatLngBounds collins = new LatLngBounds(new LatLng(47.264316,-122.482045),new LatLng(47.264833,-122.481353));
 		LatLngBounds wyatt = new LatLngBounds(new LatLng(47.261604,-122.48279),new LatLng(47.262121,-122.482517));
@@ -99,125 +99,121 @@ public class CampusInfo {
 		// catagories
 		Marker whale= map.addMarker(new MarkerOptions().title("Baby Grey whale")
 				.snippet("Main building").position(test1));
-		
+		insideMarks.add(whale);
+		Marker diner= map.addMarker(new MarkerOptions().title("Dining Hall")
+				.snippet("Main building").position(sub.getCenter()));
+		insideMarks.add(diner);
 		Marker subMarker = map.addMarker(new MarkerOptions().title("Wheelock Student Center")
 				.snippet("Main building").position(sub.getCenter()));
 		general.add(subMarker);
-		allMarkers.put(subMarker,sub);
+		allMarkers.add(subMarker);
 		bounds.add(sub);
 		Marker jonesMarker = map.addMarker(new MarkerOptions()
 				.title("Jones Hall").snippet("some info").position(jones.getCenter()));
 		acadmicBuildings.add(jonesMarker);
 		art.add(jonesMarker);
 		general.add(jonesMarker);
-		allMarkers.put(jonesMarker, jones);
+		allMarkers.add(jonesMarker);
 		bounds.add(jones);
 		Marker mcintyreMarker = map
 				.addMarker(new MarkerOptions().title("McIntyre Hall")
 						.snippet("some info").position(mcintyre.getCenter()));
 		acadmicBuildings.add(mcintyreMarker);
 		general.add(mcintyreMarker);
-		allMarkers.put(mcintyreMarker, mcintyre);
+		allMarkers.add(mcintyreMarker);
 		bounds.add(mcintyre);
 		Marker howarthMarker = map.addMarker(new MarkerOptions()
 				.title("Howarth hall").snippet("some info").position(howarth.getCenter()));
 		acadmicBuildings.add(howarthMarker);
 		general.add(howarthMarker);
-		allMarkers.put(howarthMarker, howarth);
+		allMarkers.add(howarthMarker);
 		bounds.add(howarth);
 		Marker musicMarker = map.addMarker(new MarkerOptions()
 				.title("Music Building/Schneebeck Hall").snippet("some info")
 				.position(music.getCenter()));
 		acadmicBuildings.add(musicMarker);
 		art.add(musicMarker);
-		allMarkers.put(musicMarker, music);
+		allMarkers.add(musicMarker);
 		bounds.add(music);
 		Marker thompsonMarker = map
 				.addMarker(new MarkerOptions().title("Thompson Hall")
 						.snippet("some info").position(thompson.getCenter()));
 		acadmicBuildings.add(thompsonMarker);
-		allMarkers.put(thompsonMarker, thompson);
-		ArrayList<Marker> thompsonMarks = new ArrayList();
-			Marker slater= map.addMarker(new MarkerOptions().title("Slater Museum of Natural History")
-					.snippet("Main building").position(new LatLng (47.263663,-122.482974)));
-		thompsonMarks.add(slater);
-		insideMarkers.put(thompsonMarker, thompsonMarks);
-		
+		allMarkers.add(thompsonMarker);
+		bounds.add(music);
 		Marker harnedMarker = map.addMarker(new MarkerOptions()
 				.title("Harned Hall").snippet("some info").position(harned.getCenter()));
 		acadmicBuildings.add(harnedMarker);
-		allMarkers.put(harnedMarker, harned);
-		ArrayList<Marker> harnedMarks = new ArrayList();
-		harnedMarks.add(whale);
-		insideMarkers.put(harnedMarker, harnedMarks);
+		allMarkers.add(harnedMarker);
+		bounds.add(harned);
 		Marker collinsMarker = map.addMarker(new MarkerOptions()
 				.title("Collins Memorial Libary").snippet("some info")
 				.position(collins.getCenter()));
 		acadmicBuildings.add(collinsMarker);
-		allMarkers.put(harnedMarker, harned);
+		allMarkers.add(collinsMarker);
 		general.add(collinsMarker);
 		bounds.add(collins);
 		Marker wyattMarker = map.addMarker(new MarkerOptions()
 				.title("Wyatt Hall").snippet("some info").position(wyatt.getCenter()));
 		acadmicBuildings.add(wyattMarker);
-		allMarkers.put(wyattMarker, wyatt);
+		allMarkers.add(wyattMarker);
 		bounds.add(wyatt);
 		Marker poolMarker = map.addMarker(new MarkerOptions()
 				.title("Warner Hall & Wallace Pool").snippet("some info")
 				.position(pool.getCenter()));
 		general.add(poolMarker);
-		allMarkers.put(poolMarker, pool);
+		allMarkers.add(poolMarker);
 		bounds.add(pool);
 		Marker wyerhaseuserMarker = map.addMarker(new MarkerOptions()
 				.title("Weyerhaseuser Hall").snippet("some info")
 				.position(weyerhaseuser.getCenter()));
 		acadmicBuildings.add(wyerhaseuserMarker);
 		general.add(wyerhaseuserMarker);
-		allMarkers.put(wyerhaseuserMarker, weyerhaseuser);
+		allMarkers.add(wyerhaseuserMarker);
 		bounds.add(weyerhaseuser);
 		Marker toddMarker = map.addMarker(new MarkerOptions()
 				.title("Todd/Phibbs Hall").snippet("some info").position(todd.getCenter()));
 		dorms.add(toddMarker);
-		allMarkers.put(toddMarker, todd);
+		allMarkers.add(toddMarker);
 		bounds.add(todd);
 		Marker regesterMarker = map
 				.addMarker(new MarkerOptions().title("Regester Hall")
 						.snippet("some info").position(regester.getCenter()));
 		dorms.add(regesterMarker);
-		allMarkers.put(regesterMarker, regester);
+		allMarkers.add(regesterMarker);
 		bounds.add(regester);
 		Marker sewardMarker = map.addMarker(new MarkerOptions()
 				.title("Seward Hall").snippet("some info").position(seward.getCenter()));
 		dorms.add(sewardMarker);
-		allMarkers.put(sewardMarker, seward);
+		allMarkers.add(sewardMarker);
 		bounds.add(seward);
 		Marker trimbleMarker = map.addMarker(new MarkerOptions()
 				.title("Trimble Hall").snippet("some info").position(trimble.getCenter()));
 		dorms.add(trimbleMarker);
-		allMarkers.put(trimbleMarker, trimble);
+		allMarkers.add(trimbleMarker);
 		bounds.add(trimble);
 		Marker kilworthMarker = map.addMarker(new MarkerOptions()
 				.title("Kilworth Memorial Chapel").snippet("some info")
 				.position(kilworth.getCenter()));
 		general.add(kilworthMarker);
-		allMarkers.put(kilworthMarker,kilworth);
+		allMarkers.add(kilworthMarker);
 		bounds.add(kilworth);
 		Marker alMarker = map.addMarker(new MarkerOptions()
 				.title("Anderson/Langdon Hall").snippet("some info")
 				.position(al.getCenter()));
 		dorms.add(alMarker);
-		allMarkers.put(alMarker, al);
+		allMarkers.add(alMarker);
 		bounds.add(al);
 		Marker schiffMarker = map.addMarker(new MarkerOptions()
 				.title("Schiff Hall").snippet("some info").position(schiff.getCenter()));
 		dorms.add(schiffMarker);
-		allMarkers.put(schiffMarker, schiff);
+		allMarkers.add(schiffMarker);
 		bounds.add(schiff);
 		Marker kittredgeMarker = map.addMarker(new MarkerOptions()
 				.title("Kittredge Gallery").snippet("some info")
 				.position(kittredge.getCenter()));
 		art.add(kittredgeMarker);
-		allMarkers.put(kittredgeMarker, kittredge);
+		allMarkers.add(kittredgeMarker);
 		bounds.add(kittredge);
 		
 		
@@ -225,12 +221,12 @@ public class CampusInfo {
 		Marker phiDeltMarker = map.addMarker(new MarkerOptions().title("Phi Delt")
 				.snippet("dorm").position(phiDelt.getCenter()));
 		general.add(phiDeltMarker);
-		allMarkers.put(phiDeltMarker, phiDelt);
+		allMarkers.add(phiDeltMarker);
 		bounds.add(phiDelt);
 		Marker alphaPhiMarker = map.addMarker(new MarkerOptions().title("Alpha Phi")
 				.snippet("Dorm").position(alphaPhi.getCenter()));
 		general.add(alphaPhiMarker);
-		allMarkers.put(alphaPhiMarker, alphaPhi);
+		allMarkers.add(alphaPhiMarker);
 		bounds.add(alphaPhi);
 		
 		// adds all of the lists to a master list
@@ -238,7 +234,7 @@ public class CampusInfo {
 		listoflists.add(dorms);
 		listoflists.add(general);
 		listoflists.add(art);
-		
+		addkeepers(allMarkers);
 	}
 
 	public void addkeepers(ArrayList<Marker> marks) {
@@ -258,20 +254,22 @@ public class CampusInfo {
 		for (ArrayList<Marker> a : listoflists) {
 			{
 				for (Marker m : a) {
-					m.setVisible(true);
+					m.setVisible(false);
 				}
 			}
 		}
-		/*for (ArrayList<Marker> a : keepers) {
+		for (ArrayList<Marker> a : keepers) {
 			{
 				for (Marker m : a) {
 					m.setVisible(true);
 				}
 			}
-		}*/
+		}
 	}
 
-	
+	public static ArrayList getall() {
+		return allMarkers;
+	}
 	
 	public static LatLngBounds getBounds(int i) {
 		return bounds.get(i);

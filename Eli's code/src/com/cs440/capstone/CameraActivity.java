@@ -42,7 +42,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private static Camera mainCam;
 	private CameraPreview camView;
 	private SensorManager mSensorManager;
-	public ArrayList<Marker> marks = new ArrayList ();
+	public ArrayList<Marker> allMarkers = new ArrayList ();
 	public ArrayList<Marker> currentlyNear = new ArrayList();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
 	public float heading;
@@ -58,7 +58,6 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private LocationListener onLocationChange;
 	private LocationManager lm;
 	public LatLng mylatlng;
-	private Marker insideMark;
 	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
@@ -276,10 +275,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		currentlyvisable.clear();
    		camover.xPos.clear();
    		camover.yPos.clear();
-   		
-   		for(Marker temp : CampusInfo.allMarkers.keySet()){
-   			marks.add(temp);
-   		}
+   		ArrayList<Marker>  marks= CampusInfo.getall();
    		Marker m;
    		for(int i=0; i<marks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	m= marks.get(i);
@@ -292,12 +288,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
    				LatLngBounds b=CampusInfo.getBounds(i);
-   				if(CampusInfo.allMarkers.get(m).contains(mylatlng))
+   				if(b.contains(mylatlng))
    						{
    					
    					camover.insidebool=true; 	
    					camover.inside=("Inside "+m.getTitle());
-   					insideMark=m;
    					currentlyNear.clear();
    					camover.invalidate();
    					Log.d("Inside", "we should be inside");
@@ -348,11 +343,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public void insidecurrentlyVisable()
 	{	Marker m;
 		ArrayList<Marker> temp = new ArrayList();
-		
-		if(CampusInfo.insideMarkers.get(insideMark)!=null){
-		for(int i=0; i<CampusInfo.insideMarkers.get(insideMark).size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
+
+		for(int i=0; i<CampusInfo.insideMarks.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
-			m= CampusInfo.insideMarkers.get(insideMark).get(i);
+			m= CampusInfo.insideMarks.get(i);
    			double longi= m.getPosition().longitude; //converting locations to Doubles as to allow comparison
    			double lati = m.getPosition().latitude;
    			double longi1= mylatlng.longitude;
@@ -362,7 +356,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
    				temp.add(m);//if it is add it to the array
-   				}
+   				
+   			
+   		}
 	
 		for(Marker m1: temp)// a loop to see which of those currently near markers are within our angle of view
    		{
@@ -393,7 +389,6 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					{
    				camover.setDisplayText("");
    					}
-   		}
 		}
 	}
 			
