@@ -67,6 +67,7 @@ public class CameraOverlay extends View {
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 300;
 		for(int i=0; i<nearList.size(); i++){
+			Log.d("Test", nearList.size() +"");
 			canvas.drawBitmap(bmp, xPos.get(i),(float)y-75, paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);
@@ -136,5 +137,7 @@ public class CameraOverlay extends View {
 	}
 	return true;
 	}
+
+	
 
 }

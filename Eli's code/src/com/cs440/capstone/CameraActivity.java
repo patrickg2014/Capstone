@@ -224,7 +224,6 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		camover.invalidate();
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
-   		
  
  
    		       
@@ -364,7 +363,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
    				temp.add(m);//if it is add it to the array
-   				
+   			}	
    			
    		}
 	
@@ -402,5 +401,5 @@ public class CameraActivity extends Activity implements SensorEventListener{
 			
 	
 	}
-	}
+	
 
