@@ -52,38 +52,30 @@ public class CameraActivity extends Activity{
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO Auto-generated method stub
-		super.onConfigurationChanged(newConfig);
-		Log.d("Changing", "is this it" + this.getResources().getConfiguration().orientation);
-		if(this.getResources().getConfiguration().orientation == 2){
-			mainCam.setDisplayOrientation(0);
-		}else{
-			mainCam.setDisplayOrientation(90);
-		}
+		
 	}
 	
     public static int getScreenOrientation(Activity activity) {
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        int orientation = activity.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-          if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) {
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-          } else {
-            return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-          }
-        }
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-          if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
-            return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-          } else {
-            return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-          }
-        }
-        return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+		return 0;
+        
       }
 	
+    @Override
+    protected void onPause() {
+        super.onPause();      // if you are using MediaRecorder, release it first
+        releaseCamera();              // release the camera immediately on pause event
+    }
+
+
+
+    private void releaseCamera(){
+        if (mainCam != null){
+        	mainCam.lock();  
+            mainCam.release();        // release the camera for other applications
+            mainCam = null;
+        }
 	
 	
-	
+    }
 	
 }

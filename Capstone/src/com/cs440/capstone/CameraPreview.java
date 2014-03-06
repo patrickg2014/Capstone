@@ -38,8 +38,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
         	Log.d("Changing", "surface created method");
             mCamera.setPreviewDisplay(holder);
-            mCamera.setDisplayOrientation(90);
+            mCamera.setDisplayOrientation(0);
             mCamera.startPreview();
+         
             
         } catch (IOException e) {
             Log.d("TAG", "Error setting camera preview: " + e.getMessage());
