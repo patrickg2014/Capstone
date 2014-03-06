@@ -276,7 +276,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		camover.xPos.clear();
    		camover.yPos.clear();
    		ArrayList<Marker>  marks= new ArrayList<Marker>();
-   		for(Marker m1: CampusInfo.insideMarkers.keySet())
+   		for(Marker m1: CampusInfo.allMarkers.keySet())
 		{
 		marks.add(m1);	
 		}
