@@ -37,7 +37,7 @@ public class CampusInfo {
 		LatLng pugetsound = new LatLng(47.2626, -122.4817);
 	
 		
-		LatLngBounds sub = new LatLngBounds(new LatLng(47.262887,-122.479227),new LatLng(47.263494,-122.47875));
+		LatLngBounds sub = new LatLngBounds(new LatLng(47.25962,-122.484845),new LatLng(47.260566,-122.483488));
 		LatLngBounds jones = new LatLngBounds(new LatLng(47.263286,-122.481235),new LatLng(47.264006,-122.481004));
 		LatLngBounds mcintyre = new LatLngBounds(new LatLng(47.263945,-122.480714),new LatLng(47.264101,-122.480097));
 		LatLngBounds howarth = new LatLngBounds(new LatLng(47.263184,-122.480714),new LatLng(47.263337,-122.480119));
@@ -98,7 +98,7 @@ public class CampusInfo {
 		// creates markers and adds them to the arrays of the corosponding
 		// catagories
 		Marker whale= map.addMarker(new MarkerOptions().title("Baby Grey whale")
-				.snippet("Main building").position(test1));
+				.snippet("Main building").position(sub.getCenter()));
 		
 		Marker subMarker = map.addMarker(new MarkerOptions().title("Wheelock Student Center")
 				.snippet("Main building").position(sub.getCenter()));

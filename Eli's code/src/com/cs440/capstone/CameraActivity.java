@@ -42,7 +42,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private static Camera mainCam;
 	private CameraPreview camView;
 	private SensorManager mSensorManager;
-	public ArrayList<Marker> allMarkers = new ArrayList ();
+	
 	public ArrayList<Marker> currentlyNear = new ArrayList();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
 	public float heading;
@@ -291,8 +291,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			if(distance<=.00175)	//check to make sure they are in the radius
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
-   				LatLngBounds b=CampusInfo.getBounds(i);
-   				if(b.contains(mylatlng))
+   				
+   				if(CampusInfo.allMarkers.get(m).contains(mylatlng))
    						{
    					
    					camover.insidebool=true; 	
