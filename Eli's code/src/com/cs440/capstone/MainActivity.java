@@ -11,10 +11,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Display;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 import android.app.ActionBar;
 
 import com.google.android.gms.maps.*;
@@ -27,8 +34,13 @@ public class MainActivity extends Activity {
 	public ArrayList<ArrayList> listoflists = new ArrayList();
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
-	private Button goToCam;
 	GoogleMap map = null;
+	
+	 private String[] mOptionTitles;
+	 private DrawerLayout mDrawerLayout;
+	 private ListView mDrawerList;
+	 private CharSequence mTitle;
+	 private ActionBarDrawerToggle mDrawerToggle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
@@ -42,18 +54,6 @@ public class MainActivity extends Activity {
 			cameraActivity();
 		}
 		setContentView(R.layout.activity_main);
-		goToCam = (Button) findViewById(R.id.button1);	//sets up the button for going to the camera view this may switch to simply rotating the phone
-		goToCam.setOnClickListener(new View.OnClickListener() //sets up a listener for that button
-		{
-
-			@Override
-			public void onClick(View v) //on click we will go to the cameraActivity
-			{
-				// TODO Auto-generated method stub
-				cameraActivity();
-			}
-		});
-
 		// Map
 
 		// Get a handle to the Map Fragment
@@ -63,8 +63,44 @@ public class MainActivity extends Activity {
 
 		CampusInfo campusInfo = new CampusInfo(map);
 		campusInfo.showMarkers();
+		
+		 mTitle = "test";
+		 
+		 	mOptionTitles = getResources().getStringArray(R.array.Menu);
+	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+	        
+	        // Set the adapter for the list view
+	        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+	                R.layout.drawer_list_item, mOptionTitles));
+	        // Set the list's click listener
+	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+	 
+	        mDrawerToggle = new ActionBarDrawerToggle(
+	                this,                  /* host Activity */
+	                mDrawerLayout,         /* DrawerLayout object */
+	                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+	                R.string.drawer_open,  /* "open drawer" description */
+	                R.string.drawer_close  /* "close drawer" description */
+	        ) {
+	 
+	            /** Called when a drawer has settled in a completely closed state. */
+	            public void onDrawerClosed(View view) {
+	                getActionBar().setTitle(mTitle);
+	            }
+	 
+	            /** Called when a drawer has settled in a completely open state. */
+	            public void onDrawerOpened(View drawerView) {
+	                getActionBar().setTitle(mTitle);
+	            }
+	        };
+	 
+	        // Set the drawer toggle as the DrawerListener
+	        mDrawerLayout.setDrawerListener(mDrawerToggle);
+	 
+	        getActionBar().setDisplayHomeAsUpEnabled(true);
+	        getActionBar().setHomeButtonEnabled(true);
 	}
-
 	public void cameraActivity() //what allows us to switch to the camera activity on button click
 	{
 		Intent intent = new Intent(this, CameraActivity.class);
@@ -89,6 +125,7 @@ public class MainActivity extends Activity {
 	  if(newConfig.orientation == newConfig.ORIENTATION_LANDSCAPE){
 		  cameraActivity();
 	  }
+	  mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -98,5 +135,57 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+        
+        return super.onOptionsItemSelected(item);
+    }
+ 
+    /**
+     * Swaps fragments in the main content view
+     */
+    private void selectItem(int position) {
+    	String choice = mOptionTitles[position];
+        Toast.makeText(this, choice, Toast.LENGTH_SHORT).show();
+        
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mOptionTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+        if(choice.contentEquals("Camera")){
+        	cameraActivity();
+        }
+    }
+ 
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
+ 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+      
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			// TODO Auto-generated method stub
+			selectItem(arg2);
+			
+		}
+    }
+    
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
 
 }
