@@ -99,6 +99,7 @@ public class CampusInfo {
 		// catagories
 		Marker whale= map.addMarker(new MarkerOptions().title("Baby Grey whale")
 				.snippet("Main building").position(test1));
+		whale.setVisible(false);
 		
 		Marker subMarker = map.addMarker(new MarkerOptions().title("Wheelock Student Center")
 				.snippet("Main building").position(sub.getCenter()));
@@ -142,6 +143,7 @@ public class CampusInfo {
 					.snippet("Main building").position(new LatLng (47.263663,-122.482974)));
 		thompsonMarks.add(slater);
 		insideMarkers.put(thompsonMarker, thompsonMarks);
+		slater.setVisible(false);
 		
 		Marker harnedMarker = map.addMarker(new MarkerOptions()
 				.title("Harned Hall").snippet("some info").position(harned.getCenter()));

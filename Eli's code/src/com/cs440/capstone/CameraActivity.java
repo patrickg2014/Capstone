@@ -46,6 +46,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public ArrayList<Marker> currentlyNear = new ArrayList();
 	public ArrayList<Marker> currentlyvisable = new ArrayList();
 	public float heading;
+	public Marker insideMark;
 	public Location currentLocation;
 	Location myloc;
 	private boolean mShowText;
@@ -217,10 +218,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
     	{
     		checkCurrentlyVisable();
     	}
-    	else{
+    	/*else{
     		insidecurrentlyVisable();
     	}
-   		camover.setDisplayArray(currentlyvisable);
+*/   		camover.setDisplayArray(currentlyvisable);
    		camover.invalidate();
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
@@ -296,6 +297,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					
    					camover.insidebool=true; 	
    					camover.inside=("Inside "+m.getTitle());
+   					insideMark=m;
    					currentlyNear.clear();
    					camover.invalidate();
    					Log.d("Inside", "we should be inside");
@@ -345,12 +347,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	}
 	public void insidecurrentlyVisable()
 	{	Marker m;
-		ArrayList<Marker> temp = new ArrayList();
-		for(Marker m1: CampusInfo.insideMarkers.keySet())
-		{
-		temp.add(m1);	
-		}
-			
+		ArrayList<Marker> temp = CampusInfo.insideMarkers.get(insideMark);
+		
+			if(temp!=null){
 		for(int i=0; i<temp.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
 			m= temp.get(i);
@@ -397,6 +396,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				camover.setDisplayText("");
    					}
 		}
+			}
 	}
 			
 	
