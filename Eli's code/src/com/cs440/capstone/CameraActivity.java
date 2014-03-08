@@ -218,10 +218,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
     	{
     		checkCurrentlyVisable();
     	}
-    	/*else{
+    	else{
     		insidecurrentlyVisable();
-    	}
-*/   		camover.setDisplayArray(currentlyvisable);
+	}
+   		camover.setDisplayArray(currentlyvisable);
    		camover.invalidate();
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
@@ -346,9 +346,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		}
 	}
 	public void insidecurrentlyVisable()
-	{	Marker m;
+	{	
+		Log.d("INside","this should be working..."+insideMark.getTitle());
+		Marker m;
 		ArrayList<Marker> temp = CampusInfo.insideMarkers.get(insideMark);
-		
+		currentlyNear.clear();
 			if(temp!=null){
 		for(int i=0; i<temp.size(); i++)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
@@ -361,12 +363,12 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			if(distance<=.00075)	//check to make sure they are in the radius
 //   					(longi1+lati1)-(longi-lati)<=.001)
    			{
-   				temp.add(m);//if it is add it to the array
+   				currentlyNear.add(m);//if it is add it to the array
    			}	
    			
    		}
 	
-		for(Marker m1: temp)// a loop to see which of those currently near markers are within our angle of view
+		for(Marker m1: currentlyNear)// a loop to see which of those currently near markers are within our angle of view
    		{
    			Location location = new Location("mloc");
    			  location.setLatitude(m1.getPosition().latitude);

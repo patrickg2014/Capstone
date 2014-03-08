@@ -59,6 +59,7 @@ public class CampusInfo {
 		LatLngBounds phiDelt = new LatLngBounds(new LatLng(47.262157,-122.485419),new LatLng(47.262354,-122.485145));
 		LatLngBounds alphaPhi = new LatLngBounds(new LatLng(47.262456,-122.485408),new LatLng(47.262576,-122.485038));
 		LatLng test1= new LatLng(47.263642,-122.483541);
+		LatLng clapp= new LatLng(47.263943,-122.481111);
 		map.setMyLocationEnabled(true);
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));// sets
 																			// where
@@ -112,6 +113,11 @@ public class CampusInfo {
 		art.add(jonesMarker);
 		general.add(jonesMarker);
 		allMarkers.put(jonesMarker, jones);
+		ArrayList<Marker> jonesMarkers = new ArrayList();
+		Marker clappMark= map.addMarker(new MarkerOptions().title("Norton Clapp")
+				.snippet("blahh blahh").position(clapp));
+		jonesMarkers.add(clappMark);
+		insideMarkers.put(jonesMarker, jonesMarkers);
 		bounds.add(jones);
 		Marker mcintyreMarker = map
 				.addMarker(new MarkerOptions().title("McIntyre Hall")
