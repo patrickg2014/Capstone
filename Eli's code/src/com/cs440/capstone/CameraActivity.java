@@ -45,6 +45,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private LocationManager lm;
 	public LatLng mylatlng;
 	private int counter=0;
+	private int angleOfView=100;
 	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
@@ -237,7 +238,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	
 	private void screenScale()
 	{
-		theScale=(width)/100;
+		theScale=(width)/angleOfView;
 		Log.d("DENS", ""+theScale);
 
 	}
@@ -298,20 +299,20 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  location.setLongitude(currentlyNear.get(i).m.getPosition().longitude);
    			int locHead=(int) myloc.bearingTo(location);
    			int headingOptimized=(int) heading;
-   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			 if((myloc.bearingTo(location)-headingOptimized)<(-310+angleOfView/2)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
    			 {
    				 locHead=(int)myloc.bearingTo(location)+360;	
    			 }
-   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			if((myloc.bearingTo(location)-headingOptimized)>360-angleOfView/2) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
   			 {
   				headingOptimized=(int)heading+360;	
   			 }
-   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
+   			  if(Math.abs(locHead-headingOptimized)<(angleOfView/2))	// checks to see if it is in view
    			  {
    				Log.d("near", currentlyNear.get(i).title);
    				
    				camover.nearList.add(currentlyNear.get(i));
-   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
    				camover.yPos.add((float) (myloc.distanceTo(location)+200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
@@ -343,20 +344,20 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  location.setLongitude(b.m.getPosition().longitude);
    			int locHead=(int) myloc.bearingTo(location);
    			int headingOptimized=(int) heading;
-   			 if((myloc.bearingTo(location)-headingOptimized)<(-310)) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			 if((myloc.bearingTo(location)-headingOptimized)<((-360+(angleOfView/2)))) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
    			 {
    				 locHead=(int)myloc.bearingTo(location)+360;	
    			 }
-   			if((myloc.bearingTo(location)-headingOptimized)>310) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
+   			if((myloc.bearingTo(location)-headingOptimized)>(360-(angleOfView/2))) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
   			 {
   				headingOptimized=(int)heading+360;	
   			 }
-   			  if(Math.abs(locHead-headingOptimized)<50)	// checks to see if it is in view
+   			  if(Math.abs(locHead-headingOptimized)<angleOfView/2)	// checks to see if it is in view
    			  {
    				Log.d("near", b.title);
    				if(!camover.nearList.contains(b)){
    				camover.nearList.add(b);
-   				camover.xPos.add((float) (((locHead - headingOptimized)+50)%100)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
    				camover.yPos.add((float) (myloc.distanceTo(location)+200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				}
