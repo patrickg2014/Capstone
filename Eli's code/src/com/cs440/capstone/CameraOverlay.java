@@ -2,9 +2,10 @@ package com.cs440.capstone;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.android.gms.maps.model.Marker;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,23 +13,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 
 public class CameraOverlay extends View {
 
 	private boolean mShowText;
 	private int mTextPos;
 	public String inside="";
-	private String displayText= "";
 	public boolean insidebool=false;
-	public ArrayList<Marker> nearList=new ArrayList ();
-	public ArrayList<Float> xPos=new ArrayList ();
-	public ArrayList<Float> yPos=new ArrayList ();
+	public ArrayList<Building> nearList=new ArrayList<Building> ();
+	public ArrayList<Float> xPos=new ArrayList<Float> ();
+	public ArrayList<Float> yPos=new ArrayList<Float> ();
+	private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
 
 	
 	public CameraOverlay(Context context, AttributeSet attrs) {
@@ -53,8 +52,6 @@ public class CameraOverlay extends View {
 	}*/
 	
 	
-
-	@Override
 	protected void onDraw(Canvas canvas) {
 		
 		Log.d("draw", "WE ARE DRAWING!!");
@@ -62,20 +59,20 @@ public class CameraOverlay extends View {
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.WHITE);
 		paint.setTextSize(50);
-		Rect rect = new Rect();
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
+		
 		
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
-		int y= 300;
-		for(int i=0; i<nearList.size(); i++){
+		int y= 200;
+		Log.d("Test", nearList.size() +"");
+		for(int i=0; i<(nearList.size()); i++){
 			Log.d("Test", nearList.size() +"");
-			canvas.drawBitmap(bmp, xPos.get(i),(float)y-75, paint);
+			canvas.drawBitmap(bmp, (float) (xPos.get(i)-(bmp.getWidth())),(float) (yPos.get(i)-(bmp.getHeight()/2)), paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);
-			canvas.drawText(nearList.get(i).getTitle(), xPos.get(i)+bmp.getWidth(), (float)y, paint);//draws text at x,y position
+			canvas.drawText(nearList.get(i).title, xPos.get(i), yPos.get(i), paint);//draws text at x,y position
 			 paint.setStrokeWidth(2);
 			 paint.setColor(Color.BLACK);
-			 canvas.drawText(nearList.get(i).getTitle(), xPos.get(i)+bmp.getWidth(), (float)y, paint);
+			 canvas.drawText(nearList.get(i).title, xPos.get(i),yPos.get(i), paint);
 			
 			y = y + 200;
 		}
@@ -88,8 +85,10 @@ public class CameraOverlay extends View {
 		 paint.setStrokeWidth(2);
 		 paint.setColor(Color.BLACK);
 		 canvas.drawText(inside, 100, 100, paint);
+		
 					}
-				super.onDraw(canvas);
+			 super.onDraw(canvas);
+				
 			}
 	
 	
@@ -97,7 +96,6 @@ public class CameraOverlay extends View {
 		return mShowText;
 	}
 	public void setDisplayText(String setText) {
-		displayText=setText;
 		invalidate();
 	}
 
@@ -107,7 +105,7 @@ public class CameraOverlay extends View {
 		requestLayout();
 	}
 
-	public void setDisplayArray(ArrayList<Marker> currentlyNear) {
+	public void setDisplayArray(ArrayList<Building> currentlyNear) {
 		nearList = currentlyNear;
 		
 	}
@@ -127,10 +125,10 @@ public class CameraOverlay extends View {
 	    case MotionEvent.ACTION_UP:
 	       //do something
 	    	for(int i=0; i<xPos.size(); i++){
-	    		Log.d("Touch", nearList.get(i).getTitle()+ "  "+ xPos.get(i)+ "  "+yPos.get(i));
+	    		Log.d("Touch", nearList.get(i).title+ "  "+ xPos.get(i)+ "  "+yPos.get(i));
 	    		if(x+500 >= xPos.get(i) && x-500 <= xPos.get(i)){
 	    			if(y+200 >= yPos.get(i) && x-200 <= yPos.get(i)){
-	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked");
+	    				Log.d("Touch", nearList.get(i).title+"  it worked");
 	    			}
 	    		}
 	    	}

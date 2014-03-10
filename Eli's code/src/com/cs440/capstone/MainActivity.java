@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 				.getMap();
 
 		CampusInfo campusInfo = new CampusInfo(map);
-		campusInfo.showMarkers();
+		CampusInfo.createMarkers();
 		
 		 mTitle = "test";
 		 
