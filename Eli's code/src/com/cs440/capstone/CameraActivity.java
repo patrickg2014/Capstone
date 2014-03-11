@@ -22,6 +22,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -37,7 +38,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public Location currentLocation;
 	Location myloc;
 	public CameraOverlay camover;
-	public int width=4;
+	public static int width=4;
 	public int height=4;
 	public int dens= 40;
 	public static int theScale=1;
@@ -56,7 +57,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);	//pulls and saved state for the activity
-		
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.camera_layout);	// sets the layout
 		getCameraInstance();	//calls to start up the camera
@@ -89,8 +90,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	            //sets and displays the lat/long when a location is provided
 	        	if(loc != null)
 	        	{
-	        		currentLocation= CampusInfo.map.getMyLocation();
-	        		
+	        		currentLocation=loc;
 	        		// This is being called on heading updates, but should also
 	        		// be called whenever we get a new location update since
 	        		// you may not change headings but may change locations.
@@ -269,6 +269,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					camover.inside=("Inside "+b.title);
    					insideBuilding=b;
    					currentlyNear.clear();
+   					currentlyNear.add(b);
+   					camover.xPos.add((float) 50);
+   					camover.yPos.add((float) 50);
    					Log.d("Inside", "we should be inside");
    					break;
    						}
@@ -313,7 +316,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNear.get(i));
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (myloc.distanceTo(location)+200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float) (myloc.distanceTo(location)*5+200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }
@@ -334,7 +337,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	{	
 		Log.d("INside","this should be working..."+insideBuilding.title);
 
-		currentlyNear.clear();
+		
 		if(insideBuilding.insidePoints!=null){
 	
 		for(Building b: insideBuilding.insideList)// a loop to see which of those currently near markers are within our angle of view
@@ -358,8 +361,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				if(!camover.nearList.contains(b)){
    				camover.nearList.add(b);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (myloc.distanceTo(location)+200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float) (myloc.distanceTo(location)*5+200)); //make sure that the text doesn't overlap
    				camover.invalidate();
+   			
    				}
    				  }
    				 //rewrite the text

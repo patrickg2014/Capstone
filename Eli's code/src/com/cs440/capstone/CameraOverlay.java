@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,7 +33,10 @@ public class CameraOverlay extends View {
 	
 	public CameraOverlay(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
+		Rect rect= new Rect();
+		rect.set(0, 0, CameraActivity.width, 200);
+		
+		
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.CameraOverlay, 0, 0);
 
@@ -78,13 +82,16 @@ public class CameraOverlay extends View {
 		}
 			if(insidebool)
 				{
-		
-		 paint.setStrokeWidth(0);
-		 paint.setColor(Color.WHITE);
-		 canvas.drawText(inside, 100, 100, paint);//draws text at x,y position
-		 paint.setStrokeWidth(2);
-		 paint.setColor(Color.BLACK);
-		 canvas.drawText(inside, 100, 100, paint);
+					paint.setColor(Color.DKGRAY);
+			        paint.setStrokeWidth(50);
+			        paint.setStyle(Paint.Style.STROKE);
+			        canvas.drawRect(0, 0, CameraActivity.width, 50, paint);
+			        paint.setStrokeWidth(0);
+			        paint.setColor(Color.WHITE);
+			        canvas.drawText(inside, 50, 50, paint);//draws text at x,y position
+			        paint.setStrokeWidth(2);
+			        paint.setColor(Color.BLACK);
+			        canvas.drawText(inside, 50, 50, paint);
 		
 					}
 			 super.onDraw(canvas);
@@ -117,17 +124,33 @@ public class CameraOverlay extends View {
 		Log.d("Touch",x+"   "+y);
 	switch (event.getAction()) {
 	    case MotionEvent.ACTION_DOWN:
-	        // do something
+for(int i=0; i<xPos.size(); i++){
+	    		
+	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
+	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
+	    				Log.d("Touch", nearList.get(i).title+"  it worked");
+	    			}
+	    		}
+	    	}
 	        break;
+
 	    case MotionEvent.ACTION_MOVE:
-	        // do something
+for(int i=0; i<xPos.size(); i++){
+	    		
+	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
+	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
+	    				Log.d("Touch", nearList.get(i).title+"  it worked");
+	    			}
+	    		}
+	    	}
 	        break;
+
 	    case MotionEvent.ACTION_UP:
 	       //do something
 	    	for(int i=0; i<xPos.size(); i++){
-	    		Log.d("Touch", nearList.get(i).title+ "  "+ xPos.get(i)+ "  "+yPos.get(i));
-	    		if(x+500 >= xPos.get(i) && x-500 <= xPos.get(i)){
-	    			if(y+200 >= yPos.get(i) && x-200 <= yPos.get(i)){
+	    		
+	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
+	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
 	    				Log.d("Touch", nearList.get(i).title+"  it worked");
 	    			}
 	    		}

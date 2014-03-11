@@ -15,19 +15,22 @@ public class Building{
 	public String snipit;
 	public LatLng llng;
 	public ArrayList<Building> insidePoints;
+	
 
 	
 	
-	public Building(String title, String snipit, LatLngBounds bounds) {
+	public Building(String title, String snipit,Boolean building, LatLngBounds bounds) {
 		
 		this.title=title;
 		this.snipit=snipit;
 		insideList= new ArrayList<Building>();
 		bound=bounds;
 		makeMarker();
-		if( !CampusInfo.all.contains(this)){
+		
+		if( !CampusInfo.all.contains(this)&&building){
 			CampusInfo.all.add(this);
 		}
+		
 		 
 	}
 	public Building(String title, String snipit, LatLng latlng) {

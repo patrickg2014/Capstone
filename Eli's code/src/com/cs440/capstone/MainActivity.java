@@ -17,6 +17,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +47,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
+		
 		Display display = getWindowManager().getDefaultDisplay();
 		int orientation = display.getRotation();
 		if(orientation==3||orientation==1)
@@ -75,7 +77,7 @@ public class MainActivity extends Activity {
 	                R.layout.drawer_list_item, mOptionTitles));
 	        // Set the list's click listener
 	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-	 
+	
 	        mDrawerToggle = new ActionBarDrawerToggle(
 	                this,                  /* host Activity */
 	                mDrawerLayout,         /* DrawerLayout object */
