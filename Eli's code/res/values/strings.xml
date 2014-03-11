@@ -9,15 +9,14 @@
 <string name="drawer_close">Close</string>
 
 <string-array
-        name="Menu">
+        name="MainMenu">
         <item
             >Camera</item>
         <item
-            >text_string</item>
+            >Sort By</item>
         <item
-            >text_string</item>
-        <item
-            >text_string</item>
+            >Facebook Login</item>
+        
     </string-array>
 
 </resources>

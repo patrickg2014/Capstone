@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		
 		 mTitle = "test";
 		 
-		 	mOptionTitles = getResources().getStringArray(R.array.Menu);
+		 	mOptionTitles = getResources().getStringArray(R.array.MainMenu);
 	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 	        
@@ -86,12 +86,12 @@ public class MainActivity extends Activity {
 	 
 	            /** Called when a drawer has settled in a completely closed state. */
 	            public void onDrawerClosed(View view) {
-	                getActionBar().setTitle(mTitle);
+	                getActionBar().setTitle(R.string.app_name);
 	            }
 	 
 	            /** Called when a drawer has settled in a completely open state. */
 	            public void onDrawerOpened(View drawerView) {
-	                getActionBar().setTitle(mTitle);
+	                getActionBar().setTitle("Options");
 	            }
 	        };
 	 
