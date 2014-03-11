@@ -13,11 +13,10 @@
         <item
             >Camera</item>
         <item
-            >text_string</item>
+            >Sort By</item>
         <item
-            >text_string</item>
-        <item
-            >text_string</item>
+            >Facebook Login</item>
+        
     </string-array>
 
 </resources>
