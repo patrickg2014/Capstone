@@ -269,9 +269,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					camover.inside=("Inside "+b.title);
    					insideBuilding=b;
    					currentlyNear.clear();
-   					currentlyNear.add(b);
-   					camover.xPos.add((float) 50);
-   					camover.yPos.add((float) 50);
+   					camover.nearList.clear();
+   					camover.xPos.clear();
+   					camover.yPos.clear();
+   					
    					Log.d("Inside", "we should be inside");
    					break;
    						}
@@ -316,7 +317,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNear.get(i));
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (myloc.distanceTo(location)*5+200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float)(height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }
@@ -361,7 +362,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				if(!camover.nearList.contains(b)){
    				camover.nearList.add(b);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (myloc.distanceTo(location)*5+200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float) (height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
    				camover.invalidate();
    			
    				}

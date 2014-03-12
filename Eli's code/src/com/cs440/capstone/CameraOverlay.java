@@ -70,6 +70,7 @@ public class CameraOverlay extends View {
 		Log.d("Test", nearList.size() +"");
 		for(int i=0; i<(nearList.size()); i++){
 			Log.d("Test", nearList.size() +"");
+			
 			canvas.drawBitmap(bmp, (float) (xPos.get(i)-(bmp.getWidth())),(float) (yPos.get(i)-(bmp.getHeight()/2)), paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);
