@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -75,98 +76,97 @@ public class MainActivity extends Activity {
 		CampusInfo campusInfo = new CampusInfo(map);
 		CampusInfo.createMarkers();
 		
-		 mTitle = "test";
-		 
-		 	mOptionTitles = getResources().getStringArray(R.array.Menu);
-	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-	        
-	        // Set the adapter for the list view
-	        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-	                R.layout.drawer_list_item, mOptionTitles));
-	        // Set the list's click listener
-	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		 initDrawer(savedInstanceState);
+	}
 	
-	        mDrawerToggle = new ActionBarDrawerToggle(
-	                this,                  /* host Activity */
-	                mDrawerLayout,         /* DrawerLayout object */
-	                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-	                R.string.drawer_open,  /* "open drawer" description */
-	                R.string.drawer_close  /* "close drawer" description */
-	        ) {
-	 
-	            /** Called when a drawer has settled in a completely closed state. */
-	            public void onDrawerClosed(View view) {
-	                getActionBar().setTitle(mTitle);
-	            }
-	 
-	            /** Called when a drawer has settled in a completely open state. */
-	            public void onDrawerOpened(View drawerView) {
-	                getActionBar().setTitle(mTitle);
-	            }
-	        };
-	 
-	        // Set the drawer toggle as the DrawerListener
-	        mDrawerLayout.setDrawerListener(mDrawerToggle);
-	 
-	        getActionBar().setDisplayHomeAsUpEnabled(true);
-	        getActionBar().setHomeButtonEnabled(true);
-
-		
-		//initialize drawer
-		dataList = new ArrayList<DrawerItem>();
-        mTitle = mDrawerTitle = getTitle();
+	public void initDrawer(Bundle savedInstanceState){
+		mTitle = "test";
+		 
+	 	mOptionTitles = getResources().getStringArray(R.array.Menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-                    GravityCompat.START);
-     // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
-        dataList.add(new DrawerItem("Likes", R.drawable.ic_action_good));
-        dataList.add(new DrawerItem("Games", R.drawable.ic_action_gamepad));
-        dataList.add(new DrawerItem("Lables", R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-        dataList.add(new DrawerItem("Cloud", R.drawable.ic_action_cloud));
-        dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
-        dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
-        dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Import & Export",
-                    R.drawable.ic_action_import_export));
-        dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
-        dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
-        adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
-                dataList);
-
-        mDrawerList.setAdapter(adapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mOptionTitles));
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+ 
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+            }
+ 
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mTitle);
+            }
+        };
+ 
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+ 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-         
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                    R.drawable.ic_drawer, R.string.drawer_open,
-                    R.string.drawer_close) {
-              public void onDrawerClosed(View view) {
-                    getActionBar().setTitle(mTitle);
-                    invalidateOptionsMenu(); // creates call to
-                                                              // onPrepareOptionsMenu()
-              }
-         
-              public void onDrawerOpened(View drawerView) {
-                    getActionBar().setTitle(mDrawerTitle);
-                    invalidateOptionsMenu(); // creates call to
-                                                              // onPrepareOptionsMenu()
-              }
-        };
-         
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-         
-        if (savedInstanceState == null) {
-              SelectItem(0);
-        }
-		
+
+	
+	//initialize drawer
+	dataList = new ArrayList<DrawerItem>();
+    mTitle = mDrawerTitle = getTitle();
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+    mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+                GravityCompat.START);
+ // Add Drawer Item to dataList
+    dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
+    dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
+    dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
+    dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
+    dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
+    dataList.add(new DrawerItem("Facebook", R.drawable.ic_action_cloud));
+    dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
+    dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
+    dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+    adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
+            dataList);
+
+    mDrawerList.setAdapter(adapter);
+    mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    
+    getActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setHomeButtonEnabled(true);
+     
+    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open,
+                R.string.drawer_close) {
+          public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to
+                                                          // onPrepareOptionsMenu()
+          }
+     
+          public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to
+                                                          // onPrepareOptionsMenu()
+          }
+    };
+     
+    mDrawerLayout.setDrawerListener(mDrawerToggle);
+     
+    if (savedInstanceState == null) {
+          selectItem(0);
+    }
+	
 	}
 	
 	
@@ -216,113 +216,13 @@ public class MainActivity extends Activity {
         return false;
     }
 	
-	public void SelectItem(int possition) {
+	public void selectItem(int possition) {
 		 
-        Fragment fragment = null;
-        Bundle args = new Bundle();
-        switch (possition) {
-        case 0:
-              fragment = new FragmentOne();
-              args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 1:
-              fragment = new FragmentTwo();
-              args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 2:
-              fragment = new FragmentThree();
-              args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 3:
-              fragment = new FragmentOne();
-              args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 4:
-              fragment = new FragmentTwo();
-              args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 5:
-              fragment = new FragmentThree();
-              args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 6:
-              fragment = new FragmentOne();
-              args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 7:
-              fragment = new FragmentTwo();
-              args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 8:
-              fragment = new FragmentThree();
-              args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 9:
-              fragment = new FragmentOne();
-              args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 10:
-              fragment = new FragmentTwo();
-              args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 11:
-              fragment = new FragmentThree();
-              args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        case 12:
-              fragment = new FragmentOne();
-              args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                          .getItemName());
-              args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                          .getImgResID());
-              break;
-        default:
-              break;
-        }
-
-        fragment.setArguments(args);
-        FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                    .commit();
-
         mDrawerList.setItemChecked(possition, true);
-        setTitle(dataList.get(possition).getItemName());
+        if(dataList.get(possition).getItemName().contentEquals("Camera")){
+        	Log.d("Test", "CameraTiime");
+        	cameraActivity();
+        }
         mDrawerLayout.closeDrawer(mDrawerList);
 
   }
@@ -345,7 +245,7 @@ public class MainActivity extends Activity {
 @Override
 public void onItemClick(AdapterView<?> parent, View view, int position,
           long id) {
-    SelectItem(position);
+    selectItem(position);
 
 }
 }

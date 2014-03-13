@@ -41,6 +41,7 @@
            
             android:name="com.cs440.capstone.CameraActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

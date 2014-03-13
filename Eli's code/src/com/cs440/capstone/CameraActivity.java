@@ -69,11 +69,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		Display display = getWindowManager().getDefaultDisplay();
-		int orientation = display.getRotation();
+		/*int orientation = display.getRotation();
 		if(orientation==0||orientation==4)
 		{
 			finish();
-		}
+		}*/
 		
 		Point size = new Point();
 		display.getSize(size);
@@ -177,9 +177,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public void onConfigurationChanged(Configuration newConfig) {
 		Log.d("Billy", "Here!");
 	  super.onConfigurationChanged(newConfig);
-	  if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-		  finish();
-	  }
+	  
 	}
 
 
