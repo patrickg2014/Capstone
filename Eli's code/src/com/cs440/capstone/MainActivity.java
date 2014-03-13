@@ -223,6 +223,12 @@ public class MainActivity extends Activity {
         	Log.d("Test", "CameraTiime");
         	cameraActivity();
         }
+        if(dataList.get(possition).getItemName().contentEquals("Facebook")){
+        	Log.d("Test", "CameraTiime");
+        	 Intent intent = new Intent(MainActivity.this, LoginUsingLoginFragmentActivity.class);
+             startActivity(intent);
+        	
+        }
         mDrawerLayout.closeDrawer(mDrawerList);
 
   }
