@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+import android.os.SystemClock;
 
 public class SceneRenderer implements Renderer {
 
@@ -17,8 +18,12 @@ public class SceneRenderer implements Renderer {
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
     private final float[] mRotationMatrix = new float[16];
-
+    private float[] mModelMatrix = new float[16];
+    private float[] mTempMatrix = new float[16];
+    
     private float mAngle;
+
+	
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -35,7 +40,7 @@ public class SceneRenderer implements Renderer {
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
+        
         // Set the camera position (View matrix)
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
@@ -46,18 +51,23 @@ public class SceneRenderer implements Renderer {
 
         // Use the following code to generate constant rotation.
         // Leave this code out when using TouchEvents.
-        // long time = SystemClock.uptimeMillis() % 4000L;
-        // float angle = 0.090f * ((int) time);
-
-        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, 1.0f);
-
+         long time = SystemClock.uptimeMillis() % 4000L;
+         float angle = 0.090f * ((int) time);
+        
         // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
-        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-
+        Matrix.setIdentityM(mModelMatrix, 0); // initialize to identity matrix
+        Matrix.translateM(mModelMatrix, 0, -0.5f, 0, 0); // translation to the left
+        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
+        mTempMatrix = mModelMatrix.clone();
+        Matrix.multiplyMM(mModelMatrix, 0, mTempMatrix, 0, mRotationMatrix, 0);
+     // Combine the model matrix with the projection and camera view
+        mTempMatrix = mMVPMatrix.clone();
+        Matrix.multiplyMM(mMVPMatrix, 0, mTempMatrix, 0, mModelMatrix, 0);
         // Draw triangle
-        mTriangle.draw(scratch);
+        mTriangle.draw(mMVPMatrix);
+        
     }
 
     @Override
