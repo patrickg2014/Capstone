@@ -455,7 +455,7 @@ containing a value of this type.
         public static final int user2=0x7f02004f;
     }
     public static final class id {
-        public static final int action_settings=0x7f05002e;
+        public static final int action_settings=0x7f05002f;
         public static final int camera_layout=0x7f05000c;
         public static final int com_facebook_login_activity_progress_bar=0x7f050010;
         public static final int com_facebook_picker_activity_circle=0x7f05000f;
@@ -486,12 +486,13 @@ containing a value of this type.
         public static final int frag2_text=0x7f05002c;
         public static final int frag3_icon=0x7f050029;
         public static final int frag3_text=0x7f05002a;
+        public static final int gl_view=0x7f05002d;
         public static final int hybrid=0x7f050004;
         public static final int itemLayout=0x7f050023;
         public static final int large=0x7f050006;
         public static final int left=0x7f050007;
         public static final int left_drawer=0x7f05000b;
-        public static final int login_fragment=0x7f05002d;
+        public static final int login_fragment=0x7f05002e;
         public static final int map=0x7f05000a;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
@@ -528,7 +529,8 @@ containing a value of this type.
         public static final int fragment_layout_one=0x7f030012;
         public static final int fragment_layout_three=0x7f030013;
         public static final int fragment_layout_two=0x7f030014;
-        public static final int login_fragment_activity=0x7f030015;
+        public static final int gl_view=0x7f030015;
+        public static final int login_fragment_activity=0x7f030016;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
