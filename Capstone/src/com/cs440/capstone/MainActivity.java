@@ -1,20 +1,33 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.hardware.Camera;
 import android.location.Location;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 import android.app.ActionBar;
 
 import com.google.android.gms.maps.*;
@@ -22,281 +35,149 @@ import com.google.android.gms.maps.model.*;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
+
+	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
+	public ArrayList<ArrayList> listoflists = new ArrayList();
+	ArrayList<Marker> allMarkers = new ArrayList();
+	ArrayList<Marker> currentlyvisable = new ArrayList();
+	GoogleMap map = null;
 	
-	 public ArrayList<ArrayList<Marker>> keepers= new ArrayList();
-	 public ArrayList<ArrayList> listoflists = new ArrayList();
-	 ArrayList<Marker> allMarkers = new ArrayList ();
-	 ArrayList<Marker> currentlyvisable = new ArrayList();
-	private Button goToCam;
-	private EditText edittext;
-	
-	private Location currentLocation;
-	GoogleMap map =null;
+	 private String[] mOptionTitles;
+	private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
+    CustomDrawerAdapter adapter;
+
+    List<DrawerItem> dataList;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		edittext = (EditText) findViewById(R.id.editText1);
-		goToCam = (Button) findViewById(R.id.button1);
-		goToCam.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				cameraActivity();
-			}
-		});
-		
-		// Map
-		
-
-        // Get a handle to the Map Fragment
-		
-        map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map)).getMap();
-        
-        
-        
-       // map.setMyLocationEnabled(true);
-
-        
-        LatLng pugetsound = new LatLng(47.2626, -122.4817);
-        LatLng sub = new LatLng (47.263144,-122.478944);
-        LatLng jones = new LatLng (47.263635,-122.481138);
-        LatLng mcintyre = new LatLng ( 47.264021,-122.480403);
-        LatLng howarth = new LatLng (47.263257,-122.480435);
-        LatLng music = new LatLng ( 47.263631,-122.48235);
-        LatLng thompson = new LatLng ( 47.263668,-122.482882);
-        LatLng harned = new LatLng (47.263668,-122.483466);
-        LatLng collins = new LatLng (47.264389,-122.481723);
-        LatLng wyatt = new LatLng (47.261859,-122.482608);
-        LatLng pool = new LatLng (47.261276,-122.481685);
-        LatLng weyerhaseuser = new LatLng (47.260482,-122.480537);
-        LatLng todd = new LatLng (47.262404,-122.480832);
-        LatLng regester = new LatLng ( 47.261938,-122.480628);
-        LatLng seward = new LatLng (47.262004,-122.480081);
-        LatLng trimble = new LatLng (47.26279,-122.480392);
-        LatLng kilworth = new LatLng (47.26512,-122.481744);
-        LatLng al = new LatLng (47.264843,-122.480779);
-        LatLng schiff = new LatLng ( 47.265246,-122.480095);
-        LatLng kittredge = new LatLng (47.263905,-122.478966);
-        
-        //LatLng sydney = new LatLng(map.getMyLocation().getLatitude(),
-        //1		map.getMyLocation().getLatitude());
-
-        map.setMyLocationEnabled(true);
-
-		
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));
-        ArrayList<Marker> acadmicBuildings = new ArrayList ();
-        ArrayList<Marker> dorms = new ArrayList ();
-        ArrayList<Marker> art = new ArrayList ();
-        ArrayList<Marker> general = new ArrayList ();
-        
-        listoflists.add(acadmicBuildings);
-        listoflists.add(dorms);
-        listoflists.add(general);
-        listoflists.add(art);
-        
-        
-        Marker subMarker= map.addMarker(new MarkerOptions()
-        .title("The SUB")
-        .snippet("Main building")
-        .position(sub));
-        general.add(subMarker);
-        allMarkers.add(subMarker);
-       Marker jonesMarker= map.addMarker(new MarkerOptions()
-        .title("Jones hall")
-        .snippet("some info")
-        .position(jones));
-       acadmicBuildings.add(jonesMarker);
-       art.add(jonesMarker);
-       general.add(jonesMarker);
-       allMarkers.add(jonesMarker);
-       Marker mcintyreMarker= map.addMarker(new MarkerOptions()
-        .title("McIntyre hall")
-        .snippet("some info")
-        .position(mcintyre));
-       acadmicBuildings.add(mcintyreMarker);
-       general.add(mcintyreMarker);
-       allMarkers.add(mcintyreMarker);
-        Marker howarthMarker=map.addMarker(new MarkerOptions()
-        .title("Howarth hall")
-        .snippet("some info")
-        .position(howarth));
-        acadmicBuildings.add(howarthMarker);
-        general.add(howarthMarker);
-        allMarkers.add(howarthMarker);
-        Marker musicMarker=map.addMarker(new MarkerOptions()
-        .title("Music Building/Schneebeck Hall")
-        .snippet("some info")
-        .position(music));
-        acadmicBuildings.add(musicMarker);
-        art.add(musicMarker);
-        allMarkers.add(musicMarker);
-        Marker thompsonMarker= map.addMarker(new MarkerOptions()
-        .title("Thompson Hall")
-        .snippet("some info")
-        .position(thompson));
-        acadmicBuildings.add(thompsonMarker);
-        allMarkers.add(thompsonMarker);
-        allMarkers.add(howarthMarker);
-        Marker harnedMarker=map.addMarker(new MarkerOptions()
-        .title("Harned Hall")
-        .snippet("some info")
-        .position(harned));
-        acadmicBuildings.add(harnedMarker);
-        allMarkers.add(harnedMarker);
-       Marker collinsMarker=  map.addMarker(new MarkerOptions()
-        .title("Collins Memorial Libary")
-        .snippet("some info")
-        .position(collins));
-       acadmicBuildings.add(collinsMarker);
-       allMarkers.add(collinsMarker);
-       general.add(collinsMarker);
-        Marker wyattMarker=map.addMarker(new MarkerOptions()
-        .title("Wyatt Hall")
-        .snippet("some info")
-        .position(wyatt));
-        acadmicBuildings.add(wyattMarker);
-        allMarkers.add(wyattMarker);
-        Marker poolMarker= map.addMarker(new MarkerOptions()
-        .title("Warner Hall & Wallace Pool")
-        .snippet("some info")
-        .position(pool));
-        general.add(poolMarker);
-        allMarkers.add(poolMarker);
-        Marker wyerhaseuserMarker= map.addMarker(new MarkerOptions()
-        .title("Weyerhaseuser Hall")
-        .snippet("some info")
-        .position(weyerhaseuser));
-        acadmicBuildings.add(wyerhaseuserMarker);
-        general.add(wyerhaseuserMarker);
-        allMarkers.add(wyerhaseuserMarker);
-        Marker toddMarker=map.addMarker(new MarkerOptions()
-        .title("Todd/Phibbs Hall")
-        .snippet("some info")
-        .position(todd));
-        dorms.add(toddMarker);
-        allMarkers.add(toddMarker);
-        Marker regesterMarker=map.addMarker(new MarkerOptions()
-        .title("Regester Hall")
-        .snippet("some info")
-        .position(regester));
-        dorms.add(regesterMarker);
-        allMarkers.add(regesterMarker);
-        Marker sewardMarker=map.addMarker(new MarkerOptions()
-        .title("Seward Hall")
-        .snippet("some info")
-        .position(seward));
-        dorms.add(sewardMarker);
-        allMarkers.add(sewardMarker);
-        Marker trimbleMarker=map.addMarker(new MarkerOptions()
-        .title("Trimble Hall")
-        .snippet("some info")
-        .position(trimble));
-        dorms.add(trimbleMarker);
-        allMarkers.add(trimbleMarker);
-        Marker kilworthMarker=map.addMarker(new MarkerOptions()
-        .title("Kilworth Memorial Chapel")
-        .snippet("some info")
-        .position(kilworth));
-        general.add(kilworthMarker);
-        allMarkers.add(kilworthMarker);
-        Marker alMarker=map.addMarker(new MarkerOptions()
-        .title("Anderson/Langdon Hall")
-        .snippet("some info")
-        .position(al));
-        dorms.add(alMarker);
-        allMarkers.add(alMarker);
-        Marker schiffMarker= map.addMarker(new MarkerOptions()
-        .title("Schiff Hall")
-        .snippet("some info")
-        .position(schiff));
-        dorms.add(schiffMarker);
-        allMarkers.add(schiffMarker);
-       Marker kittredgeMarker= map.addMarker(new MarkerOptions()
-        .title("Kittredge Gallery")
-        .snippet("some info")
-        .position(kittredge));
-       art.add(kittredgeMarker);
-       allMarkers.add(kittredgeMarker); 
-       addkeepers(allMarkers);
-       showMarkers();
-       
-       map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-			
-			@Override
-			public void onMyLocationChange(Location location) {
-				if(!currentLocation.equals(location))
-				{
-				currentLocation = location;
-				whatshouldwesee();
-			       for(Marker m: currentlyvisable)
-			    	   Log.d("logout", m.getTitle());
-				}
-			}
-		});
-       
-       ArrayList<Marker> v = visibility();
-       if(v.size() > 0)
-       {
-    	   Log.d("logout", v.get(0).getTitle());
-    	   edittext.setText(v.get(0).getTitle()); 
-       }
-    	}
-	
-	public void whatshouldwesee()
-	{
-		//Location myloc= map.getMyLocation();
-		Location myloc = currentLocation;
-		LatLng mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
-		
-		currentlyvisable.clear();
-		for(Marker m: allMarkers){
-			double longi= m.getPosition().longitude;
-			double lati = m.getPosition().latitude;
-			double longi1= mylatlng.longitude;
-			double lati1 =mylatlng.latitude;
-			
-			if(Math.abs(longi-longi1) <= .001 && Math.abs(lati-lati1) <= .001)
-//					(longi1+lati1)-(longi-lati)<=.001)
-			{
-				currentlyvisable.add(m);
-			}
-		
-			
-		}
-	}
-	
-	public ArrayList<Marker> visibility()
-	{
-		VisibleRegion vr = map.getProjection().getVisibleRegion();
-		/*
-		LatLng farleft = vr.farLeft;
-		LatLng nearleft = vr.nearLeft;
-		LatLng farright = vr.farRight;
-		LatLng nearright = vr.nearRight; */
-		LatLngBounds b = vr.latLngBounds; 
-		ArrayList<Marker> markersinbound = new ArrayList<Marker>();
-		for(Marker m: allMarkers)
+	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
-			if(b.contains(m.getPosition()))
-				markersinbound.add(m);
+		super.onCreate(savedInstanceState);
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		int orientation = display.getRotation();
+		if(orientation==3||orientation==1)
+		{
+			finish();
+			cameraActivity();
 		}
-		return markersinbound;
+		setContentView(R.layout.activity_main);
+		// Map
+
+		// Get a handle to the Map Fragment
+
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
+				.getMap();
+
+		CampusInfo campusInfo = new CampusInfo(map);
+		CampusInfo.createMarkers();
+		
+		 initDrawer(savedInstanceState);
 	}
+	
+	public void initDrawer(Bundle savedInstanceState){
+		mTitle = "test";
+		 
+	 	mOptionTitles = getResources().getStringArray(R.array.Menu);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mOptionTitles));
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+ 
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+            }
+ 
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mTitle);
+            }
+        };
+ 
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+ 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
 	
-	public void cameraActivity(){
+	//initialize drawer
+	dataList = new ArrayList<DrawerItem>();
+    mTitle = mDrawerTitle = getTitle();
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+    mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+                GravityCompat.START);
+ // Add Drawer Item to dataList
+    dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
+    dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
+    dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
+    dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
+    dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
+    dataList.add(new DrawerItem("Facebook", R.drawable.ic_action_cloud));
+    dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
+    dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
+    dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+    adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
+            dataList);
+
+    mDrawerList.setAdapter(adapter);
+    mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    
+    getActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setHomeButtonEnabled(true);
+     
+    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open,
+                R.string.drawer_close) {
+          public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to
+                                                          // onPrepareOptionsMenu()
+          }
+     
+          public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to
+                                                          // onPrepareOptionsMenu()
+          }
+    };
+     
+    mDrawerLayout.setDrawerListener(mDrawerToggle);
+     
+    if (savedInstanceState == null) {
+          selectItem(0);
+    }
+    
+    mDrawerLayout.openDrawer(mDrawerList);
+	
+	}
+	
+	
+	public void cameraActivity() //what allows us to switch to the camera activity on button click
+	{
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
 
-	
-	
-	
 	public boolean checkCameraHardware(Context context) {
 		if (context.getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_CAMERA)) {
@@ -304,6 +185,19 @@ public class MainActivity extends Activity {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * This method changes to the CameraActivity when the phone is rotated
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	// Pass any configuration change to the drawer toggles
+      mDrawerToggle.onConfigurationChanged(newConfig);
+	  if(newConfig.orientation == newConfig.ORIENTATION_LANDSCAPE){
+		  cameraActivity();
+	  }
 	}
 
 	@Override
@@ -313,48 +207,62 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+     // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+              return true;
+        }
+        return false;
+    }
 	
+	public void selectItem(int possition) {
+		 
+        mDrawerList.setItemChecked(possition, true);
+        if(dataList.get(possition).getItemName().contentEquals("Camera")){
+        	Log.d("Test", "CameraTiime");
+        	cameraActivity();
+        }
+        if(dataList.get(possition).getItemName().contentEquals("Facebook")){
+        	Log.d("Test", "CameraTiime");
+        	 Intent intent = new Intent(MainActivity.this, LoginUsingLoginFragmentActivity.class);
+             startActivity(intent);
+        	
+        }
+        if(dataList.get(possition).getItemName().contentEquals("About")){
+        	Log.d("Test", "OPENGLLLLLLLLLLL");
+        	 Intent intent = new Intent(MainActivity.this, OpenGlActivity.class);
+             startActivity(intent);
+        	
+        }
+        mDrawerLayout.closeDrawer(mDrawerList);
+
+  }
 	
-	public void showMarkers()
-	{
-		for(ArrayList<Marker> a: listoflists)
-		{
-			{
-				
-				for(Marker m: a)
-				{
-					m.setVisible(false);
-				}
-				
-				
-					
-				}
-			
-			}
-		for(ArrayList<Marker> a: keepers)
-		{
-			{
-				
-				for(Marker m: a)
-				{
-					m.setVisible(true);
-				}
-				
-				
-					
-				}
-			
-			}
-		}
-	
-	public void addkeepers(ArrayList<Marker> marks){
-		keepers.add(marks);
+	@Override
+	public void setTitle(CharSequence title) {
+	      mTitle = title;
+	      getActionBar().setTitle(mTitle);
 	}
 	
-	public void removeKeepers(ArrayList<Marker> marks){
-		keepers.remove(marks);
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+	      super.onPostCreate(savedInstanceState);
+	      // Sync the toggle state after onRestoreInstanceState has occurred.
+	      mDrawerToggle.syncState();
 	}
-		
+ 
+	private class DrawerItemClickListener implements
+    ListView.OnItemClickListener {
+@Override
+public void onItemClick(AdapterView<?> parent, View view, int position,
+          long id) {
+    selectItem(position);
+
 }
+}
+ 
 
-
+}
