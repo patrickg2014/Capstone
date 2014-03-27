@@ -15,6 +15,7 @@ public class CampusInfo {
 	public ArrayList<ArrayList<Building>> keepers = new ArrayList();
 	public static ArrayList<ArrayList<Building>> listoflists = new ArrayList();
 	public static ArrayList<Marker> currentlyvisable = new ArrayList();
+	public static ArrayList<Event> events = new ArrayList();
 	public static GoogleMap map = null;
 	public static ArrayList<Building> all = new ArrayList();
 
