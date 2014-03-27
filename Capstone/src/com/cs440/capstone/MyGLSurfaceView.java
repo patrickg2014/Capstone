@@ -1,6 +1,7 @@
 package com.cs440.capstone;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -19,10 +20,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
+        setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        getHolder().setFormat(PixelFormat.RGBA_8888);
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer = new SceneRenderer();
         setRenderer(mRenderer);
-
         // Render the view only when there is a change in the drawing data
         //setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }

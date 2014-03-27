@@ -24,6 +24,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -50,8 +51,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	private int counter=0;
 	private int angleOfView=100;
 	
+	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+	private MyGLSurfaceView mGLSurfaceView;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -64,8 +67,12 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		setContentView(R.layout.camera_layout);	// sets the layout
 		getCameraInstance();	//calls to start up the camera
 		camView = new CameraPreview(this, mainCam);	// allows the screen to see what the camera sensor is seeing
+		mGLSurfaceView = new MyGLSurfaceView(this);
+		
 		FrameLayout preview = (FrameLayout)findViewById(R.id.camera_layout);	// updates the layout
 		preview.addView(camView);	
+		preview.addView(mGLSurfaceView);
+		mGLSurfaceView.setZOrderOnTop(true);
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);// sets up a sensor manager to help with gps and comapss data
 		currentLocation= CampusInfo.map.getMyLocation();	// gets our current location
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
