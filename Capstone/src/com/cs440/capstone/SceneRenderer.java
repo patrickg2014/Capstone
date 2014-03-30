@@ -1,17 +1,29 @@
 package com.cs440.capstone;
 
+import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 
 public class SceneRenderer implements Renderer {
+	
+	private final Context context;
 
 	private Triangle mTriangle;
+	private boolean mShowText;
+	private int mTextPos;
+	public String inside="";
+	public boolean insidebool=false;
+	public ArrayList<Building> nearList=new ArrayList<Building> ();
+	public ArrayList<Float> xPos=new ArrayList<Float> ();
+	public ArrayList<Float> yPos=new ArrayList<Float> ();
+	//private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -22,16 +34,24 @@ public class SceneRenderer implements Renderer {
     private float[] mTempMatrix = new float[16];
     
     private float mAngle;
+  //private Triangle triangle;
+    private Sprite sprite;
+    private Sprite sprite2;
+    
+    public SceneRenderer(final Context activityContext)
+    {
+        this.context = activityContext;
+    }
 
-	
-
-    @Override
+	@Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
+        
         mTriangle = new Triangle();
+        sprite = new Sprite(context);
+        sprite2 = new Sprite(context);
     }
 
     @Override
@@ -42,7 +62,7 @@ public class SceneRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -10, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
@@ -54,22 +74,30 @@ public class SceneRenderer implements Renderer {
          long time = SystemClock.uptimeMillis() % 4000L;
          float angle = 0.090f * ((int) time);
         
-        // Combine the rotation matrix with the projection and camera view
+         drawLogo(0,0,0);
+        drawLogo(14,0,0);
+        
+        
+    }
+
+    
+    public void drawLogo(float x, float y, float z){
+    	 // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
         Matrix.setIdentityM(mModelMatrix, 0); // initialize to identity matrix
-        Matrix.translateM(mModelMatrix, 0, -0.5f, 0, 0); // translation to the left
-        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
+        
+        //Matrix.setRotateM(mRotationMatrix, 0, 180, 0, 0, 1f);
+        Matrix.translateM(mModelMatrix, 0, x, y, z); // translation to the left
+        
         mTempMatrix = mModelMatrix.clone();
         Matrix.multiplyMM(mModelMatrix, 0, mTempMatrix, 0, mRotationMatrix, 0);
      // Combine the model matrix with the projection and camera view
         mTempMatrix = mMVPMatrix.clone();
         Matrix.multiplyMM(mMVPMatrix, 0, mTempMatrix, 0, mModelMatrix, 0);
-        // Draw triangle
-        mTriangle.draw(mMVPMatrix);
-        
+    	sprite.Draw(mMVPMatrix);
+				
     }
-
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         // Adjust the viewport based on geometry changes,
