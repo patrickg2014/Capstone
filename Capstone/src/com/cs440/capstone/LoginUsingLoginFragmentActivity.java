@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -43,10 +44,14 @@ import com.google.android.gms.maps.model.LatLng;
 public class LoginUsingLoginFragmentActivity extends FragmentActivity {
     private UserSettingsFragment userSettingsFragment;
     public static Request request;
+    public static Session sesh= null;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sesh= Session.getActiveSession();
         setContentView(R.layout.login_fragment_activity);
+      
+      
+    		   
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         userSettingsFragment = (UserSettingsFragment) fragmentManager.findFragmentById(R.id.login_fragment);
@@ -54,12 +59,29 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         userSettingsFragment.setSessionStatusCallback(new Session.StatusCallback() {
             @Override
             public void call(Session session, SessionState state, Exception exception) {
-            	String fqlQuery = "SELECT name, venue, description, start_time,end_time, eid FROM event WHERE eid IN (SELECT eid FROM event_member WHERE (uid IN (SELECT uid2 FROM friend WHERE uid1 = me())  OR uid = me())limit 10000) AND  end_time>now() AND venue.latitude > \"47.257379\" AND venue.latitude < \"47.265393\" AND venue.longitude < \"-122.477989\" AND venue.longitude  >\"-122.485628\"";
+            	String fqlQuery = 
+            			
+            			"SELECT name, venue, description, start_time,end_time, eid " +
+            			"FROM event " +
+            			"WHERE eid IN (" +
+            			"SELECT eid " +
+            			"FROM event_member " +
+            			"WHERE (uid IN (" +
+            			"SELECT uid2 " +
+            			"FROM friend " +
+            			"WHERE uid1 = me())  " +
+            			"OR uid = me())limit 1000000) " +
+            			"AND  end_time>now() "+
+            			"AND venue.latitude > \"47.257379\" " +
+            			"AND venue.latitude < \"47.265393\" " +
+            			"AND venue.longitude < \"-122.477989\" " +
+            			"AND venue.longitude  >\"-122.485628\"";
+            	
             	Bundle params = new Bundle();
             	params.putString("q", fqlQuery);
-
+            	
             	Session session1 = Session.getActiveSession();
-           
+            	sesh=session1;
             	Request request = new Request(session1, 
             	    "/fql", 
             	    params, 
@@ -97,7 +119,11 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             	    }
             	});
             	Request.executeBatchAsync(request);
-            	
+            	for(Building b: CampusInfo.all)
+            	{
+            		b.makeMarker();
+            		
+            	}
 
             }
             
@@ -118,7 +144,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         if (activeSession == null || activeSession.getState().isClosed()) {
             activeSession = new Session.Builder(this).setApplicationId("431689033600302").build();
             Session.setActiveSession(activeSession);
-            activeSession.requestNewReadPermissions(new NewPermissionsRequest( userSettingsFragment, Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events")));
+            activeSession.requestNewReadPermissions(new NewPermissionsRequest( userSettingsFragment, Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events, friends_photos,user_photos")));
         }
         if(activeSession.isOpened())
         {
@@ -127,4 +153,20 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         return activeSession;
     }
 
+
+
+public boolean isLoggedIn() {
+    Session session = Session.getActiveSession();
+    if (session != null && session.isOpened()) {
+        return true;
+    } else {
+        return false;
+    }
 }
+}
+
+
+
+
+
+
