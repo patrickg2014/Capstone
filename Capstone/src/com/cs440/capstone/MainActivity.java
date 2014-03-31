@@ -31,10 +31,12 @@ import android.widget.Toast;
 import android.app.ActionBar;
 
 import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.*;
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnInfoWindowClickListener{
 
 	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
 	public ArrayList<ArrayList> listoflists = new ArrayList();
@@ -72,6 +74,7 @@ public class MainActivity extends Activity {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
 				.getMap();
+		map.setOnInfoWindowClickListener(this);
 
 		CampusInfo campusInfo = new CampusInfo(map);
 		CampusInfo.createMarkers();
@@ -177,6 +180,12 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
+	
+	public void buildingActivity(String buildingName){
+		Intent intent = new Intent(this, BuildingInfoActivity.class);
+		intent.putExtra("Name", buildingName);
+		startActivity(intent);
+	}
 
 	public boolean checkCameraHardware(Context context) {
 		if (context.getPackageManager().hasSystemFeature(
@@ -263,6 +272,14 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 }
 }
+
+
+
+	@Override
+	public void onInfoWindowClick(Marker arg0) {
+		// TODO Auto-generated method stub
+		buildingActivity(arg0.getTitle());
+	}
  
 
 }
