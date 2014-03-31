@@ -61,9 +61,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             @Override
             
             public void call(Session session, SessionState state, Exception exception) {
-            	if(session.isOpened()){
-            	session=createSession();
-            	}
+            	
             	String fqlQuery = 
             			
             			"SELECT name, venue, description, start_time,end_time, eid " +
@@ -83,10 +81,12 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             			"AND venue.longitude  >\"-122.485628\"";
             	
             	Bundle params = new Bundle();
+            	
             	params.putString("q", fqlQuery);
             	
             	Session session1 = Session.getActiveSession();
             	sesh=session1;
+            	
             	 
             	Request request = new Request(session1, 
             	    "/fql", 
@@ -124,6 +124,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             	        }
             	    }
             	});
+            	userSettingsFragment.setReadPermissions("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
             	Request.executeBatchAsync(request);
             	for(Building b: CampusInfo.all)
             	{
