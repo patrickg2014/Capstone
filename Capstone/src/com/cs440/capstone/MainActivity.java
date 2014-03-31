@@ -181,9 +181,10 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 		startActivity(intent);
 	}
 	
-	public void buildingActivity(String buildingName){
+	public void buildingActivity(String buildingName, String snippet){
 		Intent intent = new Intent(this, BuildingInfoActivity.class);
 		intent.putExtra("Name", buildingName);
+		intent.putExtra("Snippet", snippet);
 		startActivity(intent);
 	}
 
@@ -278,7 +279,7 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		// TODO Auto-generated method stub
-		buildingActivity(arg0.getTitle());
+		buildingActivity(arg0.getTitle(),arg0.getSnippet());
 	}
  
 
