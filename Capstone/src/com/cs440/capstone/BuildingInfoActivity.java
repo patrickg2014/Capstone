@@ -47,7 +47,7 @@ public class BuildingInfoActivity extends Activity {
 		text = (TextView)findViewById(R.id.textView1);
 		Intent intent = getIntent();
 		String name = intent.getStringExtra("Name");
-		text.setText(intent.getStringExtra("Snippet") + "josfhld;afkhfaslhbalsikjfhlasdkjfblsdkjfblkafsdlkfbjlskadjbflskjbflksdjbkl;sdl/fkasn/lfnsdf/lvnjgfdlsn;lkdnv;kdjfnvk;jndfs;kjvnsldfkjvlkdfl;kab;kjnv;klajnf;vklfdkjvnsdfklbjvsl;k;dfksvn;dfkj;sdknv;dfk;kldn;vkfnd;sjd;fdns;jng;fkdjdn;gjdfns;kjng;sdfkng;ksdfn;jfnf;dkljng;sdkljn;dfklnj;gdflksn;dfln;sldjfn;klnjg;kdfjb;n;kjdfn;sdkfng;sdfkjgn;sdfkln;fdkjn;sdfjgn;dfjg;ldfsng;njg;dfkjnflkasbdl,fkjbsdflkbsdlakbjflkasjdbflkbsdlfkbsd;lakfblskjfbslkd");
+		text.setText(intent.getStringExtra("Snippet"));
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);

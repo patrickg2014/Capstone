@@ -45,6 +45,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
     private UserSettingsFragment userSettingsFragment;
     public static Request request;
     public static Session sesh= null;
+    
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sesh= Session.getActiveSession();
@@ -58,7 +59,11 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         
         userSettingsFragment.setSessionStatusCallback(new Session.StatusCallback() {
             @Override
+            
             public void call(Session session, SessionState state, Exception exception) {
+            	if(session.isOpened()){
+            	session=createSession();
+            	}
             	String fqlQuery = 
             			
             			"SELECT name, venue, description, start_time,end_time, eid " +
@@ -70,7 +75,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             			"SELECT uid2 " +
             			"FROM friend " +
             			"WHERE uid1 = me())  " +
-            			"OR uid = me())limit 1000000) " +
+            			"OR uid = me())limit 10000) " +
             			"AND  end_time>now() "+
             			"AND venue.latitude > \"47.257379\" " +
             			"AND venue.latitude < \"47.265393\" " +
@@ -82,6 +87,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             	
             	Session session1 = Session.getActiveSession();
             	sesh=session1;
+            	 
             	Request request = new Request(session1, 
             	    "/fql", 
             	    params, 
@@ -139,12 +145,12 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         userSettingsFragment.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private Session createSession() {
+    public Session createSession() {
         Session activeSession = Session.getActiveSession();
         if (activeSession == null || activeSession.getState().isClosed()) {
             activeSession = new Session.Builder(this).setApplicationId("431689033600302").build();
             Session.setActiveSession(activeSession);
-            activeSession.requestNewReadPermissions(new NewPermissionsRequest( userSettingsFragment, Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events, friends_photos,user_photos")));
+            activeSession.requestNewReadPermissions(new NewPermissionsRequest( userSettingsFragment, Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events")));
         }
         if(activeSession.isOpened())
         {
@@ -155,7 +161,7 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
 
 
 
-public boolean isLoggedIn() {
+public static boolean isLoggedIn() {
     Session session = Session.getActiveSession();
     if (session != null && session.isOpened()) {
         return true;

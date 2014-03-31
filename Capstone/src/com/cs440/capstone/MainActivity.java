@@ -1,19 +1,20 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import android.hardware.Camera;
-import android.location.Location;
-import android.os.Bundle;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,18 +23,23 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.app.ActionBar;
 
-import com.google.android.gms.maps.*;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.Session.NewPermissionsRequest;
+import com.facebook.model.GraphObject;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnInfoWindowClickListener{
@@ -42,6 +48,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 	public ArrayList<ArrayList> listoflists = new ArrayList();
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
+	public LoginUsingLoginFragmentActivity logIn;
 	GoogleMap map = null;
 	
 	 private String[] mOptionTitles;
@@ -79,6 +86,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 		CampusInfo campusInfo = new CampusInfo(map);
 		CampusInfo.createMarkers();
 		
+		query();
 		 initDrawer(savedInstanceState);
 	}
 	
@@ -273,6 +281,86 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 }
 }
+	private void query() {
+		
+	       
+	    // Create a new request for an HTTP GET with the
+		if(LoginUsingLoginFragmentActivity.isLoggedIn()){
+        	
+        
+        	String fqlQuery = 
+        			
+        			"SELECT name, venue, description, start_time,end_time, eid " +
+        			"FROM event " +
+        			"WHERE eid IN (" +
+        			"SELECT eid " +
+        			"FROM event_member " +
+        			"WHERE (uid IN (" +
+        			"SELECT uid2 " +
+        			"FROM friend " +
+        			"WHERE uid1 = me())  " +
+        			"OR uid = me())limit 10000) " +
+        			"AND  end_time>now() "+
+        			"AND venue.latitude > \"47.257379\" " +
+        			"AND venue.latitude < \"47.265393\" " +
+        			"AND venue.longitude < \"-122.477989\" " +
+        			"AND venue.longitude  >\"-122.485628\"";
+        	
+        	Bundle params = new Bundle();
+        	params.putString("q", fqlQuery);
+        	
+        	Session session1 = Session.getActiveSession();
+        	
+        	 
+        	Request request = new Request(session1, 
+        	    "/fql", 
+        	    params, 
+        	    HttpMethod.GET, 
+        	    new Request.Callback(){ 
+        	        public void onCompleted(Response response) {
+        	        //Log.i("fql", "Got results: " + response.toString());
+        	       
+        	        try
+        	        {
+        	            GraphObject go  = response.getGraphObject();
+        	            JSONObject  jso = go.getInnerJSONObject();
+        	            JSONArray array =  jso.getJSONArray("data");
+
+        	            		// loop
+        	            		for(int i = 0; i < array.length(); i++) {
+        	            		 JSONObject obj = array.getJSONObject(i);
+        	            		 JSONObject jb1= new JSONObject(obj.getString("venue"));
+        	            		 String name = obj.getString("name");
+        	            		 String description = obj.getString("description");
+        	            		 
+        	            		 String lat = jb1.getString("latitude");
+        	            		 String longi = jb1.getString("longitude");
+        	            		 CampusInfo.events.add(new Event(name, description,new LatLng(Double.parseDouble(lat),Double.parseDouble(longi))));
+        	            		 Log.d("fql", name+" "+description+" ");
+        	            		}
+        	               
+        	                
+        	            
+        	        }
+        	        catch ( Throwable t )
+        	        {
+        	            t.printStackTrace();
+        	        }
+        	    }
+        	});
+        	Request.executeBatchAsync(request);
+        	for(Building b: CampusInfo.all)
+        	{
+        		b.makeMarker();
+        		
+        	}
+
+        }
+        
+    }
+
+	
+
 
 
 
