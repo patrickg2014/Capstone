@@ -19,6 +19,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class GLRenderer implements Renderer {
@@ -191,8 +192,8 @@ public class GLRenderer implements Renderer {
                 GL10.GL_FASTEST);
 
          GLES20.glClearColor(0,0,0,0);
-         GLES20.glEnable(GL10.GL_CULL_FACE);
-         GLES20.glEnable(GL10.GL_DEPTH_TEST);
+         GLES20.glEnable(GLES20.GL_BLEND);
+         GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
 	    // Create the shaders, solid color
 	    int vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER, riGraphicTools.vs_SolidColor);
@@ -241,15 +242,16 @@ public class GLRenderer implements Renderer {
         // This is strictly optional as it only effects the output of our app,
         // Not the actual knowledge.
         Random rnd = new Random();
+        Log.d("Setup","Updating!");
          
         // 30 imageobjects times 4 vertices times (u and v)
-        uvs = new float[30*4*2];
+        uvs = new float[3*4*2];
          
         // We will make 30 randomly textures objects
-        for(int i=0; i<30; i++)
+        for(int i=0; i<3; i++)
         {
-            int random_u_offset = rnd.nextInt(2);
-            int random_v_offset = rnd.nextInt(2);
+            int random_u_offset = rnd.nextInt(2);////////x pos value
+            int random_v_offset = rnd.nextInt(2);//////////y pos value
              
             // Adding the UV's using the offsets
             uvs[(i*8) + 0] = random_u_offset * 0.5f;
@@ -274,7 +276,7 @@ public class GLRenderer implements Renderer {
         GLES20.glGenTextures(1, texturenames, 0);
          
         // Retrieve our image from resources.
-        int id = mContext.getResources().getIdentifier("drawable/ups", null, mContext.getPackageName());
+        int id = mContext.getResources().getIdentifier("drawable/upslogo", null, mContext.getPackageName());
          
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), id);
@@ -300,13 +302,14 @@ public class GLRenderer implements Renderer {
         Random rnd = new Random();
          
         // Our collection of vertices
-        vertices = new float[30*4*3];
-         
+        vertices = new float[3*4*3];
+        int offset_x = 50;//rnd.nextInt((int)swp);
+        int offset_y = 50;//rnd.nextInt((int)shp);
         // Create the vertex data
-        for(int i=0;i<30;i++)
+        for(int i=0;i<3;i++)
         {
-            int offset_x = rnd.nextInt((int)swp);
-            int offset_y = rnd.nextInt((int)shp);
+            //int offset_x = 50;//rnd.nextInt((int)swp);
+            //int offset_y = 50;//rnd.nextInt((int)shp);
              
             // Create the 2D parts of our 3D vertices, others are default 0.0f
             vertices[(i*12) + 0] = offset_x;
@@ -321,12 +324,15 @@ public class GLRenderer implements Renderer {
             vertices[(i*12) + 9] = offset_x + (30.0f*ssu);
             vertices[(i*12) + 10] = offset_y + (30.0f*ssu);
             vertices[(i*12) + 11] = 0f;
+            
+            offset_x += 50;
+            offset_y += 50;
         }
          
         // The indices for all textured quads
-        indices = new short[30*6]; 
+        indices = new short[3*6]; 
         int last = 0;
-        for(int i=0;i<30;i++)
+        for(int i=0;i<3;i++)
         {
             // We need to set the new indices for the new quad
             indices[(i*6) + 0] = (short) (last + 0);
