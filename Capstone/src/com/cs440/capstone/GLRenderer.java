@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 
 public class GLRenderer implements Renderer {
 
+	private GLSurf surf;
 	private boolean mShowText;
 	private int mTextPos;
 	public String inside="";
@@ -57,13 +58,14 @@ public class GLRenderer implements Renderer {
 
 	// Misc
 	Context mContext;
-	long mLastTime;
 	int mProgram;
+	private float offset_x;
+	private float offset_y;
+	private int last;
 	
 	public GLRenderer(Context c)
 	{
 		mContext = c;
-		mLastTime = System.currentTimeMillis() + 100;
 	}
 	
 	public void onPause()
@@ -73,28 +75,19 @@ public class GLRenderer implements Renderer {
 	
 	public void onResume()
 	{
-		/* Do stuff to resume the renderer */
-		mLastTime = System.currentTimeMillis();
 	}
 	
 	@Override
 	public void onDrawFrame(GL10 unused) {
+		//Log.d("Setup", "on draw");
 		
-		// Get the current time
-    	long now = System.currentTimeMillis();
-    	
-    	// We should make sure we are valid and sane
-    	if (mLastTime > now) return;
+
         
-    	// Get the amount of time the last frame took.
-    	long elapsed = now - mLastTime;
-	
-		
 		// Render our example
 		Render(mtrxProjectionAndView);
-		
-		// Save the current time to see how long it took :).
-        mLastTime = now;
+		SetupTriangle();
+		// Create the image information
+		//SetupImage();
 		
 	}
 	
@@ -150,7 +143,7 @@ public class GLRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		
+		Log.d("Setup", "Surface changed!!");
 		// We need to know the current width and height.
 		mScreenWidth = width;
 		mScreenHeight = height;
@@ -245,10 +238,10 @@ public class GLRenderer implements Renderer {
         Log.d("Setup","Updating!");
          
         // 30 imageobjects times 4 vertices times (u and v)
-        uvs = new float[3*4*2];
+        uvs = new float[10*4*2];
          
         // We will make 30 randomly textures objects
-        for(int i=0; i<3; i++)
+        for(int i=0; i<10; i++)
         {
             int random_u_offset = rnd.nextInt(2);////////x pos value
             int random_v_offset = rnd.nextInt(2);//////////y pos value
@@ -298,20 +291,29 @@ public class GLRenderer implements Renderer {
     }
 	public void SetupTriangle()
     {
-        // We will need a randomizer
-        Random rnd = new Random();
+		Log.d("Setup", "Making TRIANGLE!!!");
+        
          
         // Our collection of vertices
-        vertices = new float[3*4*3];
-        int offset_x = 50;//rnd.nextInt((int)swp);
-        int offset_y = 50;//rnd.nextInt((int)shp);
+        vertices = new float[10*4*3];
+        offset_x = 50f;//rnd.nextInt((int)swp);
+        offset_y = 50f;//rnd.nextInt((int)shp);
         // Create the vertex data
-        for(int i=0;i<3;i++)
+        for(int i=0;i<10;i++)
         {
             //int offset_x = 50;//rnd.nextInt((int)swp);
             //int offset_y = 50;//rnd.nextInt((int)shp);
-             
-            // Create the 2D parts of our 3D vertices, others are default 0.0f
+        	
+        	if (i < xPos.size() && i < yPos.size()) {
+				if (xPos.get(i) != null && yPos.get(i) != null) {
+					offset_x = xPos.get(i);
+					offset_y = yPos.get(i);
+				}
+			}else{
+				offset_x = 0f;
+				offset_y = 0f;
+			}
+			// Create the 2D parts of our 3D vertices, others are default 0.0f
             vertices[(i*12) + 0] = offset_x;
             vertices[(i*12) + 1] = offset_y + (30.0f*ssu);
             vertices[(i*12) + 2] = 0f;
@@ -330,9 +332,9 @@ public class GLRenderer implements Renderer {
         }
          
         // The indices for all textured quads
-        indices = new short[3*6]; 
-        int last = 0;
-        for(int i=0;i<3;i++)
+        indices = new short[10*6]; 
+        last = 0;
+        for(int i=0;i<10;i++)
         {
             // We need to set the new indices for the new quad
             indices[(i*6) + 0] = (short) (last + 0);
@@ -378,5 +380,10 @@ public class GLRenderer implements Renderer {
         else
             ssu = ssx;
     }
+
+	public void passSurface(GLSurf glSurf) {
+		// TODO Auto-generated method stub
+		surf = glSurf;
+	}
 
 }
