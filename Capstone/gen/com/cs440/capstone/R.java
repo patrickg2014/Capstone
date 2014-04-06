@@ -535,6 +535,7 @@ containing a value of this type.
         public static final int fragment_layout_two=0x7f030015;
         public static final int gl_view=0x7f030016;
         public static final int login_fragment_activity=0x7f030017;
+        public static final int searchable=0x7f030018;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;

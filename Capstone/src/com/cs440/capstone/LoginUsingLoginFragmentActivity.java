@@ -64,22 +64,21 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
             	
             	String fqlQuery = 
             			
-            			"SELECT name, venue, description, start_time,end_time, eid " +
-            			"FROM event " +
-            			"WHERE eid IN (" +
-            			"SELECT eid " +
-            			"FROM event_member " +
-            			"WHERE (uid IN (" +
-            			"SELECT uid2 " +
-            			"FROM friend " +
-            			"WHERE uid1 = me())  " +
-            			"OR uid = me())limit 10000) " +
-            			"AND  end_time>now() "+
-            			"AND venue.latitude > \"47.257379\" " +
-            			"AND venue.latitude < \"47.265393\" " +
-            			"AND venue.longitude < \"-122.477989\" " +
-            			"AND venue.longitude  >\"-122.485628\"";
-            	
+            			"SELECT name,  venue, description, start_time,end_time, eid " +
+                     			"FROM event " +
+                     			"WHERE eid IN (" +
+                     			"SELECT eid " +
+                     			"FROM event_member " +
+                     			"WHERE (uid IN (" +
+                     			"SELECT uid2 " +
+                     			"FROM friend " +
+                     			"WHERE uid1 = me())  " +
+                     			"OR uid = me())limit 10000) " +
+                     			"AND  (end_time>now() OR start_time>now()) "+
+                     			"AND venue.latitude > \""+(CampusInfo.map.getMyLocation().getLatitude()-.1)+"\""+
+                     			"AND venue.latitude < \""+(CampusInfo.map.getMyLocation().getLatitude()+.1)+"\""+
+                     			"AND venue.longitude < \""+(CampusInfo.map.getMyLocation().getLongitude()+.1)+"\""+
+                     			"AND venue.longitude  >\""+(CampusInfo.map.getMyLocation().getLongitude()-.1)+"\"";
             	Bundle params = new Bundle();
             	
             	params.putString("q", fqlQuery);

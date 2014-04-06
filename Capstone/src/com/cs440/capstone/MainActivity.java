@@ -1,15 +1,14 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,14 +26,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.SearchView;
 
-import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.model.GraphObject;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -224,6 +221,13 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		// Associate searchable configuration with the SearchView
+	    SearchManager searchManager =
+	           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView =
+	            (SearchView) menu.findItem(R.id.search).getActionView();
+	    searchView.setSearchableInfo(
+	            searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
 	
@@ -292,21 +296,21 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
         
         	String fqlQuery = 
         			
-        			"SELECT name, venue, description, start_time,end_time, eid " +
-        			"FROM event " +
-        			"WHERE eid IN (" +
-        			"SELECT eid " +
-        			"FROM event_member " +
-        			"WHERE (uid IN (" +
-        			"SELECT uid2 " +
-        			"FROM friend " +
-        			"WHERE uid1 = me())  " +
-        			"OR uid = me())limit 10000) " +
-        			"AND  end_time>now() "+
-        			"AND venue.latitude > \"47.257379\" " +
-        			"AND venue.latitude < \"47.265393\" " +
-        			"AND venue.longitude < \"-122.477989\" " +
-        			"AND venue.longitude  >\"-122.485628\"";
+        			"SELECT name,  venue, description, start_time,end_time, eid " +
+                 			"FROM event " +
+                 			"WHERE eid IN (" +
+                 			"SELECT eid " +
+                 			"FROM event_member " +
+                 			"WHERE (uid IN (" +
+                 			"SELECT uid2 " +
+                 			"FROM friend " +
+                 			"WHERE uid1 = me())  " +
+                 			"OR uid = me())limit 10000) " +
+                 			"AND  (end_time>now() OR start_time>now()) "+
+                 			"AND venue.latitude > \""+(CampusInfo.map.getMyLocation().getLatitude()-.1)+"\""+
+                 			"AND venue.latitude < \""+(CampusInfo.map.getMyLocation().getLatitude()+.1)+"\""+
+                 			"AND venue.longitude < \""+(CampusInfo.map.getMyLocation().getLongitude()+.1)+"\""+
+                 			"AND venue.longitude  >\""+(CampusInfo.map.getMyLocation().getLongitude()-.1)+"\"";
         	
         	Bundle params = new Bundle();
         	params.putString("q", fqlQuery);
