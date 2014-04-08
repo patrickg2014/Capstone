@@ -14,7 +14,7 @@ import android.util.Log;
 
 /**
  * A class to hold some utility functions for working with OpenGL (refactoring for readability)
- * @author joel
+ * @author joel / Patrick Green
  */
 public class GLUtilities
 {

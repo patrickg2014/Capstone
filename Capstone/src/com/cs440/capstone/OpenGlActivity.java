@@ -15,8 +15,7 @@ import android.widget.RelativeLayout;
  * A basic activity for displaying a simple OpenGL rendering. This uses a slightly different structure than
  * with a regular Canvas.
  * 
- * @author Joel and Patrick Green
- * @version Fall 2013
+ * @author Patrick Green
  */
 public class OpenGlActivity extends Activity implements OnTouchListener
 {

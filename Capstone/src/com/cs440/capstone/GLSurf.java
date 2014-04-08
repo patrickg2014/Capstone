@@ -27,7 +27,7 @@ public class GLSurf extends GLSurfaceView {
 		setRenderer(mRenderer); //set the renderer
 
 		//render continuously (like for animation). Set to WHEN_DIRTY to manually control redraws (via GLSurfaceView.requestRender())
-		setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);//WHEN_DIRTY);
+		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
 	
 	public GLRenderer getRenderer(){

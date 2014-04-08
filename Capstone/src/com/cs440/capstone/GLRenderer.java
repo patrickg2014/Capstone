@@ -4,19 +4,21 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.util.Log;
 
 /**
  * This class represents a custom OpenGL renderer--all of our "drawing" logic goes here.
  * 
- * @author Joel; code adapted from Google and LearnOpenGLES
- * @version Fall 2013
+ * @author Patrick Green; code adapted from Google and LearnOpenGLES
  */
 @SuppressLint("NewApi")
 public class GLRenderer implements GLSurfaceView.Renderer 
@@ -79,7 +81,9 @@ public class GLRenderer implements GLSurfaceView.Renderer
 	private int mTextureBufferHandle; //memory location of texture buffer (data)
 	private int mTextureHandle; //pointer into shader
 	private int mTextureCoordHandle; //pointer into shader]
-	public static final String TEX_FILE = "wood.PNG";
+	private int ourWidth;
+	private int ourHeight;
+	public static final String TEX_FILE = "ups.png";
 	
 	
 	
@@ -147,8 +151,6 @@ public class GLRenderer implements GLSurfaceView.Renderer
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST); //enable depth testing
 		GLES20.glDepthFunc(GLES20.GL_LEQUAL);
 
-		// Set the background clear color
-		//GLES20.glClearColor(0.05f, 0.05f, 0.05f, 1.0f); //Currently a dark grey so we can make sure things are working
 
 		//This is a good place to compile the shaders from Strings into actual executables. We use a helper method for that
 		int vertexShaderHandle = GLUtilities.loadShader(GLES20.GL_VERTEX_SHADER, "diffuseVertex.glsl", context);
@@ -201,15 +203,16 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
 		//tweak the camera
 		Matrix.translateM(mViewMatrix, 0, 0, 0, 3f);
-		Matrix.rotateM(mViewMatrix,0, 30, 1f, 0, 0);
+		//Matrix.rotateM(mViewMatrix,0, 30, 1f, 0, 0);
 		
 		
 		//Set Projection Matrix.
-		final float ratio = (float) width / height; //aspect ratio
+		final float ratio = (float) width / height; //aspect ratio  1!!!!!
 		//final float left = -ratio;	final float right = ratio;
 		//final float bottom = -1; final float top = 1;
 		//final float near = 1.0f; final float far = 50.0f;
-		//TODO
+		ourWidth = width;
+		ourHeight = height;
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
 		//Matrix.perspectiveM(mProjectionMatrix, 0, 90f, ratio, near, far);
 	}
@@ -232,11 +235,38 @@ public class GLRenderer implements GLSurfaceView.Renderer
 	    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureBufferHandle); //bind the texture to the "current" texture
 	    GLES20.glUniform1i(mTextureHandle, 0); //pass the texture into the shader
 		
+	   // Log.d("Setup", "Nearlist is  working!!!!!!!x = " + ourWidth + " and y = "+ ourHeight);
+	    float halfWide = ourWidth/2;
+	    float halfTall = ourHeight/2;
+	    Log.d("Setup", "Nearlist is " + nearList.size());
+	    for(int i=0; i<nearList.size(); i++){
+	    	
+	    	float x = (xPos.get(i) - halfWide)/ourWidth;
+	    	float y = (yPos.get(i) - halfTall)/ourHeight;
+	    	Log.d("Setup", "Nearlist is  working!!!!!!!x = " + x + " and y = "+ y);
+	    	drawLogo(x,y,0f);
+	    }
+	    
+	    if(nearList.size()<1){
+	    	Log.d("Setup", "Nearlist is not working..." + nearList.size());
+	    	drawLogo(0,1f,0);
+	    }
+	    
+		//drawLogo(5f,0f,0f);
+		//drawLogo(0f,0f,0f);
+		
+		
+		
+		//drawAxis(); //so we have guides on coordinate axes, for debugging
+	}
+	
+	public void drawLogo(float x, float y, float z){
 		Matrix.setIdentityM(mModelMatrix, 0);
 		
 		
-	
-		
+		//Matrix.scaleM(mModelMatrix, 0, .3f, .3f, .3f);
+		Matrix.translateM(mModelMatrix, 0, x,y,z);
+		Matrix.scaleM(mModelMatrix, 0, .3f, .3f, .3f);
 		mTextureBufferHandle = GLUtilities.loadTexture("ups.png", context);
 		GLES20.glUniform1i(mHasTextHandle, 1);
 		mCubeTextureBuffer.position(0); //reset buffer start to 0 (where data starts)
@@ -246,11 +276,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
 		GLES20.glUniform1i(mHasTextHandle, 0);
 		GLES20.glUniform1f(mShineLightHandle, 1.0f);
 		Matrix.setIdentityM(mModelMatrix, 0);
-		Matrix.translateM(mModelMatrix, 0, 2.0f, 0.0f, 4.0f);
 		
-		
-		
-		//drawAxis(); //so we have guides on coordinate axes, for debugging
 	}
 	
 	
