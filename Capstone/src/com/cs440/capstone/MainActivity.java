@@ -13,7 +13,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,21 +40,26 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity implements OnInfoWindowClickListener{
+public class MainActivity extends Activity implements OnInfoWindowClickListener, SensorEventListener{
 
 	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
 	public ArrayList<ArrayList> listoflists = new ArrayList();
+	private SensorManager mSensorManager;
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
 	public LoginUsingLoginFragmentActivity logIn;
 	GoogleMap map = null;
+	LatLng myLocation = null;
 	
 	 private String[] mOptionTitles;
 	private DrawerLayout mDrawerLayout;
@@ -64,6 +76,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
+		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		
 		Display display = getWindowManager().getDefaultDisplay();
 		int orientation = display.getRotation();
@@ -80,6 +93,8 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
+		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		
 
 		CampusInfo campusInfo = new CampusInfo(map);
 		CampusInfo.createMarkers();
@@ -255,10 +270,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
              startActivity(intent);
         	
         }
-        if(dataList.get(possition).getItemName().contentEquals("About")){
-        	
-        	
-        }
+       
         mDrawerLayout.closeDrawer(mDrawerList);
 
   }
@@ -364,7 +376,23 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
     }
 
 	
-
+public void onSensorChanged(SensorEvent event) {
+		
+		int heading = ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
+		Log.d("map","we should be animating");
+		
+		centerMapOnMyLocation();
+		if(myLocation!=null){
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+	    .target(new LatLng(myLocation.latitude,myLocation.longitude))      // Sets the center of the map to Mountain View
+	    .zoom(19)                   // Sets the zoom
+	    .bearing(heading)                // Sets the orientation of the camera to east
+	    .tilt(68)                   // Sets the tilt of the camera to 30 degrees
+	    .build();                   // Creates a CameraPosition from the builder
+	map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),1,null);
+	
+		}
+	}
 
 
 
@@ -373,6 +401,32 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 		// TODO Auto-generated method stub
 		buildingActivity(arg0.getTitle(),arg0.getSnippet());
 	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
  
 
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+	}
+
+    private void centerMapOnMyLocation() {
+
+        map.setMyLocationEnabled(true);
+
+        Location location = map.getMyLocation();
+
+        myLocation = null;
+		if (location != null) {
+            myLocation = new LatLng(location.getLatitude(),
+                    location.getLongitude());
+        }
+        
+    }
 }
