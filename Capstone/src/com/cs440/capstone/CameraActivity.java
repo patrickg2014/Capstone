@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -14,7 +12,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,7 +24,6 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -43,6 +39,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public Building insideBuilding;
 	public Location currentLocation;
 	Location myloc;
+	public CameraOverlay camover;
 	public static int width=4;
 	public int height=4;
 	public int dens= 40;
@@ -52,35 +49,26 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public LatLng mylatlng;
 	private int counter=0;
 	private int angleOfView=100;
-	private GLSurf mGLSurfaceView;
-	private GLRenderer render;
 	
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-	
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);	//pulls and saved state for the activity
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.camera_layout);	// sets the layout
 		getCameraInstance();	//calls to start up the camera
 		camView = new CameraPreview(this, mainCam);	// allows the screen to see what the camera sensor is seeing
-		mGLSurfaceView = new GLSurf(this);
-		render = mGLSurfaceView.getRenderer();
-		mGLSurfaceView.setZOrderOnTop(true);
 		FrameLayout preview = (FrameLayout)findViewById(R.id.camera_layout);	// updates the layout
-		preview.addView(camView);
-		preview.addView(mGLSurfaceView);
-			
-		
-		
+		preview.addView(camView);	
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);// sets up a sensor manager to help with gps and comapss data
 		currentLocation= CampusInfo.map.getMyLocation();	// gets our current location
+		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		Display display = getWindowManager().getDefaultDisplay();
 		
@@ -213,11 +201,10 @@ public class CameraActivity extends Activity implements SensorEventListener{
     }
     public void whatshouldwesee()
    	{	
-    	
    		//Location myloc= map.getMyLocation();
-    	render.nearList.clear();
+    	camover.nearList.clear();
     	checkCurrentlyNear();
-    	if(!render.insidebool)
+    	if(!camover.insidebool)
     	{
     		checkCurrentlyVisable();
     	}
@@ -225,7 +212,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
     		insidecurrentlyVisable();
 	}
    		
-   		mGLSurfaceView.invalidate();
+   		camover.invalidate();
+   		
    		
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    	}
@@ -261,8 +249,8 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		mylatlng = new LatLng(myloc.getLatitude(),myloc.getLongitude());
    		currentlyNear.clear();
    		currentlyvisable.clear();
-   		render.xPos.clear();
-   		render.yPos.clear();
+   		camover.xPos.clear();
+   		camover.yPos.clear();
    		
    		for(Building b: CampusInfo.all)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
@@ -279,13 +267,13 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				if(b.getBounds().contains(mylatlng))
    						{
    					
-   					render.insidebool=true; 	
-   					render.inside=("Inside "+b.title);
+   					camover.insidebool=true; 	
+   					camover.inside=("Inside "+b.title);
    					insideBuilding=b;
    					currentlyNear.clear();
-   					render.nearList.clear();
-   					render.xPos.clear();
-   					render.yPos.clear();
+   					camover.nearList.clear();
+   					camover.xPos.clear();
+   					camover.yPos.clear();
    					
    					Log.d("Inside", "we should be inside");
    					break;
@@ -293,7 +281,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					else
    						{
    						currentlyNear.add(b);//if it is add it to the array
-   						render.insidebool=false;
+   						camover.insidebool=false;
    						}
    			}
    			
@@ -329,17 +317,17 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  {
    				Log.d("near", currentlyNear.get(i).title);
    				
-   				render.nearList.add(currentlyNear.get(i));
-   				render.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				render.yPos.add((float)(height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
-   				mGLSurfaceView.invalidate();
+   				camover.nearList.add(currentlyNear.get(i));
+   				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.yPos.add((float)(height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
+   				camover.invalidate();
    				
    				  }
    				 //rewrite the text
    			  }
-   			if(render.nearList.size()==0) // if currentlyvisable is empty, display no text 
+   			if(camover.nearList.size()==0) // if currentlyvisable is empty, display no text 
    					{
-   				//mGLSurfaceView.setDisplayText("");
+   				camover.setDisplayText("");
    					}
 		}
 		}
@@ -373,24 +361,23 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			  if(Math.abs(locHead-headingOptimized)<angleOfView/2)	// checks to see if it is in view
    			  {
    				Log.d("near", b.title);
-   				if(!render.nearList.contains(b)){
-   				render.nearList.add(b);
-   				render.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				render.yPos.add((float) (height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
-   				mGLSurfaceView.invalidate();
+   				if(!camover.nearList.contains(b)){
+   				camover.nearList.add(b);
+   				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
+   				camover.yPos.add((float) (height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
+   				camover.invalidate();
    			
    				}
    				  }
    				 //rewrite the text
    			  }
-   			if(render.nearList.size()==0) // if currentlyvisable is empty, display no text 
+   			if(camover.nearList.size()==0) // if currentlyvisable is empty, display no text 
 
    					{
-   				//mGLSurfaceView.setDisplayText("");
+   				camover.setDisplayText("");
    					}
 		}
 			}
-
 	}
 			
 	

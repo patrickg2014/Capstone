@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:custom="http://schemas.android.com/apk/res/com.cs440.capstone"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
@@ -16,6 +17,13 @@
         >
 
     </FrameLayout>
+    
+      <com.cs440.capstone.CameraOverlay
+        android:id="@+id/overlay_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        custom:labelPosition="left"
+        custom:showText="true" />
     
 
 </RelativeLayout>

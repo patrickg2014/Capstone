@@ -256,9 +256,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener{
         	
         }
         if(dataList.get(possition).getItemName().contentEquals("About")){
-        	Log.d("Test", "OPENGLLLLLLLLLLL");
-        	 Intent intent = new Intent(MainActivity.this, OpenGlActivity.class);
-             startActivity(intent);
+        	
         	
         }
         mDrawerLayout.closeDrawer(mDrawerList);
