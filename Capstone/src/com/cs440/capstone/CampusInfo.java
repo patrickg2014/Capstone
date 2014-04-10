@@ -73,10 +73,10 @@ public class CampusInfo {
 		acadmic.add(harned);
 		currentlyvisable.add(harned.getMarker());
 
-		/*Building collins = new Building("Collins Memorial Library", "this is the snipit",true,new LatLngBounds(new LatLng(47.264316,-122.482045),new LatLng(47.264833,-122.481353)));
+		Building collins = new Building("Collins Memorial Library", "this is the snipit",true,new LatLngBounds(new LatLng(47.264316,-122.482045),new LatLng(47.264833,-122.481353)));
 		general.add(collins);
 		acadmic.add(collins);
-		currentlyvisable.add(collins.getMarker());*/
+		currentlyvisable.add(collins.getMarker());
 		
 		Building wyatt =new Building("Wyatt Hall", "this is the snipit",true, new LatLngBounds(new LatLng(47.261604,-122.48279),new LatLng(47.262121,-122.482517)));
 		acadmic.add(wyatt);
