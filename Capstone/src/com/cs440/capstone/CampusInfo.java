@@ -3,8 +3,12 @@ package com.cs440.capstone;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -136,7 +140,20 @@ public class CampusInfo {
 		currentlyvisable.add(blueBeard.getMarker());
 
 		map.setMyLocationEnabled(true);
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 16));// sets
+		
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(pugetsound, 18));// sets
+		
+		Log.d("map","we should be animating");
+		MainActivity.centerMapOnMyLocation();
+		
+		if(MainActivity.myLocation!=null){
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+	    .target(new LatLng(MainActivity.myLocation.latitude,MainActivity.myLocation.longitude))      // Sets the center of the map to Mountain View
+	    .zoom(18)                   // Sets the zoom
+	    .bearing(MainActivity.heading)                // Sets the orientation of the camera to east
+	    .tilt(68)                   // Sets the tilt of the camera to 30 degrees
+	    .build();                   // Creates a CameraPosition from the builder
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),75,null);}
 																		
 		
 		

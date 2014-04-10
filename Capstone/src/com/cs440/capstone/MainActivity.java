@@ -2,10 +2,9 @@ package com.cs440.capstone;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Timer;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -34,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -43,6 +41,8 @@ import com.facebook.model.GraphObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
@@ -52,15 +52,17 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnInfoWindowClickListener, SensorEventListener{
 
+	public static final float heading = 0;
 	public ArrayList<ArrayList<Marker>> keepers = new ArrayList();
 	public ArrayList<ArrayList> listoflists = new ArrayList();
 	private SensorManager mSensorManager;
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
 	public LoginUsingLoginFragmentActivity logIn;
-	GoogleMap map = null;
-	LatLng myLocation = null;
+	static GoogleMap map = null;
 	
+	static LatLng myLocation = null;
+	boolean maptouch= false;
 	 private String[] mOptionTitles;
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -69,7 +71,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
-
+    private long timer;
     List<DrawerItem> dataList;
 
 	@Override
@@ -77,7 +79,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		{
 		super.onCreate(savedInstanceState);
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		
+		timer = System.currentTimeMillis();
 		Display display = getWindowManager().getDefaultDisplay();
 		int orientation = display.getRotation();
 		if(orientation==3||orientation==1)
@@ -89,11 +91,12 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		// Map
 
 		// Get a handle to the Map Fragment
-
+	
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
 		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		
 		
 
 		CampusInfo campusInfo = new CampusInfo(map);
@@ -101,6 +104,23 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		
 		query();
 		 initDrawer(savedInstanceState);
+		 map.setOnMapClickListener(new OnMapClickListener() {
+
+		        @Override
+		        public void onMapClick(LatLng arg0) {
+		            // TODO Auto-generated method stub
+		        	if(map.getCameraPosition().target!=myLocation){
+						Log.d("maps","it should allow me to move it");
+						maptouch=true;
+						}
+						else{
+							Log.d("maps","it should be locked on my location");
+							maptouch=false;
+						}
+		        }
+		    });
+				
+			
 	}
 	
 	public void initDrawer(Bundle savedInstanceState){
@@ -265,8 +285,8 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         	cameraActivity();
         }
         if(dataList.get(possition).getItemName().contentEquals("Facebook")){
-        	Log.d("Test", "CameraTiime");
-        	 Intent intent = new Intent(MainActivity.this, LoginUsingLoginFragmentActivity.class);
+        	Log.d("Test", "facebook");
+        	 Intent intent = new Intent(this, LoginActivity.class);
              startActivity(intent);
         	
         }
@@ -378,19 +398,23 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 	
 public void onSensorChanged(SensorEvent event) {
 		
-		int heading = ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
-		Log.d("map","we should be animating");
-		
+		if(System.currentTimeMillis()-timer>90){
+		if(maptouch=true){
+		int heading =  ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
+		Log.d("map",heading+"");
 		centerMapOnMyLocation();
 		if(myLocation!=null){
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 	    .target(new LatLng(myLocation.latitude,myLocation.longitude))      // Sets the center of the map to Mountain View
-	    .zoom(19)                   // Sets the zoom
+	    .zoom(18)                   // Sets the zoom
 	    .bearing(heading)                // Sets the orientation of the camera to east
-	    .tilt(68)                   // Sets the tilt of the camera to 30 degrees
+	    .tilt(67)                   // Sets the tilt of the camera to 30 degrees
 	    .build();                   // Creates a CameraPosition from the builder
-	map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),1,null);
-	
+		
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),75,null);
+		timer=System.currentTimeMillis();
+		}
+		}
 		}
 	}
 
@@ -415,9 +439,11 @@ public void onSensorChanged(SensorEvent event) {
 		super.onResume();
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
 	}
+    
 
-    private void centerMapOnMyLocation() {
+    static void centerMapOnMyLocation() {
 
+    	
         map.setMyLocationEnabled(true);
 
         Location location = map.getMyLocation();
@@ -426,7 +452,13 @@ public void onSensorChanged(SensorEvent event) {
 		if (location != null) {
             myLocation = new LatLng(location.getLatitude(),
                     location.getLongitude());
-        }
+		}
+		
+        
+    	
         
     }
-}
+
+   
+	
+	}
