@@ -1,12 +1,14 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,6 +51,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnInfoWindowClickListener, SensorEventListener{
@@ -60,6 +68,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	ArrayList<Marker> currentlyvisable = new ArrayList();
 	public LoginUsingLoginFragmentActivity logIn;
 	static GoogleMap map = null;
+	public ParseUser currentUser;
 	
 	static LatLng myLocation = null;
 	boolean maptouch= false;
@@ -78,6 +87,15 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
+		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
+				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
+		ParseFacebookUtils.initialize(getString(R.string.app_id));
+		currentUser = ParseUser.getCurrentUser();
+		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)){
+			
+			query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
+			Log.d("supertest", "this should have fqled");
+		}
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		timer = System.currentTimeMillis();
 		Display display = getWindowManager().getDefaultDisplay();
@@ -102,7 +120,6 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		CampusInfo campusInfo = new CampusInfo(map);
 		CampusInfo.createMarkers();
 		
-		query();
 		 initDrawer(savedInstanceState);
 		 map.setOnMapClickListener(new OnMapClickListener() {
 
@@ -176,7 +193,11 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
     dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
     dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
     dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-    dataList.add(new DrawerItem("Facebook", R.drawable.ic_action_cloud));
+    if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+    dataList.add(new DrawerItem("Log Out Of Facebook", R.drawable.ic_action_cloud));
+    }else{
+    	dataList.add(new DrawerItem("Log In To Facebook", R.drawable.ic_action_cloud));
+    }
     dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
     dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
     dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
@@ -284,10 +305,24 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         	Log.d("Test", "CameraTiime");
         	cameraActivity();
         }
-        if(dataList.get(possition).getItemName().contentEquals("Facebook")){
-        	Log.d("Test", "facebook");
-        	 Intent intent = new Intent(this, LoginActivity.class);
-             startActivity(intent);
+        if(dataList.get(possition).getItemName().contentEquals("Settings")){
+        	Intent intent = new Intent(this, LoginActivity.class);
+    		startActivity(intent);
+        }
+        if(dataList.get(possition).getItemName().contentEquals("Log In To Facebook") && currentUser == null){
+        	Log.d("Test", "facebook in");
+        	
+        	 onLoginButtonClicked();
+             dataList.get(possition).setItemName("Log Out Of Facebook");
+        	
+        }
+        else{
+        	if(dataList.get(possition).getItemName().contentEquals("Log Out Of Facebook")){
+        	Log.d("Test", "facebook out ");
+        	 
+        	 ParseUser.logOut();
+             dataList.get(possition).setItemName("Log In To Facebook");
+        	}
         	
         }
        
@@ -317,84 +352,7 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 }
 }
-	private void query() {
-		
-	       
-	    // Create a new request for an HTTP GET with the
-		if(LoginUsingLoginFragmentActivity.isLoggedIn()){
-        	
-        
-        	String fqlQuery = 
-        			
-        			"SELECT name,  venue, description, start_time,end_time, eid " +
-                 			"FROM event " +
-                 			"WHERE eid IN (" +
-                 			"SELECT eid " +
-                 			"FROM event_member " +
-                 			"WHERE (uid IN (" +
-                 			"SELECT uid2 " +
-                 			"FROM friend " +
-                 			"WHERE uid1 = me())  " +
-                 			"OR uid = me())limit 10000) " +
-                 			"AND  (end_time>now() OR start_time>now()) "+
-                 			"AND venue.latitude > \""+(CampusInfo.map.getMyLocation().getLatitude()-.1)+"\""+
-                 			"AND venue.latitude < \""+(CampusInfo.map.getMyLocation().getLatitude()+.1)+"\""+
-                 			"AND venue.longitude < \""+(CampusInfo.map.getMyLocation().getLongitude()+.1)+"\""+
-                 			"AND venue.longitude  >\""+(CampusInfo.map.getMyLocation().getLongitude()-.1)+"\"";
-        	
-        	Bundle params = new Bundle();
-        	params.putString("q", fqlQuery);
-        	
-        	Session session1 = Session.getActiveSession();
-        	
-        	 
-        	Request request = new Request(session1, 
-        	    "/fql", 
-        	    params, 
-        	    HttpMethod.GET, 
-        	    new Request.Callback(){ 
-        	        public void onCompleted(Response response) {
-        	        //Log.i("fql", "Got results: " + response.toString());
-        	       
-        	        try
-        	        {
-        	            GraphObject go  = response.getGraphObject();
-        	            JSONObject  jso = go.getInnerJSONObject();
-        	            JSONArray array =  jso.getJSONArray("data");
-
-        	            		// loop
-        	            		for(int i = 0; i < array.length(); i++) {
-        	            		 JSONObject obj = array.getJSONObject(i);
-        	            		 JSONObject jb1= new JSONObject(obj.getString("venue"));
-        	            		 String name = obj.getString("name");
-        	            		 String description = obj.getString("description");
-        	            		 
-        	            		 String lat = jb1.getString("latitude");
-        	            		 String longi = jb1.getString("longitude");
-        	            		 CampusInfo.events.add(new Event(name, description,new LatLng(Double.parseDouble(lat),Double.parseDouble(longi))));
-        	            		 Log.d("fql", name+" "+description+" ");
-        	            		}
-        	               
-        	                
-        	            
-        	        }
-        	        catch ( Throwable t )
-        	        {
-        	            t.printStackTrace();
-        	        }
-        	    }
-        	});
-        	Request.executeBatchAsync(request);
-        	for(Building b: CampusInfo.all)
-        	{
-        		b.makeMarker();
-        		
-        	}
-
-        }
-        
-    }
-
+	
 	
 public void onSensorChanged(SensorEvent event) {
 		
@@ -458,7 +416,102 @@ public void onSensorChanged(SensorEvent event) {
     	
         
     }
+    private void onLoginButtonClicked() {
+		
+		List<String> permissions = Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
+		ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+			@Override
+			public void done(ParseUser user, ParseException err) {
+				
+				if (user == null) {
+					Log.d("facebook",
+							"Uh oh. The user cancelled the Facebook login.");
+				} else if (user.isNew()) {
+					Log.d("facebook",
+							"User signed up and logged in through Facebook!");
+					query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
+					
+				} else {
+					Log.d("facebook",
+							"User logged in through Facebook!");
+					query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
+				}
+			}
+		});
+		
+	}
+    public void query(Session session, SessionState state) {
+    	Log.d("supertest", "this should have fqled");
+     	String fqlQuery = 
+     			
+     			"SELECT name,  venue, description, start_time,end_time, eid " +
+              			"FROM event " +
+              			"WHERE eid IN (" +
+              			"SELECT eid " +
+              			"FROM event_member " +
+              			"WHERE (uid IN (" +
+              			"SELECT uid2 " +
+              			"FROM friend " +
+              			"WHERE uid1 = me())  " +
+              			"OR uid = me())limit 10000) " +
+              			"AND  (end_time>now() OR start_time>now()) "+
+              			"AND venue.latitude > \""+(CampusInfo.map.getMyLocation().getLatitude()-.1)+"\""+
+              			"AND venue.latitude < \""+(CampusInfo.map.getMyLocation().getLatitude()+.1)+"\""+
+              			"AND venue.longitude < \""+(CampusInfo.map.getMyLocation().getLongitude()+.1)+"\""+
+              			"AND venue.longitude  >\""+(CampusInfo.map.getMyLocation().getLongitude()-.1)+"\"";
+     	Bundle params = new Bundle();
+     	
+     	params.putString("q", fqlQuery);
+     	
+     	Session session1 = Session.getActiveSession();
+     	
+     	
+     	 
+     	Request request = new Request(session1, 
+     	    "/fql", 
+     	    params, 
+     	    HttpMethod.GET, 
+     	    new Request.Callback(){ 
+     	        public void onCompleted(Response response) {
+     	        //Log.i("fql", "Got results: " + response.toString());
+     	       
+     	        try
+     	        {
+     	            GraphObject go  = response.getGraphObject();
+     	            JSONObject  jso = go.getInnerJSONObject();
+     	            JSONArray array =  jso.getJSONArray("data");
 
+     	            		// loop
+     	            		for(int i = 0; i < array.length(); i++) {
+     	            		 JSONObject obj = array.getJSONObject(i);
+     	            		 JSONObject jb1= new JSONObject(obj.getString("venue"));
+     	            		 String name = obj.getString("name");
+     	            		 String description = obj.getString("description");
+     	            		 
+     	            		 String lat = jb1.getString("latitude");
+     	            		 String longi = jb1.getString("longitude");
+     	            		 CampusInfo.events.add(new Event(name, description,new LatLng(Double.parseDouble(lat),Double.parseDouble(longi))));
+     	            		 Log.d("fql", name+" "+description+" ");
+     	            		}
+     	               
+     	                
+     	            
+     	        }
+     	        catch ( Throwable t )
+     	        {
+     	            t.printStackTrace();
+     	        }
+     	    }
+     	});
+     	
+     	Request.executeBatchAsync(request);
+     	for(Building b: CampusInfo.all)
+     	{
+     		b.makeMarker();
+     		
+     	}
+
+     }
    
 	
 	}

@@ -23,6 +23,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
+import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -34,6 +35,7 @@ import com.parse.ParseUser;
 public class LoginActivity extends Activity {
 
 	private Button loginButton;
+	private Button logoutButton;
 	private Dialog progressDialog;
 
 	@Override
@@ -43,22 +45,32 @@ public class LoginActivity extends Activity {
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		setContentView(R.layout.main);
-
+		ParseUser currentUser = ParseUser.getCurrentUser();
 		loginButton = (Button) findViewById(R.id.loginButton);
+		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+			// Go to the user info activity
+			
+			loginButton.setText("Log Out");
+			loginButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onLogoutButtonClicked();
+				}
+			});
+		}else{
+
+		
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onLoginButtonClicked();
 			}
+			
 		});
-
+		}
 		// Check if there is a currently logged in user
 		// and they are linked to a Facebook account.
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
-			// Go to the user info activity
-			showUserDetailsActivity();
-		}
+		
 	}
 
 	@Override
@@ -88,12 +100,19 @@ public class LoginActivity extends Activity {
 				} else if (user.isNew()) {
 					Log.d("facebook",
 							"User signed up and logged in through Facebook!");
-					showUserDetailsActivity();
+					
 				} else {
 					Log.d("facebook",
 							"User logged in through Facebook!");
 					call( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState(), err);
 				}
+			}
+		});
+		loginButton.setText("Log Out");
+		loginButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onLogoutButtonClicked();
 			}
 		});
 	}
@@ -177,5 +196,18 @@ public class LoginActivity extends Activity {
 
          }
          
+		 private void onLogoutButtonClicked() {
+				// Log the user out
+				ParseUser.logOut();
+				loginButton.setText("Log In");
+				loginButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onLoginButtonClicked();
+					}
+				});
+				// Go to the login view
+				
+			}
 	
 }
