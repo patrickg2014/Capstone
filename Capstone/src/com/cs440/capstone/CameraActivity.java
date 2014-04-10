@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.Marker;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -71,7 +72,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		camover = (CameraOverlay)findViewById(R.id.overlay_layout);	//starts up a comeraOverlay instance which will allow us to write on top of the camera
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keeps the Camera from falling asleep
 		Display display = getWindowManager().getDefaultDisplay();
-		
+		camover.passActivity(this);
 		/*int orientation = display.getRotation();
 		if(orientation==0||orientation==4)
 		{
@@ -188,6 +189,13 @@ public class CameraActivity extends Activity implements SensorEventListener{
     private void MainAcivity() {
 		// TODO Auto-generated method stub
 		
+	}
+    
+	public void buildingActivity(String buildingName, String snippet){
+		Intent intent = new Intent(this, BuildingInfoActivity.class);
+		intent.putExtra("Name", buildingName);
+		intent.putExtra("Snippet", snippet);
+		startActivity(intent);
 	}
 
 	private void releaseCamera(){

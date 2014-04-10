@@ -7,7 +7,9 @@ import java.util.Set;
 
 import com.google.android.gms.maps.model.Marker;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +33,7 @@ public class CameraOverlay extends ViewGroup {
 	public ArrayList<Float> xPos=new ArrayList<Float> ();
 	public ArrayList<Float> yPos=new ArrayList<Float> ();
 	private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
+	public CameraActivity camActivity;
 
 	
 	public CameraOverlay(Context context, AttributeSet attrs) {
@@ -51,6 +54,10 @@ public class CameraOverlay extends ViewGroup {
 		}
 		setShowText(true);
 		setWillNotDraw(false);
+	}
+	
+	public void passActivity(CameraActivity theActivity){
+		camActivity = theActivity;
 	}
 	
 	@Override
@@ -130,34 +137,35 @@ public class CameraOverlay extends ViewGroup {
 		Log.d("Touch",x+"   "+y);
 	switch (event.getAction()) {
 	    case MotionEvent.ACTION_DOWN:
-for(int i=0; i<xPos.size(); i++){
+	    	for(int i=0; i<xPos.size(); i++){
 	    		
-	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
-	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
-	    				Log.d("Touch", nearList.get(i).title+"  it worked");
+	    		if(x >= xPos.get(i) && x <= xPos.get(i) + (nearList.get(i).title.length()*50)){
+	    			if(y >= yPos.get(i) && y <= yPos.get(i)+100){
+	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
+	    				camActivity.buildingActivity(nearList.get(i).title, "Look");
 	    			}
 	    		}
 	    	}
 	        break;
 
 	    case MotionEvent.ACTION_MOVE:
-for(int i=0; i<xPos.size(); i++){
+	    	/*for(int i=0; i<xPos.size(); i++){
 	    		
 	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
-	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
-	    				Log.d("Touch", nearList.get(i).title+"  it worked");
+	    			if(y+50 >= yPos.get(i) && y-50 <= yPos.get(i)){
+	    				Log.d("Touch", nearList.get(i).title+"  it worked!!!");
 	    			}
 	    		}
-	    	}
+	    	}*/
 	        break;
 
 	    case MotionEvent.ACTION_UP:
 	       //do something
 	    	for(int i=0; i<xPos.size(); i++){
 	    		
-	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
-	    			if(y+50 >= yPos.get(i) && x-50 <= yPos.get(i)){
-	    				Log.d("Touch", nearList.get(i).title+"  it worked");
+	    		if(x >= xPos.get(i) && x <= xPos.get(i) + (nearList.get(i).title.length()*50)){
+	    			if(y >= yPos.get(i) && y <= yPos.get(i)+50){
+	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
 	    			}
 	    		}
 	    	}
@@ -171,6 +179,7 @@ for(int i=0; i<xPos.size(); i++){
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	
 
