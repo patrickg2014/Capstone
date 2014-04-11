@@ -38,7 +38,7 @@ public class Building{
 		this.title=title;
 		this.snipit=snipit;
 		llng=latlng;
-		makeMarker();
+		makeOldMarker();
 		
 	}
 	public void makeMarker(){
@@ -48,6 +48,13 @@ public class Building{
 		 m.isVisible();
 		
 		
+	}
+	
+	public void makeOldMarker(){
+		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
+				.snippet(snipit).position(llng));
+		 insidePoints=  new ArrayList<Building>();
+		 m.isVisible();
 	}
 	
 	public Marker getMarker(){

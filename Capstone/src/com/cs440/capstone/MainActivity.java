@@ -114,8 +114,8 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		
 		
 
-		CampusInfo campusInfo = new CampusInfo(map);
-		CampusInfo.createMarkers();
+		CampusInfo campusInfo = new CampusInfo(map,this);
+		//CampusInfo.createMarkers();
 		
 		 initDrawer(savedInstanceState);
 		 map.setOnMapClickListener(new OnMapClickListener() {

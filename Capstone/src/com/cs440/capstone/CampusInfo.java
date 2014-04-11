@@ -1,18 +1,22 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
+import android.content.Context;
+import android.net.ParseException;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 public class CampusInfo {
 
@@ -22,10 +26,43 @@ public class CampusInfo {
 	public static ArrayList<Event> events = new ArrayList();
 	public static GoogleMap map = null;
 	public static ArrayList<Building> all = new ArrayList();
+	private Context context;
 
-	public CampusInfo(GoogleMap map) {
+	public CampusInfo(GoogleMap map,Context con) {
+		context = con;
+		Parse.initialize(context, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa", "GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		this.map = map;
-		createMarkers();
+		//createMarkers();
+		queryMarkers();
+	}
+	
+	public void queryMarkers(){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Building");
+		query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+		query.whereNotEqualTo("name", "");
+		
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects,
+					com.parse.ParseException e) {
+				  if (e == null) {
+			            Log.d("query", "Retrieved " + objects.size() + " buildings");
+			            for (int i = 0; i < objects.size(); i++) {
+							String name = objects.get(i).getString("name");
+							String description = objects.get(i).getString("description");
+							double lat = objects.get(i).getParseGeoPoint("coordinate").getLatitude();
+							double longitude = objects.get(i).getParseGeoPoint("coordinate").getLongitude();
+							LatLng buildPosition = new LatLng(lat,longitude);
+							Building build = new Building(name,description,buildPosition);
+							currentlyvisable.add(build.getMarker());
+							all.add(build);
+						}
+			        } else {
+			            Log.d("query", "Error: " + e.getMessage());
+			        }
+			}
+		});
+		
 	}
 
 	/*
