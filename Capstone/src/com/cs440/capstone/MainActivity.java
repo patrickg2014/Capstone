@@ -91,13 +91,10 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
-		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)){
-			
-			query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
-			Log.d("supertest", "this should have fqled");
-		}
+		
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		timer = System.currentTimeMillis();
+		
 		Display display = getWindowManager().getDefaultDisplay();
 		int orientation = display.getRotation();
 		if(orientation==3||orientation==1)
@@ -136,6 +133,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 						}
 		        }
 		    });
+		
 				
 			
 	}
@@ -277,6 +275,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		
 		// Associate searchable configuration with the SearchView
 	    SearchManager searchManager =
 	           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -304,29 +303,33 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         if(dataList.get(possition).getItemName().contentEquals("Camera")){
         	Log.d("Test", "CameraTiime");
         	cameraActivity();
+        	  mDrawerLayout.closeDrawer(mDrawerList);
         }
         if(dataList.get(possition).getItemName().contentEquals("Settings")){
         	Intent intent = new Intent(this, LoginActivity.class);
     		startActivity(intent);
         }
-        if(dataList.get(possition).getItemName().contentEquals("Log In To Facebook") && currentUser == null){
+        if(dataList.get(possition).getItemName().contentEquals("Log In To Facebook")&& ParseFacebookUtils.getSession()==null){
         	Log.d("Test", "facebook in");
         	
-        	 onLoginButtonClicked();
-             dataList.get(possition).setItemName("Log Out Of Facebook");
+        	login();
         	
+        	Log.d("Test", "facebook should have fqled");
+             dataList.get(possition).setItemName("Log Out Of Facebook");
+            
         }
         else{
         	if(dataList.get(possition).getItemName().contentEquals("Log Out Of Facebook")){
         	Log.d("Test", "facebook out ");
         	 
         	 ParseUser.logOut();
+        	 
              dataList.get(possition).setItemName("Log In To Facebook");
         	}
         	
         }
        
-        mDrawerLayout.closeDrawer(mDrawerList);
+      
 
   }
 	
@@ -356,7 +359,7 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 	
 public void onSensorChanged(SensorEvent event) {
 		
-		if(System.currentTimeMillis()-timer>90){
+		if(System.currentTimeMillis()-timer>130){
 		if(maptouch=true){
 		int heading =  ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
 		Log.d("map",heading+"");
@@ -369,7 +372,7 @@ public void onSensorChanged(SensorEvent event) {
 	    .tilt(67)                   // Sets the tilt of the camera to 30 degrees
 	    .build();                   // Creates a CameraPosition from the builder
 		
-		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),75,null);
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),130,null);
 		timer=System.currentTimeMillis();
 		}
 		}
@@ -416,32 +419,9 @@ public void onSensorChanged(SensorEvent event) {
     	
         
     }
-    private void onLoginButtonClicked() {
-		
-		List<String> permissions = Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
-		ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
-			@Override
-			public void done(ParseUser user, ParseException err) {
-				
-				if (user == null) {
-					Log.d("facebook",
-							"Uh oh. The user cancelled the Facebook login.");
-				} else if (user.isNew()) {
-					Log.d("facebook",
-							"User signed up and logged in through Facebook!");
-					query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
-					
-				} else {
-					Log.d("facebook",
-							"User logged in through Facebook!");
-					query( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState());
-				}
-			}
-		});
-		
-	}
-    public void query(Session session, SessionState state) {
-    	Log.d("supertest", "this should have fqled");
+    
+    public void call(Session session, SessionState state, Exception exception) {
+     	
      	String fqlQuery = 
      			
      			"SELECT name,  venue, description, start_time,end_time, eid " +
@@ -512,6 +492,34 @@ public void onSensorChanged(SensorEvent event) {
      	}
 
      }
-   
+    
+    public void login(){
+    	
+    	List<String> permissions = Arrays.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
+    ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+		@Override
+		public void done(ParseUser user, ParseException err) {
+			
+			if (user == null) {
+				Log.d("facebook",
+						"Uh oh. The user cancelled the Facebook login.");
+			} else if (user.isNew()) {
+				Log.d("facebook",
+						"User signed up and logged in through Facebook!");
+				
+			} else {
+				Log.d("facebook",
+						"User logged in through Facebook!");
+				call( ParseFacebookUtils.getSession() ,  ParseFacebookUtils.getSession().getState(), err);
+			}
+		}
+	});
+
+    }
 	
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	}
 	}
