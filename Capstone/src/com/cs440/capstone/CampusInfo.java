@@ -50,10 +50,17 @@ public class CampusInfo {
 			            for (int i = 0; i < objects.size(); i++) {
 							String name = objects.get(i).getString("name");
 							String description = objects.get(i).getString("description");
-							double lat = objects.get(i).getParseGeoPoint("coordinate").getLatitude();
-							double longitude = objects.get(i).getParseGeoPoint("coordinate").getLongitude();
-							LatLng buildPosition = new LatLng(lat,longitude);
-							Building build = new Building(name,description,buildPosition);
+						
+							double latboundone = objects.get(i).getParseGeoPoint("latlngboundfirst").getLatitude();
+							double longboundone = objects.get(i).getParseGeoPoint("latlngboundfirst").getLongitude();
+							LatLng boundOne = new LatLng(latboundone,longboundone);
+							double latboundtwo = objects.get(i).getParseGeoPoint("latlngboundsecond").getLatitude();
+							double longboundtwo = objects.get(i).getParseGeoPoint("latlngboundsecond").getLongitude();
+							LatLng boundTwo = new LatLng(latboundtwo,longboundtwo);
+							
+							
+							LatLngBounds bounds = new LatLngBounds(boundOne,boundTwo);
+							Building build = new Building(name,description,true,bounds);
 							currentlyvisable.add(build.getMarker());
 							all.add(build);
 						}
