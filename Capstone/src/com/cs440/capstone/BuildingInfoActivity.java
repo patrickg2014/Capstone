@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 
 import java.util.List;
+
+import com.parse.ParseFacebookUtils;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -47,7 +50,7 @@ public class BuildingInfoActivity extends Activity {
 		text = (TextView)findViewById(R.id.textView1);
 		Intent intent = getIntent();
 		String name = intent.getStringExtra("Name");
-		text.setText(intent.getStringExtra("Snippet"));
+		text.setText(intent.getStringExtra("Snippet")+"\n \n");
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
@@ -107,7 +110,11 @@ public class BuildingInfoActivity extends Activity {
     dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
     dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
     dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-    dataList.add(new DrawerItem("Facebook", R.drawable.ic_action_cloud));
+    if ((MainActivity.currentUser != null) && ParseFacebookUtils.isLinked(MainActivity.currentUser)) {
+        dataList.add(new DrawerItem("Log Out Of Facebook", R.drawable.ic_action_cloud));
+        }else{
+        	dataList.add(new DrawerItem("Log In To Facebook", R.drawable.ic_action_cloud));
+        }
     dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
     dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
     dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));

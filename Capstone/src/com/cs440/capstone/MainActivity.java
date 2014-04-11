@@ -68,8 +68,8 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	ArrayList<Marker> currentlyvisable = new ArrayList();
 	public LoginUsingLoginFragmentActivity logIn;
 	static GoogleMap map = null;
-	public ParseUser currentUser;
-	
+	public static ParseUser currentUser;
+
 	static LatLng myLocation = null;
 	boolean maptouch= false;
 	 private String[] mOptionTitles;
@@ -91,10 +91,10 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
-		
+
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		timer = System.currentTimeMillis();
-		
+
 		Display display = getWindowManager().getDefaultDisplay();
 		int orientation = display.getRotation();
 		if(orientation==3||orientation==1)
@@ -106,17 +106,17 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		// Map
 
 		// Get a handle to the Map Fragment
-	
+
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
 		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		
-		
+
+
 
 		CampusInfo campusInfo = new CampusInfo(map,this);
 		//CampusInfo.createMarkers();
-		
+
 		 initDrawer(savedInstanceState);
 		 map.setOnMapClickListener(new OnMapClickListener() {
 
@@ -133,14 +133,14 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 						}
 		        }
 		    });
-		
-				
-			
+
+
+
 	}
-	
+
 	public void initDrawer(Bundle savedInstanceState){
 		mTitle = "test";
-		 
+
 	 	mOptionTitles = getResources().getStringArray(R.array.Menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-	
+
 	//initialize drawer
 	dataList = new ArrayList<DrawerItem>();
     mTitle = mDrawerTitle = getTitle();
@@ -231,16 +231,16 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
     }
     
     mDrawerLayout.openDrawer(mDrawerList);
-	
+
 	}
-	
-	
+
+
 	public void cameraActivity() //what allows us to switch to the camera activity on button click
 	{
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void buildingActivity(String buildingName, String snippet){
 		Intent intent = new Intent(this, BuildingInfoActivity.class);
 		intent.putExtra("Name", buildingName);
@@ -256,7 +256,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 			return false;
 		}
 	}
-	
+
 	/**
 	 * This method changes to the CameraActivity when the phone is rotated
 	 */
@@ -275,7 +275,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
-		
+
 		// Associate searchable configuration with the SearchView
 	    SearchManager searchManager =
 	           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -285,7 +285,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	            searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
-	
+
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         
@@ -296,9 +296,9 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         }
         return false;
     }
-	
+
 	public void selectItem(int possition) {
-		 
+
         mDrawerList.setItemChecked(possition, true);
         if(dataList.get(possition).getItemName().contentEquals("Camera")){
         	Log.d("Test", "CameraTiime");
@@ -332,13 +332,13 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
       
 
   }
-	
+
 	@Override
 	public void setTitle(CharSequence title) {
 	      mTitle = title;
 	      getActionBar().setTitle(mTitle);
 	}
-	
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 	      super.onPostCreate(savedInstanceState);
@@ -355,10 +355,10 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 }
 }
-	
-	
+
+
 public void onSensorChanged(SensorEvent event) {
-		
+
 		if(System.currentTimeMillis()-timer>130){
 		if(maptouch=true){
 		int heading =  ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
@@ -371,7 +371,7 @@ public void onSensorChanged(SensorEvent event) {
 	    .bearing(heading)                // Sets the orientation of the camera to east
 	    .tilt(67)                   // Sets the tilt of the camera to 30 degrees
 	    .build();                   // Creates a CameraPosition from the builder
-		
+
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),130,null);
 		timer=System.currentTimeMillis();
 		}
@@ -390,7 +390,7 @@ public void onSensorChanged(SensorEvent event) {
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
+
 	}
  
 
@@ -414,7 +414,7 @@ public void onSensorChanged(SensorEvent event) {
             myLocation = new LatLng(location.getLatitude(),
                     location.getLongitude());
 		}
-		
+
         
     	
         
@@ -499,14 +499,14 @@ public void onSensorChanged(SensorEvent event) {
     ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
 		@Override
 		public void done(ParseUser user, ParseException err) {
-			
+
 			if (user == null) {
 				Log.d("facebook",
 						"Uh oh. The user cancelled the Facebook login.");
 			} else if (user.isNew()) {
 				Log.d("facebook",
 						"User signed up and logged in through Facebook!");
-				
+
 			} else {
 				Log.d("facebook",
 						"User logged in through Facebook!");
@@ -516,7 +516,7 @@ public void onSensorChanged(SensorEvent event) {
 	});
 
     }
-	
+
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

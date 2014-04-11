@@ -29,17 +29,10 @@ public class Event{
 		Marker m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
 				.snippet(snipit).position(llng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 		boolean in = false;
-		 for(Building b: CampusInfo.all){
-			 if(b.bound.contains(llng)){
-				 b.snipit=this.title;
-				 in=true;
-			 }
-		 }
-		 if(!in){
+		
 			 
 			 m.isVisible();
 			 
-		 }
 		
 		
 		

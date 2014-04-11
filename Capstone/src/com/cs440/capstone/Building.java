@@ -15,66 +15,67 @@ public class Building{
 	public String snipit;
 	public LatLng llng;
 	public ArrayList<Building> insidePoints;
-	
 
-	
-	
+
+
+
 	public Building(String title, String snipit,Boolean building, LatLngBounds bounds) {
-		
+
 		this.title=title;
 		this.snipit=snipit;
 		insideList= new ArrayList<Building>();
 		bound=bounds;
+		llng= bound.getCenter();
 		makeMarker();
-		
+
 		if( !CampusInfo.all.contains(this)&&building){
 			CampusInfo.all.add(this);
 		}
-		
-		 
+
+
 	}
 	public Building(String title, String snipit, LatLng latlng) {
-		
+
 		this.title=title;
 		this.snipit=snipit;
 		llng=latlng;
 		makeOldMarker();
-		
+
 	}
 	public void makeMarker(){
 		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
-				.snippet(snipit).position(bound.getCenter()));
+				.snippet(snipit).position(llng));
 		 insidePoints=  new ArrayList<Building>();
 		 m.isVisible();
-		
-		
+
+
 	}
-	
+
 	public void makeOldMarker(){
 		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
 				.snippet(snipit).position(llng));
 		 insidePoints=  new ArrayList<Building>();
 		 m.isVisible();
 	}
-	
+
 	public Marker getMarker(){
 		return m;
-		
+
 	}
-	
+
 	public LatLngBounds getBounds(){
 		return bound;
-		
+
 	}
 	public void setVisible(boolean bool)
 	{
 		m.setVisible(bool);
 	}
-	
+
 	public ArrayList<Building> getInsideList(){
 		return insideList;
-		
-		
+
+
 	}
 	 public void addInsidePoint(Building inside){
 		 insideList.add(inside);
