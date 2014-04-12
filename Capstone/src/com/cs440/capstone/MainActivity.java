@@ -45,6 +45,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -111,32 +112,57 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
 		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
+		
 
 
 		CampusInfo campusInfo = new CampusInfo(map,this);
 		//CampusInfo.createMarkers();
 
 		 initDrawer(savedInstanceState);
+		 map.setOnMapLongClickListener(new OnMapLongClickListener() {
+
+		        @Override
+		        
+		        public void onMapLongClick(LatLng arg0) {
+		            // TODO Auto-generated method stub
+		        	Log.d("maps", "should be unlocked");
+						maptouch=true;
+						
+						
+		        }
+		        
+		    
+		    });
 		 map.setOnMapClickListener(new OnMapClickListener() {
 
 		        @Override
+		        
 		        public void onMapClick(LatLng arg0) {
 		            // TODO Auto-generated method stub
-		        	if(map.getCameraPosition().target!=myLocation){
-						Log.d("maps","it should allow me to move it");
+		        	Log.d("maps", "should be unlocked");
 						maptouch=true;
-						}
-						else{
-							Log.d("maps","it should be locked on my location");
-							maptouch=false;
-						}
+						
+						
+		        }
+		        
+		    
+		    });
+		 
+		 map.setOnMyLocationButtonClickListener(new OnMyLocationButtonClickListener() {
+		        @Override
+		        public boolean onMyLocationButtonClick() {
+		        	Log.d("maps", "should be locked");
+		        	maptouch=false;
+		        	
+		        	return true;
+		           
 		        }
 		    });
 
 
 
 	}
+	
 
 	public void initDrawer(Bundle savedInstanceState){
 		mTitle = "test";
@@ -237,6 +263,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 
 	public void cameraActivity() //what allows us to switch to the camera activity on button click
 	{
+		
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
@@ -359,8 +386,8 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 public void onSensorChanged(SensorEvent event) {
 
-		if(System.currentTimeMillis()-timer>130){
-		if(maptouch=true){
+		if(System.currentTimeMillis()-timer>130 && !maptouch){
+		
 		int heading =  ((Math.round(event.values[0]+event.values[2]))%360); //Rounds the current heading to full degrees
 		Log.d("map",heading+"");
 		centerMapOnMyLocation();
@@ -374,7 +401,7 @@ public void onSensorChanged(SensorEvent event) {
 
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),130,null);
 		timer=System.currentTimeMillis();
-		}
+	
 		}
 		}
 	}
