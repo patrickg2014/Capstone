@@ -13,6 +13,7 @@ public class Event{
 	public LatLngBounds bound;
 	public String snipit;
 	public LatLng llng;
+	public Marker m;
 
 	public Event(String title, String snipit, LatLng latlng) {
 		
@@ -20,13 +21,14 @@ public class Event{
 		this.snipit=snipit;
 		llng=latlng;
 		makeMarker();
+		
 	
 		
 	}
 	public void makeMarker(){
 		
 		
-		Marker m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
+		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
 				.snippet(snipit).position(llng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 		boolean in = false;
 		

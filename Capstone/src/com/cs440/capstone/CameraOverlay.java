@@ -1,3 +1,4 @@
+
 package com.cs440.capstone;
 
 
@@ -29,7 +30,7 @@ public class CameraOverlay extends ViewGroup {
 	private int mTextPos;
 	public String inside="";
 	public boolean insidebool=false;
-	public ArrayList<Building> nearList=new ArrayList<Building> ();
+	public ArrayList<Marker> nearList=new ArrayList<Marker> ();
 	public ArrayList<Float> xPos=new ArrayList<Float> ();
 	public ArrayList<Float> yPos=new ArrayList<Float> ();
 	private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
@@ -66,8 +67,7 @@ public class CameraOverlay extends ViewGroup {
 		super.addView(child);
 	}
 	
-	
-	protected void onDraw(Canvas canvas) {
+protected void onDraw(Canvas canvas) {
 		
 		Log.d("draw", "WE ARE DRAWING!!");
 		Log.d("Setup", "invalidate");
@@ -86,13 +86,13 @@ public class CameraOverlay extends ViewGroup {
 			canvas.drawBitmap(bmp, (float) (xPos.get(i)-(bmp.getWidth())),(float) (yPos.get(i)-(bmp.getHeight()/2)), paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);
-			canvas.drawText(nearList.get(i).title, xPos.get(i), yPos.get(i), paint);//draws text at x,y position
+			canvas.drawText(nearList.get(i).getTitle(), xPos.get(i), yPos.get(i), paint);//draws text at x,y position
 			 paint.setStrokeWidth(2);
 			 paint.setColor(Color.BLACK);
-			 canvas.drawText(nearList.get(i).title, xPos.get(i),yPos.get(i), paint);
+			 canvas.drawText(nearList.get(i).getTitle(), xPos.get(i),yPos.get(i), paint);
 			 
 			 //For touch area testing!
-			 canvas.drawLine(xPos.get(i)-100, yPos.get(i)-50, xPos.get(i) + (nearList.get(i).title.length()*25),  yPos.get(i)+100, paint);
+			// canvas.drawLine(xPos.get(i)-100, yPos.get(i)-50, xPos.get(i) + (nearList.get(i).getTitle().length()*25),  yPos.get(i)+100, paint);
 			y = y + 200;
 		}
 			if(insidebool)
@@ -127,10 +127,7 @@ public class CameraOverlay extends ViewGroup {
 		requestLayout();
 	}
 
-	public void setDisplayArray(ArrayList<Building> currentlyNear) {
-		nearList = currentlyNear;
-		
-	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		//Log.d("Touch","Hello !!!!!!!!!!!! AHHHHHHHH");
@@ -141,16 +138,16 @@ public class CameraOverlay extends ViewGroup {
 	    case MotionEvent.ACTION_DOWN:
 	    	for(int i=0; i<xPos.size(); i++){
 	    		
-	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).title.length()*25)){
+	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).getTitle().length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
-	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).title, nearList.get(i).snipit);
+	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked>>>>>>.");
+	    				camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
 	    			}
 	    		}
 	    	}
 	        break;
 
-	    case MotionEvent.ACTION_MOVE:
+	    //case MotionEvent.ACTION_MOVE:
 	    	/*for(int i=0; i<xPos.size(); i++){
 	    		
 	    		if(x+(nearList.get(i).title.length()*50) >= xPos.get(i) && x-(nearList.get(i).title.length()*50) <= xPos.get(i)){
@@ -159,16 +156,16 @@ public class CameraOverlay extends ViewGroup {
 	    			}
 	    		}
 	    	}*/
-	        break;
+	        //break;
 
-	    case MotionEvent.ACTION_UP:
+	   case MotionEvent.ACTION_UP:
 	       //do something
 	    	for(int i=0; i<xPos.size(); i++){
 	    		
-	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).title.length()*25)){
+	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).getTitle().length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
-	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).title, nearList.get(i).snipit);
+	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked>>>>>>.");
+	    				camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
 	    			}
 	    		}
 	    	}
