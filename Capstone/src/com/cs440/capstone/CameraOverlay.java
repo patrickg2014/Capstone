@@ -144,7 +144,7 @@ public class CameraOverlay extends ViewGroup {
 	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).title.length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
 	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).title, "Look");
+	    				camActivity.buildingActivity(nearList.get(i).title, nearList.get(i).snipit);
 	    			}
 	    		}
 	    	}
@@ -168,7 +168,7 @@ public class CameraOverlay extends ViewGroup {
 	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).title.length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
 	    				Log.d("Touch", nearList.get(i).title+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).title, "Look");
+	    				camActivity.buildingActivity(nearList.get(i).title, nearList.get(i).snipit);
 	    			}
 	    		}
 	    	}

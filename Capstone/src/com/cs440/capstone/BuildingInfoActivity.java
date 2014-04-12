@@ -5,12 +5,25 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -38,23 +51,35 @@ public class BuildingInfoActivity extends Activity {
 	    private CharSequence mDrawerTitle;
 	    private CharSequence mTitle;
 	    CustomDrawerAdapter adapter;
-
+	    public String name;
 	    List<DrawerItem> dataList;
+	    private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
+		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
+				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		setContentView(R.layout.building_info_actvity);
 		image = (ImageView)findViewById(R.id.imageView1);
 		text = (TextView)findViewById(R.id.textView1);
 		Intent intent = getIntent();
-		String name = intent.getStringExtra("Name");
+		name = intent.getStringExtra("Name");
 		text.setText(intent.getStringExtra("Snippet")+"\n \n");
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
+		queryPhoto();
 		}
+	
+	public void queryPhoto(){
+		//ParseFile
+		//https://parse.com/tutorials/mealspotting
+
+		
+		
+	 }
 	
 	@SuppressLint("NewApi")
 	public void initDrawer(Bundle savedInstanceState){
