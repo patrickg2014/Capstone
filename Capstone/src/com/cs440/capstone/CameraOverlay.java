@@ -79,7 +79,8 @@ protected void onDraw(Canvas canvas) {
 		
 		//canvas.drawText(displayText, 300, 300, paint);//draws text at x,y position
 		int y= 200;
-		Log.d("Test", nearList.size() +"");
+		Log.d("Test", CampusInfo.all.size()+"this should be how many buildings");
+		Log.d("Test", nearList.size() +"this should be how many things are in the near list");
 		for(int i=0; i<(nearList.size()); i++){
 			Log.d("Test", nearList.size() +"");
 			

@@ -14,13 +14,15 @@ public class Event{
 	public String snipit;
 	public LatLng llng;
 	public Marker m;
+	public String pic;
 
-	public Event(String title, String snipit, LatLng latlng) {
+	public Event(String title, String snipit, LatLng latlng, String pic) {
 		
 		this.title=title;
 		this.snipit=snipit;
 		llng=latlng;
 		makeMarker();
+		this.pic=pic;
 		
 	
 		

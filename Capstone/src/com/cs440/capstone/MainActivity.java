@@ -46,6 +46,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -67,7 +68,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	private SensorManager mSensorManager;
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
-	public LoginUsingLoginFragmentActivity logIn;
+	
 	static GoogleMap map = null;
 	public static ParseUser currentUser;
 
@@ -97,12 +98,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		timer = System.currentTimeMillis();
 
 		Display display = getWindowManager().getDefaultDisplay();
-		int orientation = display.getRotation();
-		if(orientation==3||orientation==1)
-		{
-			finish();
-			cameraActivity();
-		}
+		
 		setContentView(R.layout.activity_main);
 		// Map
 
@@ -133,6 +129,23 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		        
 		    
 		    });
+		 
+		 
+		 map.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+		       
+
+				@Override
+				public boolean onMarkerClick(Marker arg0) {
+					// TODO Auto-generated method stub
+					maptouch=true;
+					
+					return false;
+				}
+		        
+		    
+		    });
+		 
 		 map.setOnMapClickListener(new OnMapClickListener() {
 
 		        @Override
@@ -160,6 +173,13 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		    });
 
 
+		 
+		 int orientation = display.getRotation();
+			if(orientation==3||orientation==1)
+			{
+				finish();
+				cameraActivity();
+			}
 
 	}
 	
@@ -332,10 +352,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         	cameraActivity();
         	  mDrawerLayout.closeDrawer(mDrawerList);
         }
-        if(dataList.get(possition).getItemName().contentEquals("Settings")){
-        	Intent intent = new Intent(this, LoginActivity.class);
-    		startActivity(intent);
-        }
+      
         if(dataList.get(possition).getItemName().contentEquals("Log In To Facebook")&& ParseFacebookUtils.getSession()==null){
         	Log.d("Test", "facebook in");
         	
@@ -404,6 +421,7 @@ public void onSensorChanged(SensorEvent event) {
 	
 		}
 		}
+		
 	}
 
 
@@ -451,7 +469,7 @@ public void onSensorChanged(SensorEvent event) {
      	
      	String fqlQuery = 
      			
-     			"SELECT name,  venue, description, start_time,end_time, eid " +
+     			"SELECT name, pic,venue, description, start_time,end_time, eid " +
               			"FROM event " +
               			"WHERE eid IN (" +
               			"SELECT eid " +
@@ -493,11 +511,12 @@ public void onSensorChanged(SensorEvent event) {
      	            		 JSONObject obj = array.getJSONObject(i);
      	            		 JSONObject jb1= new JSONObject(obj.getString("venue"));
      	            		 String name = obj.getString("name");
+     	            		 String pic = obj.getString("pic");
      	            		 String description = obj.getString("description");
      	            		 
      	            		 String lat = jb1.getString("latitude");
      	            		 String longi = jb1.getString("longitude");
-     	            		 CampusInfo.events.add(new Event(name, description,new LatLng(Double.parseDouble(lat),Double.parseDouble(longi))));
+     	            		 CampusInfo.events.add(new Event(name, description,new LatLng(Double.parseDouble(lat),Double.parseDouble(longi)), pic));
      	            		 Log.d("fql", name+" "+description+" ");
      	            		}
      	               
