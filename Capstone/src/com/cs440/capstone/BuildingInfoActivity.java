@@ -79,7 +79,7 @@ public class BuildingInfoActivity extends Activity {
 	public void queryPhoto(String textField){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Building");
 		ParseFile parseFile = null;
-		query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo("name", name).whereEqualTo("image", parseFile);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override

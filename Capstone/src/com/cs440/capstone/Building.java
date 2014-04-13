@@ -11,10 +11,10 @@ public class Building{
 	public String title;
 	public Marker m;
 	public LatLngBounds bound;
-	public ArrayList<Building> insideList;
+	public ArrayList<Marker> insideList;
 	public String snipit;
 	public LatLng llng;
-	public ArrayList<Building> insidePoints;
+	public ArrayList<Marker> insidePoints;
 
 
 
@@ -23,7 +23,7 @@ public class Building{
 
 		this.title=title;
 		this.snipit=snipit;
-		insideList= new ArrayList<Building>();
+		insideList= new ArrayList<Marker>();
 		bound=bounds;
 		llng= bound.getCenter();
 		makeMarker();
@@ -39,23 +39,14 @@ public class Building{
 		this.title=title;
 		this.snipit=snipit;
 		llng=latlng;
-		makeOldMarker();
 
 	}
 	public void makeMarker(){
 		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
 				.snippet(snipit).position(llng));
-		 insidePoints=  new ArrayList<Building>();
 		 m.isVisible();
 
 
-	}
-
-	public void makeOldMarker(){
-		m= CampusInfo.map.addMarker(new MarkerOptions().title(title)
-				.snippet(snipit).position(llng));
-		 insidePoints=  new ArrayList<Building>();
-		 m.isVisible();
 	}
 
 	public Marker getMarker(){
@@ -72,12 +63,12 @@ public class Building{
 		m.setVisible(bool);
 	}
 
-	public ArrayList<Building> getInsideList(){
+	public ArrayList<Marker> getInsideList(){
 		return insideList;
 
 
 	}
-	 public void addInsidePoint(Building inside){
+	 public void addInsidePoint(Marker inside){
 		 insideList.add(inside);
 	 }
 

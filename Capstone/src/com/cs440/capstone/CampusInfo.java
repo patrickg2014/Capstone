@@ -9,10 +9,12 @@ import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -48,9 +50,10 @@ public class CampusInfo {
 				  if (e == null) {
 			            Log.d("query", "Retrieved " + objects.size() + " buildings");
 			            for (int i = 0; i < objects.size(); i++) {
+			            	String id = objects.get(i).getObjectId();
 							String name = objects.get(i).getString("name");
 							String description = objects.get(i).getString("description");
-						
+							Log.d("query",name + " loaded");
 							double latboundone = objects.get(i).getParseGeoPoint("latlngboundfirst").getLatitude();
 							double longboundone = objects.get(i).getParseGeoPoint("latlngboundfirst").getLongitude();
 							LatLng boundOne = new LatLng(latboundone,longboundone);
@@ -60,9 +63,38 @@ public class CampusInfo {
 							
 							
 							LatLngBounds bounds = new LatLngBounds(boundOne,boundTwo);
-							Building build = new Building(name,description,true,bounds);
+							final Building build = new Building(name,description,true,bounds);
 							currentlyvisable.add(build.getMarker());
 							all.add(build);
+							
+							//For each build put in Building.insidelist their objects
+							
+							ParseQuery<ParseObject> query = ParseQuery.getQuery("Inside_POI");
+							query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+							ParseObject obj = ParseObject.createWithoutData("Building", id);
+							query.whereEqualTo("FK", obj);
+
+							query.findInBackground(new FindCallback<ParseObject>() {
+								@Override
+								public void done(List<ParseObject> objects,
+										com.parse.ParseException e) {
+									  if (e == null) {
+								            Log.d("query", "Retrieved " + objects.size() + " inside buildings");
+								            for (int j = 0; j < objects.size(); j++) {
+								            	String name = objects.get(j).getString("Title");
+												String description = objects.get(j).getString("Description");
+												Log.d("query",name + " loaded");
+												double latbound = objects.get(j).getParseGeoPoint("latlng").getLatitude();
+												double longbound = objects.get(j).getParseGeoPoint("latlng").getLongitude();
+												LatLng bound = new LatLng(latbound,longbound);
+												build.insideList.add(map.addMarker(new MarkerOptions().title(name).snippet(description).position(bound).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
+											}
+								        } else {
+								            Log.d("query", "Error: " + e.getMessage());
+								        }
+								}
+							});
+							//build.insideList
 						}
 			        } else {
 			            Log.d("query", "Error: " + e.getMessage());
@@ -115,7 +147,7 @@ public class CampusInfo {
 		Building thompson = new Building("Thompson Hall", "this is the snipit",true,new LatLngBounds(new LatLng(47.263246,-122.483193),new LatLng(47.264087,-122.482823)));
 		acadmic.add(thompson);
 		currentlyvisable.add(thompson.getMarker());
-		thompson.insideList.add(new Building("Slater Museum (2nd Floor)" , "this is the snipit",false,new LatLngBounds(new LatLng(47.263654,-122.482941),new LatLng(47.263654,-122.482941))));
+		//thompson.insideList.add(new Building("Slater Museum (2nd Floor)" , "this is the snipit",false,new LatLngBounds(new LatLng(47.263654,-122.482941),new LatLng(47.263654,-122.482941))));
 
 		Building harned = new Building("Harned Hall", "this is the snipit",true,new LatLngBounds(new LatLng(47.263249,-122.483686),new LatLng(47.264076,-122.483209)));
 		acadmic.add(harned);
