@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -35,6 +37,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
+
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -154,7 +158,12 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		            // TODO Auto-generated method stub
 		        	Log.d("maps", "should be unlocked");
 						maptouch=true;
-						
+						Context context = getApplicationContext();
+						CharSequence text = "Free to roam!";
+						int duration = Toast.LENGTH_SHORT;
+
+						Toast toast = Toast.makeText(context, text, duration);
+						toast.show();
 						
 		        }
 		        
