@@ -54,6 +54,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	@SuppressLint("NewApi")
 	android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 	private ArrayList<Event> currentlyNearEvents= new ArrayList<Event>();
+	private long timer;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -75,7 +76,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		Display display = getWindowManager().getDefaultDisplay();
 		camover.passActivity(this);
 		
-		
+		timer = System.currentTimeMillis();
 		Point size = new Point();
 		display.getSize(size);
 		width = size.x;
@@ -219,10 +220,12 @@ public class CameraActivity extends Activity implements SensorEventListener{
     public void whatshouldwesee()
    	{	
    		//Location myloc= map.getMyLocation();
+    	if(System.currentTimeMillis()-timer>200){
     	camover.nearList.clear();
+    	checkCurrentlyNearevents();
     	
     	checkCurrentlyNear();
-    	checkCurrentlyNearevents();
+    	
     	if(!camover.insidebool)
     	{
     		checkCurrentlyVisable();
@@ -236,8 +239,9 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		
    		
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
+   		timer = System.currentTimeMillis();
    	}
- 
+   	}
  
    		       
 
@@ -250,7 +254,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		
-		heading = ((Math.round(event.values[0]+event.values[1])+90)%360); //Rounds the current heading to full degrees
+		heading =((Math.round(event.values[0]+event.values[2])+45)%360); //Rounds the current heading to full degrees
 		
 		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
@@ -295,7 +299,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    					camover.xPos.clear();
    					camover.yPos.clear();
    					
-   					Log.d("Inside", "we should be inside");
+   					Log.d("Inside", "");
    					break;
    						}
    					else
@@ -306,10 +310,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    			}
    			
    		}
-   		for(Building b: currentlyNear){
-   			Log.d("dup", b.m.getTitle()+counter);
-   		}
-   		counter++;
+   		
    		}
    		
 	
@@ -352,22 +353,20 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		}
 		}
 			
-	
-	
-	
-	
 	public void insidecurrentlyVisable()
 	{	
 		Log.d("INside","this should be working..."+insideBuilding.title);
 
 		
-		if(insideBuilding.insidePoints!=null){
+		if(insideBuilding.insideList!=null){
 	
-		for(Marker b: insideBuilding.insideList)// a loop to see which of those currently near markers are within our angle of view
+		for(Marker m: insideBuilding.insideList)// a loop to see which of those currently near markers are within our angle of view
    		{
+			Log.d("nearinside", "ahjalkfdjs");
+			
    			Location location = new Location("mloc");
-   			  location.setLatitude(b.getPosition().latitude);
-   			  location.setLongitude(b.getPosition().longitude);
+   			  location.setLatitude(m.getPosition().latitude);
+   			  location.setLongitude(m.getPosition().longitude);
    			int locHead=(int) myloc.bearingTo(location);
    			int headingOptimized=(int) heading;
    			 if((myloc.bearingTo(location)-headingOptimized)<((-360+(angleOfView/2)))) //if the headings cross from 359-0 we will treat the bearing as if it is actually over 360
@@ -380,11 +379,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
   			 }
    			  if(Math.abs(locHead-headingOptimized)<angleOfView/2)	// checks to see if it is in view
    			  {
-   				Log.d("near", b.getTitle());
-   				if(!camover.nearList.contains(b)){
-   				camover.nearList.add(b);
+   				Log.d("nearinside", m.getTitle());
+   				if(!camover.nearList.contains(m)){
+   				camover.nearList.add(m);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float) (height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
+   				camover.yPos.add((float) (400)); //make sure that the text doesn't overlap
    				camover.invalidate();
    			
    				}

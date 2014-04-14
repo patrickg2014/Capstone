@@ -23,7 +23,7 @@ public class Building{
 
 		this.title=title;
 		this.snipit=snipit;
-		insideList= new ArrayList<Marker>();
+		insideList= new ArrayList();
 		bound=bounds;
 		llng= bound.getCenter();
 		makeMarker();
