@@ -142,13 +142,16 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 				@Override
 				public boolean onMarkerClick(Marker arg0) {
 					// TODO Auto-generated method stub
-					maptouch=true;
-					Context context = getApplicationContext();
-					CharSequence text = "Free to roam!";
-					int duration = Toast.LENGTH_SHORT;
+					if(maptouch==false){
+		        		Context context = getApplicationContext();
+						CharSequence text = "Free to roam!";
+						int duration = Toast.LENGTH_SHORT;
 
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
+						Toast toast = Toast.makeText(context, text, duration);
+						toast.show();
+		        	}
+					maptouch=true;
+					
 					
 					return false;
 				}
@@ -163,13 +166,16 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		        public void onMapClick(LatLng arg0) {
 		            // TODO Auto-generated method stub
 		        	Log.d("maps", "should be unlocked");
-						maptouch=true;
-						Context context = getApplicationContext();
+		        	if(maptouch==false){
+		        		Context context = getApplicationContext();
 						CharSequence text = "Free to roam!";
 						int duration = Toast.LENGTH_SHORT;
 
 						Toast toast = Toast.makeText(context, text, duration);
 						toast.show();
+		        	}
+						maptouch=true;
+						
 						
 		        }
 		        
@@ -180,13 +186,17 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		        @Override
 		        public boolean onMyLocationButtonClick() {
 		        	Log.d("maps", "should be locked");
-		        	maptouch=false;
-		        	Context context = getApplicationContext();
-					CharSequence text = "Locked on your location";
-					int duration = Toast.LENGTH_SHORT;
+		        	if(maptouch==true){
+		        		Context context = getApplicationContext();
+						CharSequence text = "Locked on your location";
+						int duration = Toast.LENGTH_SHORT;
 
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
+						Toast toast = Toast.makeText(context, text, duration);
+						toast.show();
+		        	}
+		        			
+		        	maptouch=false;
+		        	
 		        	
 		        	return true;
 		           
