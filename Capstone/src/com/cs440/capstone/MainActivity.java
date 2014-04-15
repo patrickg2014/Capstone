@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))	//sets up the map view we have
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
-		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		
 
 
