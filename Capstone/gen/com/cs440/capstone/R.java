@@ -545,13 +545,14 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment=0x7f030010;
         public static final int custom_drawer_item=0x7f030011;
         public static final int drawer_list_item=0x7f030012;
-        public static final int fragment_layout_one=0x7f030013;
-        public static final int fragment_layout_three=0x7f030014;
-        public static final int fragment_layout_two=0x7f030015;
-        public static final int login_fragment_activity=0x7f030016;
-        public static final int main=0x7f030017;
-        public static final int searchable=0x7f030018;
-        public static final int userdetails=0x7f030019;
+        public static final int event_info_activity=0x7f030013;
+        public static final int fragment_layout_one=0x7f030014;
+        public static final int fragment_layout_three=0x7f030015;
+        public static final int fragment_layout_two=0x7f030016;
+        public static final int login_fragment_activity=0x7f030017;
+        public static final int main=0x7f030018;
+        public static final int searchable=0x7f030019;
+        public static final int userdetails=0x7f03001a;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;

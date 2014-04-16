@@ -61,7 +61,11 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.parse.os.ParseAsyncTask;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnInfoWindowClickListener, SensorEventListener{
@@ -82,7 +86,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private long querytimer=0;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
@@ -100,7 +104,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		timer = System.currentTimeMillis();
-
+		querytimer=System.currentTimeMillis()+30000;
 		Display display = getWindowManager().getDefaultDisplay();
 		
 		setContentView(R.layout.activity_main);
@@ -325,6 +329,13 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		intent.putExtra("Snippet", snippet);
 		startActivity(intent);
 	}
+	
+	public void eventActivity(String eventname, String snippet){
+		Intent intent = new Intent(this, EventInfoActivity.class);
+		intent.putExtra("Name", eventname);
+		intent.putExtra("Snippet", snippet);
+		startActivity(intent);
+	}
 
 	public boolean checkCameraHardware(Context context) {
 		if (context.getPackageManager().hasSystemFeature(
@@ -451,6 +462,28 @@ public void onSensorChanged(SensorEvent event) {
 		timer=System.currentTimeMillis();
 	
 		}
+		
+		}
+		if(System.currentTimeMillis()-querytimer>30000)
+		{
+			 ParseUser user = ParseUser.getCurrentUser();
+		       
+		        ParseGeoPoint geo= new ParseGeoPoint();
+		        geo.setLatitude(myLocation.latitude);
+		        geo.setLongitude(myLocation.longitude);
+		        user.put("Location",geo);
+		       
+		        user.saveInBackground(new SaveCallback() {
+		        	public void done(com.parse.ParseException e) {
+		        		  if (e == null) {
+		        		    // Save was successful!
+		        		    Log.d("parse", "upload location");
+		        		  } else {
+		        		    // Save failed. Inspect e for details.
+		        		    Log.d("parse", "failed to upload location");
+		        		  }
+		        		}});
+			
 		}
 		
 	}
@@ -460,7 +493,19 @@ public void onSensorChanged(SensorEvent event) {
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		// TODO Auto-generated method stub
-		buildingActivity(arg0.getTitle(),arg0.getSnippet());
+		for(Building b :CampusInfo.all){
+			if(b.m.equals(arg0)){
+				buildingActivity(arg0.getTitle(),arg0.getSnippet());
+				break;
+			}
+		}
+		for(Event e :CampusInfo.events){
+			if(e.m.equals(arg0)){
+				eventActivity(arg0.getTitle(),arg0.getSnippet());
+				break;
+			}
+		}
+		
 	}
 
 	@Override

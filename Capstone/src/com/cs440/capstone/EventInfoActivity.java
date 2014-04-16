@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 
 @SuppressLint("NewApi")
-public class BuildingInfoActivity extends Activity {
+public class EventInfoActivity extends Activity {
 	
 	ParseImageView image;
 	TextView text;
@@ -60,11 +60,10 @@ public class BuildingInfoActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
-		Log.d("building", "got to the building info activity");
-		
+		Log.d("event", "got to the event info activity");
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
-		setContentView(R.layout.building_info_actvity);
+		setContentView(R.layout.event_info_activity);
 		image = (ParseImageView)findViewById(R.id.imageViewParse);
 		text = (TextView)findViewById(R.id.textView1);
 		text.setText(""+"\n \n");
@@ -74,42 +73,10 @@ public class BuildingInfoActivity extends Activity {
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
-		queryPhoto(description);
+		
 		
 		}
 	
-	public void queryPhoto(String textField){
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Building");
-		ParseFile parseFile = null;
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-		query.whereEqualTo("name", name).whereEqualTo("image", parseFile);
-		query.findInBackground(new FindCallback<ParseObject>() {
-			@Override
-			public void done(List<ParseObject> objects,
-					com.parse.ParseException e) {
-				  if (e == null) {
-			            Log.d("query", "Retrieved " + objects.size() + " buildings");
-			            ParseFile photoFile = objects.get(0).getParseFile("image");
-			            if (photoFile != null) {
-			                image.setParseFile(photoFile);
-			                image.loadInBackground(new GetDataCallback() {
-			                    @Override
-			                    public void done(byte[] data, ParseException e) {
-			                        image.setVisibility(View.VISIBLE);
-			                    }
-			                });
-			            }
-			           
-			        } else {
-			            Log.d("query", "Error: " + e.getMessage());
-			        }
-			}
-		});
-		text.setText(textField+"\n \n");
-
-		
-		
-	 }
 	
 	@SuppressLint("NewApi")
 	public void initDrawer(Bundle savedInstanceState){
