@@ -472,6 +472,7 @@ public void onSensorChanged(SensorEvent event) {
 		        ParseGeoPoint geo= new ParseGeoPoint();
 		        geo.setLatitude(myLocation.latitude);
 		        geo.setLongitude(myLocation.longitude);
+		       
 		        user.put("Location",geo);
 		       
 		        user.saveInBackground(new SaveCallback() {
@@ -485,7 +486,9 @@ public void onSensorChanged(SensorEvent event) {
 		        		  }
 		        		}});
 		        querytimer=System.currentTimeMillis();
+		        
 		}
+			
 		}
 	}
 
@@ -494,17 +497,21 @@ public void onSensorChanged(SensorEvent event) {
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		// TODO Auto-generated method stub
+		boolean building= false;
 		for(Building b :CampusInfo.all){
 			if(b.m.equals(arg0)){
 				buildingActivity(arg0.getTitle(),arg0.getSnippet());
+				building=true;
 				break;
 			}
 		}
+		if(!building){
 		for(Event e :CampusInfo.events){
 			if(e.m.equals(arg0)){
 				eventActivity(arg0.getTitle(),arg0.getSnippet());
 				break;
 			}
+		}
 		}
 		
 	}
@@ -608,11 +615,7 @@ public void onSensorChanged(SensorEvent event) {
      	});
      	
      	Request.executeBatchAsync(request);
-     	for(Building b: CampusInfo.all)
-     	{
-     		b.makeMarker();
-     		
-     	}
+     	
 
      }
     
