@@ -104,7 +104,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		timer = System.currentTimeMillis();
-		querytimer=System.currentTimeMillis()+30000;
+		querytimer=System.currentTimeMillis()-28000;
 		Display display = getWindowManager().getDefaultDisplay();
 		
 		setContentView(R.layout.activity_main);
@@ -466,6 +466,7 @@ public void onSensorChanged(SensorEvent event) {
 		}
 		if(System.currentTimeMillis()-querytimer>30000)
 		{
+			if(myLocation!=null){
 			 ParseUser user = ParseUser.getCurrentUser();
 		       
 		        ParseGeoPoint geo= new ParseGeoPoint();
@@ -483,9 +484,9 @@ public void onSensorChanged(SensorEvent event) {
 		        		    Log.d("parse", "failed to upload location");
 		        		  }
 		        		}});
-			
+		        querytimer=System.currentTimeMillis();
 		}
-		
+		}
 	}
 
 
