@@ -615,7 +615,11 @@ public void onSensorChanged(SensorEvent event) {
      	});
      	
      	Request.executeBatchAsync(request);
-     	
+     	for(Event e: CampusInfo.events)
+     	{
+     		e.makeMarker();
+     		
+     	}
 
      }
     
