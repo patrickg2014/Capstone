@@ -472,7 +472,7 @@ public void onSensorChanged(SensorEvent event) {
 		        ParseGeoPoint geo= new ParseGeoPoint();
 		        geo.setLatitude(myLocation.latitude);
 		        geo.setLongitude(myLocation.longitude);
-		       
+		       if(ParseUser.getCurrentUser()!=null){
 		        user.put("Location",geo);
 		       
 		        user.saveInBackground(new SaveCallback() {
@@ -488,7 +488,7 @@ public void onSensorChanged(SensorEvent event) {
 		        querytimer=System.currentTimeMillis();
 		        
 		}
-			
+			}
 		}
 	}
 
