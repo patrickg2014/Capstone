@@ -5,29 +5,14 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -35,16 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 
 @SuppressLint("NewApi")
-public class BuildingInfoActivity extends Activity {
+public class HelpActivity extends Activity {
 	
-	ParseImageView image;
-	TextView text;
+
+	LinearLayout ll;
 	
 	 private String[] mOptionTitles;
 		private DrawerLayout mDrawerLayout;
@@ -54,65 +38,19 @@ public class BuildingInfoActivity extends Activity {
 	    private CharSequence mDrawerTitle;
 	    private CharSequence mTitle;
 	    CustomDrawerAdapter adapter;
-	    public String name;
 	    List<DrawerItem> dataList;
-	    private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
-		Log.d("building", "got to the building info activity");
-		
-		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
-				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
-		setContentView(R.layout.building_info_actvity);
-		image = (ParseImageView)findViewById(R.id.imageViewParse);
-		image.setPlaceholder(getResources().getDrawable(R.drawable.ic_action_cloud));
-		text = (TextView)findViewById(R.id.textView1);
-		text.setText("");
-		Intent intent = getIntent();
-		name = intent.getStringExtra("Name");
-		String description = intent.getStringExtra("Snippet")+"\n \n";
+		setContentView(R.layout.about_activity);
 		ActionBar ab = getActionBar();
-		ab.setTitle(name);
+		ab.setTitle("About Us");
 		initDrawer(savedInstanceState);
-		queryPhoto(description);
+		//ll = (LinearLayout)findViewById(R.id.about);
 		
 		}
-	
-	public void queryPhoto(String textField){
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Building");
-		ParseFile parseFile = null;
-		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-		query.whereEqualTo("name", name).whereEqualTo("image", parseFile);
-		query.findInBackground(new FindCallback<ParseObject>() {
-			@Override
-			public void done(List<ParseObject> objects,
-					com.parse.ParseException e) {
-				  if (e == null) {
-			            Log.d("query", "Retrieved " + objects.size() + " buildings");
-			            ParseFile photoFile = objects.get(0).getParseFile("image");
-			            if (photoFile != null) {
-			                image.setParseFile(photoFile);
-			                image.loadInBackground(new GetDataCallback() {
-			                    @Override
-			                    public void done(byte[] data, ParseException e) {
-			                        image.setVisibility(View.VISIBLE);
-			                    }
-			                });
-			            }
-			           
-			        } else {
-			            Log.d("query", "Error: " + e.getMessage());
-			        }
-			}
-		});
-		text.setText(textField);
-
-		
-		
-	 }
 	
 	@SuppressLint("NewApi")
 	public void initDrawer(Bundle savedInstanceState){

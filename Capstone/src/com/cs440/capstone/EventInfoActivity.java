@@ -193,6 +193,7 @@ public class EventInfoActivity extends Activity {
             // startActivity(intent);
         	
         }
+        mDrawerList.setItemChecked(possition, false);
         mDrawerLayout.closeDrawer(mDrawerList);
 
   }

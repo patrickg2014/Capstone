@@ -269,8 +269,6 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
  // Add Drawer Item to dataList
     dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
     dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
-    dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
-    dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
     dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
     if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
     dataList.add(new DrawerItem("Log Out Of Facebook", R.drawable.ic_action_cloud));
@@ -322,6 +320,25 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
+	public void aboutActivity() //what allows us to switch to the camera activity on button click
+	{
+		
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
+	}
+	public void settingsActivity() //what allows us to switch to the camera activity on button click
+	{
+		
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+	}
+	public void helpActivity() //what allows us to switch to the camera activity on button click
+	{
+		
+		Intent intent = new Intent(this, HelpActivity.class);
+		startActivity(intent);
+	}
+	
 
 	public void buildingActivity(String buildingName, String snippet){
 		Intent intent = new Intent(this, BuildingInfoActivity.class);
@@ -394,6 +411,21 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         	cameraActivity();
         	  mDrawerLayout.closeDrawer(mDrawerList);
         }
+        if(dataList.get(possition).getItemName().contentEquals("About")){
+        	Log.d("Test", "About screen");
+        	aboutActivity();
+        	  mDrawerLayout.closeDrawer(mDrawerList);
+        }
+        if(dataList.get(possition).getItemName().contentEquals("Settings")){
+        	Log.d("Test", "Settings screen");
+        	settingsActivity();
+        	  mDrawerLayout.closeDrawer(mDrawerList);
+        }
+        if(dataList.get(possition).getItemName().contentEquals("Help")){
+        	Log.d("test", "Help screen");
+        	helpActivity();
+        	  mDrawerLayout.closeDrawer(mDrawerList);
+        }
       
         if(dataList.get(possition).getItemName().contentEquals("Log In To Facebook")&& ParseFacebookUtils.getSession()==null){
         	Log.d("Test", "facebook in");
@@ -414,7 +446,7 @@ public class MainActivity extends Activity implements OnInfoWindowClickListener,
         	}
         	
         }
-       
+        mDrawerList.setItemChecked(possition, false);
       
 
   }
