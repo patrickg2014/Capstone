@@ -3,6 +3,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     tools:context=".MainActivity" >
 
     <FrameLayout
@@ -20,23 +21,23 @@
      android:layout_height="wrap_content"
      android:adjustViewBounds="true"
      android:scaleType="fitCenter"
-     android:padding="15dp"  
-     android:layout_above="@+id/ScrollView"
+     android:padding="15dp" 
      />
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/imageView1" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="260dp"
+             >
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
-        android:layout_marginTop="260dp"
-        android:text="TextView"
-        android:textSize="20sp" />
+        android:text="Loading..."
+        android:textSize="20sp"
+        android:padding="15dp"  />
     </ScrollView>
     </RelativeLayout>
 

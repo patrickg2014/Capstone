@@ -27,9 +27,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,8 +68,9 @@ public class BuildingInfoActivity extends Activity {
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		setContentView(R.layout.building_info_actvity);
 		image = (ParseImageView)findViewById(R.id.imageViewParse);
+		image.setPlaceholder(getResources().getDrawable(R.drawable.ic_action_cloud));
 		text = (TextView)findViewById(R.id.textView1);
-		text.setText(""+"\n \n");
+		text.setText("");
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");
 		String description = intent.getStringExtra("Snippet")+"\n \n";
@@ -105,7 +108,7 @@ public class BuildingInfoActivity extends Activity {
 			        }
 			}
 		});
-		text.setText(textField+"\n \n");
+		text.setText(textField);
 
 		
 		
@@ -229,6 +232,18 @@ public class BuildingInfoActivity extends Activity {
         mDrawerLayout.closeDrawer(mDrawerList);
 
   }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        finish();
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
 	private class DrawerItemClickListener implements
     ListView.OnItemClickListener {
 @Override
