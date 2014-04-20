@@ -270,5 +270,13 @@ public class CampusInfo {
 			}
 		}
 	}
+	
+	public ArrayList<Building> getAllList(){
+		return all;
+	}
+	
+	public ArrayList<Marker> getCurrentlyVisableList(){
+		return currentlyvisable;
+	}
 
 }

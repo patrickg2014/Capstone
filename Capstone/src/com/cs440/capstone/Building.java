@@ -71,5 +71,13 @@ public class Building{
 	 public void addInsidePoint(Marker inside){
 		 insideList.add(inside);
 	 }
+	 
+	 public String getTitle(){
+		 return title;
+	 }
+	 
+	 public String getSnipit(){
+		 return snipit;
+	 }
 
 }
