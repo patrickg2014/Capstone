@@ -44,10 +44,10 @@ public class SettingsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) //where our app sets up
 		{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.settings_activity);
+		setContentView(R.layout.hello_card);
 		ActionBar ab = getActionBar();
 		ab.setTitle("About Us");
-		initDrawer(savedInstanceState);
+		//initDrawer(savedInstanceState);
 		//ll = (LinearLayout)findViewById(R.id.about);
 		
 		}
