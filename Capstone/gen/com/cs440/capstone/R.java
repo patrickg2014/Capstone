@@ -462,8 +462,7 @@ containing a value of this type.
         public static final int user2=0x7f020055;
     }
     public static final class id {
-        public static final int ScrollView=0x7f06002a;
-        public static final int action_settings=0x7f06003b;
+        public static final int action_settings=0x7f06003a;
         public static final int camera_layout=0x7f06000f;
         public static final int com_facebook_login_activity_progress_bar=0x7f060013;
         public static final int com_facebook_picker_activity_circle=0x7f060012;
@@ -488,22 +487,22 @@ containing a value of this type.
         public static final int drawer_icon=0x7f060027;
         public static final int drawer_itemName=0x7f060028;
         public static final int drawer_layout=0x7f060009;
-        public static final int frag1_icon=0x7f06002c;
-        public static final int frag1_text=0x7f06002d;
-        public static final int frag2_icon=0x7f060030;
-        public static final int frag2_text=0x7f060031;
-        public static final int frag3_icon=0x7f06002e;
-        public static final int frag3_text=0x7f06002f;
+        public static final int frag1_icon=0x7f06002b;
+        public static final int frag1_text=0x7f06002c;
+        public static final int frag2_icon=0x7f06002f;
+        public static final int frag2_text=0x7f060030;
+        public static final int frag3_icon=0x7f06002d;
+        public static final int frag3_text=0x7f06002e;
         public static final int hybrid=0x7f060004;
-        public static final int imageView1=0x7f06002b;
+        public static final int imageView1=0x7f06002a;
         public static final int imageViewParse=0x7f06000e;
         public static final int itemLayout=0x7f060026;
         public static final int large=0x7f060006;
         public static final int left=0x7f060007;
         public static final int left_drawer=0x7f06000c;
-        public static final int loginButton=0x7f060033;
-        public static final int login_fragment=0x7f060032;
-        public static final int logoutButton=0x7f06003a;
+        public static final int loginButton=0x7f060032;
+        public static final int login_fragment=0x7f060031;
+        public static final int logoutButton=0x7f060039;
         public static final int map=0x7f06000d;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
@@ -512,17 +511,17 @@ containing a value of this type.
         public static final int right=0x7f060008;
         public static final int satellite=0x7f060002;
         public static final int scrollView=0x7f06000a;
-        public static final int search=0x7f06003c;
+        public static final int search=0x7f06003b;
         public static final int small=0x7f060005;
         public static final int terrain=0x7f060003;
         public static final int textView=0x7f060029;
         public static final int textView1=0x7f06000b;
-        public static final int userDateOfBirth=0x7f060038;
-        public static final int userGender=0x7f060037;
-        public static final int userLocation=0x7f060036;
-        public static final int userName=0x7f060035;
-        public static final int userProfilePicture=0x7f060034;
-        public static final int userRelationship=0x7f060039;
+        public static final int userDateOfBirth=0x7f060037;
+        public static final int userGender=0x7f060036;
+        public static final int userLocation=0x7f060035;
+        public static final int userName=0x7f060034;
+        public static final int userProfilePicture=0x7f060033;
+        public static final int userRelationship=0x7f060038;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;

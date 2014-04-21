@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements
 
 	static GoogleMap map = null;
 	public static ParseUser currentUser;
-
+	public LatLng lastqueryloc =null;
 	static LatLng myLocation = null;
 	boolean maptouch = false;
 	private String[] mOptionTitles;
@@ -213,7 +213,7 @@ public class MainActivity extends Activity implements
 			finish();
 			cameraActivity();
 		}
-
+		
 	}
 
 	public void initDrawer(Bundle savedInstanceState) {
@@ -482,8 +482,9 @@ public class MainActivity extends Activity implements
 
 	public void onSensorChanged(SensorEvent event) {
 
-		if (System.currentTimeMillis() - timer > 130 && !maptouch) {
+		if (System.currentTimeMillis() - timer > 150 && !maptouch) {
 
+			
 			int heading = ((Math.round(event.values[0] + event.values[2])) % 360); // Rounds
 																					// the
 																					// current
@@ -536,6 +537,18 @@ public class MainActivity extends Activity implements
 					querytimer = System.currentTimeMillis();
 
 				}
+				
+				if(ParseFacebookUtils.getSession()!=null&& myLocation!=null){
+					if(lastqueryloc==null){
+						lastqueryloc=new LatLng(0,0);
+					}
+					Double distance= Math.abs(myLocation.latitude-lastqueryloc.longitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
+					if(distance>.5){
+					ParseException err= null;
+					
+					call(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+					}
+					}
 			}
 		}
 	}
@@ -650,6 +663,49 @@ public class MainActivity extends Activity implements
 						}
 					}
 				});
+		lastqueryloc=myLocation;
+		Request.executeBatchAsync(request);
+		for (Event e : CampusInfo.events) {
+			e.makeMarker();
+
+		}
+
+	}
+	
+	public void friendcall(Session session, SessionState state, Exception exception) {
+
+		String fqlQuery = "SELECT uid FROM user WHERE  uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
+
+		Bundle params = new Bundle();
+
+		params.putString("q", fqlQuery);
+
+		Session session1 = Session.getActiveSession();
+
+		Request request = new Request(session1, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						// Log.i("fql", "Got results: " + response.toString());
+
+						try {
+							GraphObject go = response.getGraphObject();
+							JSONObject jso = go.getInnerJSONObject();
+							JSONArray array = jso.getJSONArray("data");
+
+							// loop
+							for (int i = 0; i < array.length(); i++) {
+								JSONObject obj = array.getJSONObject(i);
+								
+								String uid = obj.getString("uid");
+								
+								Log.d("fql",uid);
+							}
+
+						} catch (Throwable t) {
+							t.printStackTrace();
+						}
+					}
+				});
 
 		Request.executeBatchAsync(request);
 		for (Event e : CampusInfo.events) {
@@ -673,11 +729,19 @@ public class MainActivity extends Activity implements
 				} else if (user.isNew()) {
 					Log.d("facebook",
 							"User signed up and logged in through Facebook!");
+					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
+					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
+					ParseFacebookUtils.saveLatestSessionData(currentUser);
 
 				} else {
 					Log.d("facebook", "User logged in through Facebook!");
+					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
+					
 				}
 			}
 		});

@@ -1,23 +1,11 @@
 package com.cs440.capstone;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-
-
 import java.util.List;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -25,6 +13,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +25,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseImageView;
 
 
 @SuppressLint("NewApi")
@@ -64,16 +57,43 @@ public class EventInfoActivity extends Activity {
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		setContentView(R.layout.event_info_activity);
-		image = (ParseImageView)findViewById(R.id.imageViewParse);
+		//image = (ParseImageView)findViewById(R.id.imageViewParse);
 		text = (TextView)findViewById(R.id.textView1);
-		text.setText(""+"\n \n");
+		ImageView  view = (ImageView)findViewById(R.id.imageView1);
+		text.setText(" ");
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");
 		String description = intent.getStringExtra("Snippet")+"\n \n";
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
-		
+		text.setText(description);
+		for(Event E: CampusInfo.events)
+		{
+			Log.d("imageload", "should have looped to loaded");
+			Log.d("imageload", E.title+"  "+name);
+			if(E.title.equals(name)){
+				try {
+					 
+				    URL myFileUrl = new URL (E.pic);
+				    HttpURLConnection conn =
+				      (HttpURLConnection) myFileUrl.openConnection();
+				    conn.setDoInput(true);
+				    conn.connect();
+				 
+				    InputStream is = conn.getInputStream();
+				    view.setImageBitmap(BitmapFactory.decodeStream(is));
+				 
+				   Log.d("imageload","should have worked");
+				 
+				  } catch (MalformedURLException e) {
+				    e.printStackTrace();
+				  } catch (Exception e) {
+				    e.printStackTrace();
+				  }
+		break;
+		}
+		}
 		
 		}
 	
@@ -206,6 +226,31 @@ public void onItemClick(AdapterView<?> parent, View view, int position,
 
 }
 }
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		  ImageView bmImage;
+
+		  public DownloadImageTask(ImageView bmImage) {
+		      this.bmImage = bmImage;
+		  }
+
+		  protected Bitmap doInBackground(String... urls) {
+		      String urldisplay = urls[0];
+		      Bitmap mIcon11 = null;
+		      try {
+		        InputStream in = new java.net.URL(urldisplay).openStream();
+		        mIcon11 = BitmapFactory.decodeStream(in);
+		      } catch (Exception e) {
+		          Log.e("Error", e.getMessage());
+		          e.printStackTrace();
+		      }
+		      return mIcon11;
+		  }
+
+		  protected void onPostExecute(Bitmap result) {
+		      bmImage.setImageBitmap(result);
+		  }
+		}
 	
 
 }
+

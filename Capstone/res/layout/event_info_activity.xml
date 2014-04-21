@@ -5,29 +5,30 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
+   
+ <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+             >
  <RelativeLayout
-     android:layout_width="fill_parent"
-     android:layout_height="match_parent" >
+      android:layout_width="fill_parent"
+            android:layout_height="match_parent">
 
-         <com.parse.ParseImageView
+           
+
+         
+         <ImageView
              
-     android:id="@+id/imageViewParse"
+     android:id="@+id/imageView1"
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:adjustViewBounds="true"
      android:scaleType="fitCenter"
      android:padding="15dp"  
-     android:layout_above="@+id/ScrollView"
+     
      />
 
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/imageView1" >
+       
 
     <TextView
         android:id="@+id/textView1"
@@ -37,10 +38,12 @@
         android:layout_marginTop="260dp"
         android:text="TextView"
         android:textSize="20sp" />
-    </ScrollView>
+    
     </RelativeLayout>
+    </ScrollView>
+ 
 
-	</FrameLayout>
+	
 
         <!-- The navigation drawer -->
 
