@@ -24,7 +24,9 @@
                     android:id="@+id/imageViewParse"
                     android:layout_width="fill_parent"
                     android:layout_height="225dp"
-                    android:layout_margin="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/layer_card_background"
                     android:padding="15dp"
@@ -34,12 +36,26 @@
                     android:id="@+id/textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:background="@drawable/layer_card_background"
                     android:padding="15dp"
                     android:text="Loading..."
                     android:textSize="20sp" />
+
+                <com.cs440.capstone.ExpandableTextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/layer_card_background"
+                    android:padding="15dp"
+                    android:text="EVENTS"
+                    android:textSize="20sp" />
+
             </LinearLayout>
         </ScrollView>
     </FrameLayout>

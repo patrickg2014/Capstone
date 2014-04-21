@@ -72,7 +72,7 @@ public class BuildingInfoActivity extends Activity {
 		text.setText("");
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");
-		String description = intent.getStringExtra("Snippet") + "\n \n";
+		String description = intent.getStringExtra("Snippet");
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
