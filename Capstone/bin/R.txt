@@ -28,6 +28,7 @@ int attr show_search_box 0x7f01001c
 int attr show_title_bar 0x7f010013
 int attr title_bar_background 0x7f010016
 int attr title_text 0x7f010014
+int attr trimLength 0x7f010025
 int attr uiCompass 0x7f010009
 int attr uiRotateGestures 0x7f01000a
 int attr uiScrollGestures 0x7f01000b
@@ -330,6 +331,8 @@ int styleable AdsAttrs_adUnitId 2
 int[] styleable CameraOverlay { 0x7f010023, 0x7f010024 }
 int styleable CameraOverlay_labelPosition 1
 int styleable CameraOverlay_showText 0
+int[] styleable ExpandableTextView { 0x7f010025 }
+int styleable ExpandableTextView_trimLength 0
 int[] styleable MapAttrs { 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f, 0x7f010010 }
 int styleable MapAttrs_cameraBearing 1
 int styleable MapAttrs_cameraTargetLat 2

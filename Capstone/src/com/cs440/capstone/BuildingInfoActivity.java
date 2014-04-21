@@ -42,7 +42,7 @@ import android.widget.Toast;
 public class BuildingInfoActivity extends Activity {
 
 	ParseImageView image;
-	TextView text;
+	ExpandableTextView text;
 
 	private String[] mOptionTitles;
 	private DrawerLayout mDrawerLayout;
@@ -68,7 +68,7 @@ public class BuildingInfoActivity extends Activity {
 		image = (ParseImageView) findViewById(R.id.imageViewParse);
 		image.setPlaceholder(getResources().getDrawable(
 				R.drawable.ic_action_cloud));
-		text = (TextView) findViewById(R.id.textView1);
+		text = (ExpandableTextView) findViewById(R.id.textView1);
 		text.setText("");
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");

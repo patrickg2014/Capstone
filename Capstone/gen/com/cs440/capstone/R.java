@@ -260,6 +260,14 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int title_text=0x7f010014;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int trimLength=0x7f010025;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -855,6 +863,33 @@ containing a value of this type.
           @attr name com.cs440.capstone:showText
         */
         public static final int CameraOverlay_showText = 0;
+        /** Attributes that can be used with a ExpandableTextView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ExpandableTextView_trimLength com.cs440.capstone:trimLength}</code></td><td></td></tr>
+           </table>
+           @see #ExpandableTextView_trimLength
+         */
+        public static final int[] ExpandableTextView = {
+            0x7f010025
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.cs440.capstone.R.attr#trimLength}
+          attribute's value can be found in the {@link #ExpandableTextView} array.
+
+
+          <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.cs440.capstone:trimLength
+        */
+        public static final int ExpandableTextView_trimLength = 0;
         /** Attributes that can be used with a MapAttrs.
            <p>Includes the following attributes:</p>
            <table>
