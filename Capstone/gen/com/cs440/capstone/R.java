@@ -391,7 +391,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02000f;
         public static final int com_facebook_loginbutton_silver=0x7f020010;
         public static final int com_facebook_logo=0x7f020011;
-        public static final int com_facebook_picker_default_separator_color=0x7f020056;
+        public static final int com_facebook_picker_default_separator_color=0x7f020057;
         public static final int com_facebook_picker_item_background=0x7f020012;
         public static final int com_facebook_picker_list_focused=0x7f020013;
         public static final int com_facebook_picker_list_longpressed=0x7f020014;
@@ -452,14 +452,15 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f02004b;
         public static final int ic_plusone_standard_off_client=0x7f02004c;
         public static final int ic_plusone_tall_off_client=0x7f02004d;
-        public static final int login_button_focused=0x7f02004e;
-        public static final int login_button_normal=0x7f02004f;
-        public static final int login_button_pressed=0x7f020050;
-        public static final int table_round_shape=0x7f020051;
-        public static final int ups=0x7f020052;
-        public static final int upslogo=0x7f020053;
-        public static final int user1=0x7f020054;
-        public static final int user2=0x7f020055;
+        public static final int layer_card_background=0x7f02004e;
+        public static final int login_button_focused=0x7f02004f;
+        public static final int login_button_normal=0x7f020050;
+        public static final int login_button_pressed=0x7f020051;
+        public static final int table_round_shape=0x7f020052;
+        public static final int ups=0x7f020053;
+        public static final int upslogo=0x7f020054;
+        public static final int user1=0x7f020055;
+        public static final int user2=0x7f020056;
     }
     public static final class id {
         public static final int action_settings=0x7f06003a;
@@ -551,12 +552,13 @@ containing a value of this type.
         public static final int fragment_layout_one=0x7f030015;
         public static final int fragment_layout_three=0x7f030016;
         public static final int fragment_layout_two=0x7f030017;
-        public static final int help_activity=0x7f030018;
-        public static final int login_fragment_activity=0x7f030019;
-        public static final int main=0x7f03001a;
-        public static final int searchable=0x7f03001b;
-        public static final int settings_activity=0x7f03001c;
-        public static final int userdetails=0x7f03001d;
+        public static final int hello_card=0x7f030018;
+        public static final int help_activity=0x7f030019;
+        public static final int login_fragment_activity=0x7f03001a;
+        public static final int main=0x7f03001b;
+        public static final int searchable=0x7f03001c;
+        public static final int settings_activity=0x7f03001d;
+        public static final int userdetails=0x7f03001e;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;

@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -395,7 +396,6 @@ public class MainActivity extends Activity implements
 		return true;
 	}
 
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -757,6 +757,7 @@ public class MainActivity extends Activity implements
 	@Override
 	public boolean onQueryTextChange(String arg0) {
 		// TODO Auto-generated method stub
+		Log.d("change", arg0);
 		return false;
 	}
 
@@ -769,7 +770,7 @@ public class MainActivity extends Activity implements
 		ArrayList<Building> theAllList = campusInfo.getAllList();
 		// ArrayList<Marker> currentlyVisable =
 		// campusInfo.getCurrentlyVisableList();
-
+		
 		Log.d("Search", "Size: " + theAllList.size());
 
 		for (int i = 0; i < theAllList.size(); i++) {

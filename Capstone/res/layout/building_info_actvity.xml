@@ -8,11 +8,10 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+         >
 
- <RelativeLayout
-     android:layout_width="fill_parent"
-     android:layout_height="match_parent" >
+
 
          <com.parse.ParseImageView
              
@@ -21,25 +20,29 @@
      android:layout_height="wrap_content"
      android:adjustViewBounds="true"
      android:scaleType="fitCenter"
-     android:padding="15dp" 
+     android:padding="15dp"
+     android:layout_margin="15dp"
+     android:background="@drawable/layer_card_background" 
      />
 
         <ScrollView
             android:id="@+id/scrollView"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="260dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+      		android:padding="15dp"
+            android:background="@drawable/layer_card_background"
              >
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Loading..."
-        android:textSize="20sp"
-        android:padding="15dp"  />
+        android:textSize="20sp"  />
     </ScrollView>
-    </RelativeLayout>
 
 	</FrameLayout>
 
