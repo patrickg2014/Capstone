@@ -16,8 +16,11 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
+                android:id="@+id/linearlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical" >
 
                 <com.parse.ParseImageView
@@ -25,8 +28,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="225dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/layer_card_background"
                     android:padding="15dp"
@@ -37,25 +38,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:background="@drawable/layer_card_background"
                     android:padding="15dp"
                     android:text="Loading..."
                     android:textSize="15sp" />
 
-                <com.cs440.capstone.ExpandableTextView
-                    android:id="@+id/textView2"
+                <Button
+                    android:id="@+id/eventbutton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:background="@drawable/layer_card_background"
                     android:padding="15dp"
                     android:text="EVENTS"
                     android:textSize="20sp" />
 
+                <LinearLayout
+                    android:id="@+id/linearlayout"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    >
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
