@@ -159,7 +159,7 @@ public class BuildingInfoActivity extends Activity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// Add Drawer Item to dataList
-		dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
+		dataList.add(new DrawerItem("Map", R.drawable.map));
 		dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
 		dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
 		dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
