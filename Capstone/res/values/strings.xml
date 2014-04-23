@@ -6,35 +6,32 @@
     <string name="hello_world">Hello world!</string>
     <string name="camera">Camera</string>
     <string name="drawer_open">Open</string>
-<string name="drawer_close">Close</string>
-<string name="app_id">431689033600302</string>
-<string name="search_title">Search</string>
-<string name="search_hint">Search Area</string>
-  <string name="login">Log In</string>
+    <string name="drawer_close">Close</string>
+    <string name="app_id">431689033600302</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search Area</string>
+    <string name="login">Log In</string>
     <string name="logout">Log Out</string>
     <string name="login_intro">Log In to View Events</string>
     <string name="location">Location</string>
     <string name="gender">Gender</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="relationship">Relationship</string>
+
     <color name="grey">#B8B8B8</color>
 
-
-<string-array
-        name="Menu">
-        <item
-            >Camera</item>
-        <item
-            >Sort By</item>
-        <item
-            >Facebook Login</item>
-        <item
-            >About</item>
-        <item
-            >Settings</item>
-        <item
-            >Help</item>
-        
+    <string-array name="Menu">
+        <item>Camera</item>
+        <item>Sort By</item>
+        <item>Facebook Login</item>
+        <item>About</item>
+        <item>Settings</item>
+        <item>Help</item>
     </string-array>
+
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_view_search_results">ViewSearchResults</string>
+    <string name="title_activity_campus_info_search">CampusInfoSearch</string>
+    <string name="title_activity_view_campus_info_from_db">ViewCampusInfoFromDB</string>
 
 </resources>
