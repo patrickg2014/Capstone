@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,25 +26,28 @@ public class ViewSearchResults extends Activity {
 
 		Intent theIntent = getIntent();
 		searchKey = theIntent.getStringExtra(CampusInfoSearch.SEARCH_TEXT); // Get the extra String that was stored in the intent
-
+		
+		
 		popluateListViewFromDB();
 		registerListClickCallback();
+		Log.d("Chirs", "done.");
 	}
 
 	public void popluateListViewFromDB() {
-		
-
-		
 		CampusDatabase db = new CampusDatabase(this);
 		db.open();
 		Cursor cursor = db.searchByName(searchKey);
+		
+		if(cursor == null){
+			Toast.makeText(this, "Cursor is null!", Toast.LENGTH_LONG).show();
+		}
 
-		// Allow activity to manage lifetime of cursror
+		// Allow activity to manage lifetime of cursor
 		startManagingCursor(cursor);
 
 		// Setup mapping from cursor to view feilds
 		String[] fromFeildNames = new String[] { CampusDatabase.KEY_NAME,
-				CampusDatabase.KEY_TYPE, CampusDatabase.KEY_IMAGE };
+				CampusDatabase.KEY_TYPE, CampusDatabase.KEY_IMAGE, CampusDatabase.KEY_INFO};
 
 		int[] toViewIDs = new int[] { R.id.item_name, R.id.item_type,R.id.item_icon };
 

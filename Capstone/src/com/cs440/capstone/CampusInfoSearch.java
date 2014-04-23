@@ -3,12 +3,12 @@ package com.cs440.capstone;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class CampusInfoSearch extends Activity implements OnClickListener {
 
@@ -24,17 +24,23 @@ public class CampusInfoSearch extends Activity implements OnClickListener {
 		searchText = (EditText) findViewById(R.id.etSearch); // Lets find our EditText field
 		searchButton = (Button) findViewById(R.id.bSearch); // Lets find our Button
 		searchButton.setOnClickListener(this); // Set a on click listener to our button
+		
+		Log.d("Chris", "Created.");
 	}
 
 	@Override
 	public void onClick(View arg0) {
+		
+		Log.d("Chris", "Clicked");
+		
 		switch (arg0.getId()) {
 		case R.id.bSearch: // Case for when the user presses the search button
+			Log.d("Chirs", "about to go to ViewSearchResults");
 			String searchKey = searchText.getText().toString(); // Get the user inputed text from the EditText field
 			Intent searchIntent = new Intent(this, ViewSearchResults.class); // Make an intent to go to the ViewSearchResults class
 			searchIntent.putExtra(SEARCH_TEXT, searchKey); // Put the searchKey into the intent so ViewSearchResults knows what to look for
 			startActivity(searchIntent); // Start ViewSearchResults
-			searchText.setText(""); // Reset the EditText feild
+			searchText.setText(""); // Reset the EditText field
 			break;
 		}
 
