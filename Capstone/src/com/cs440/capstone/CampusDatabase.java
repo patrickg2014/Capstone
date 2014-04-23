@@ -28,10 +28,9 @@ public class CampusDatabase {
 
 	// Set up images
 	public String image = ((Integer) R.drawable.ic_building).toString();
-	// public Drawable pic = R.drawable.ic_building;
 	public Integer intPic = R.drawable.ic_building;
 
-	// construtor
+	// Constructor
 	public CampusDatabase(Context c) {
 		ourContext = c;
 	}
@@ -65,8 +64,6 @@ public class CampusDatabase {
 	}
 
 	public Cursor searchByName(String searchKey) {
-
-		//Toast.makeText(ourContext, "SEARCHING THE DATABASE!!!", Toast.LENGTH_LONG).show();
 			
 		fillDatabase(); //YOU WILL NEED TO FIX THIS //TODO
 		
@@ -93,7 +90,7 @@ public class CampusDatabase {
 		return null;
 	}
 
-	// Delete all entries in the table.
+	// Delete all entries in the table. //TODO might want to get rid of this one...
 	public void clearDatabase() {
 		ourDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
 
@@ -103,7 +100,7 @@ public class CampusDatabase {
 				+ KEY_IMAGE + " TEXT NOT NULL);");
 	}
 
-	public void fillDatabase() {
+	public void fillDatabase() { //TODO might want to get rid of this one...
 		clearDatabase();
 		CampusDatabase newdb = new CampusDatabase(ourContext);
 		newdb.open();
