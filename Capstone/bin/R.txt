@@ -145,6 +145,7 @@ int drawable ic_action_labels 0x7f020044
 int drawable ic_action_search 0x7f020045
 int drawable ic_action_settings 0x7f020046
 int drawable ic_action_video 0x7f020047
+<<<<<<< HEAD
 int drawable ic_building 0x7f020048
 int drawable ic_drawer 0x7f020049
 int drawable ic_launcher 0x7f02004a
@@ -157,11 +158,26 @@ int drawable layer_card_background 0x7f020050
 int drawable login_button_focused 0x7f020051
 int drawable login_button_normal 0x7f020052
 int drawable login_button_pressed 0x7f020053
+=======
+int drawable ic_drawer 0x7f020048
+int drawable ic_launcher 0x7f020049
+int drawable ic_plusone_medium_off_client 0x7f02004a
+int drawable ic_plusone_small_off_client 0x7f02004b
+int drawable ic_plusone_standard_off_client 0x7f02004c
+int drawable ic_plusone_tall_off_client 0x7f02004d
+int drawable launcher 0x7f02004e
+int drawable layer_card_background 0x7f02004f
+int drawable login_button_focused 0x7f020050
+int drawable login_button_normal 0x7f020051
+int drawable login_button_pressed 0x7f020052
+int drawable map 0x7f020053
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
 int drawable table_round_shape 0x7f020054
 int drawable ups 0x7f020055
 int drawable upslogo 0x7f020056
 int drawable user1 0x7f020057
 int drawable user2 0x7f020058
+<<<<<<< HEAD
 int id action_settings 0x7f06004b
 int id bSearch 0x7f06000f
 int id camera_layout 0x7f060020
@@ -216,17 +232,72 @@ int id none 0x7f060000
 int id normal 0x7f060001
 int id overlay_layout 0x7f060021
 int id picker_subtitle 0x7f060031
+=======
+int id action_settings 0x7f06003c
+int id camera_layout 0x7f060011
+int id com_facebook_login_activity_progress_bar 0x7f060015
+int id com_facebook_picker_activity_circle 0x7f060014
+int id com_facebook_picker_checkbox 0x7f060017
+int id com_facebook_picker_checkbox_stub 0x7f06001b
+int id com_facebook_picker_divider 0x7f06001f
+int id com_facebook_picker_done_button 0x7f06001e
+int id com_facebook_picker_image 0x7f060018
+int id com_facebook_picker_list_section_header 0x7f06001c
+int id com_facebook_picker_list_view 0x7f060013
+int id com_facebook_picker_profile_pic_stub 0x7f060019
+int id com_facebook_picker_row_activity_circle 0x7f060016
+int id com_facebook_picker_search_text 0x7f060024
+int id com_facebook_picker_title 0x7f06001a
+int id com_facebook_picker_title_bar 0x7f060021
+int id com_facebook_picker_title_bar_stub 0x7f060020
+int id com_facebook_picker_top_bar 0x7f06001d
+int id com_facebook_search_bar_view 0x7f060023
+int id com_facebook_usersettingsfragment_login_button 0x7f060027
+int id com_facebook_usersettingsfragment_logo_image 0x7f060025
+int id com_facebook_usersettingsfragment_profile_name 0x7f060026
+int id drawer_icon 0x7f060029
+int id drawer_itemName 0x7f06002a
+int id drawer_layout 0x7f060009
+int id eventbutton 0x7f060010
+int id frag1_icon 0x7f06002d
+int id frag1_text 0x7f06002e
+int id frag2_icon 0x7f060031
+int id frag2_text 0x7f060032
+int id frag3_icon 0x7f06002f
+int id frag3_text 0x7f060030
+int id hybrid 0x7f060004
+int id imageView1 0x7f06002c
+int id imageViewParse 0x7f06000f
+int id itemLayout 0x7f060028
+int id large 0x7f060006
+int id left 0x7f060007
+int id left_drawer 0x7f06000c
+int id linearlayout 0x7f06000e
+int id loginButton 0x7f060034
+int id login_fragment 0x7f060033
+int id logoutButton 0x7f06003b
+int id map 0x7f06000d
+int id none 0x7f060000
+int id normal 0x7f060001
+int id overlay_layout 0x7f060012
+int id picker_subtitle 0x7f060022
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
 int id right 0x7f060008
 int id rl_view_info 0x7f060019
 int id satellite 0x7f060002
 int id scrollView 0x7f06000a
+<<<<<<< HEAD
 int id search 0x7f06004c
+=======
+int id search 0x7f06003d
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
 int id small 0x7f060005
 int id tableRow1 0x7f060010
 int id tableRow2 0x7f060015
 int id tableRow3 0x7f060016
 int id tableRow4 0x7f060017
 int id terrain 0x7f060003
+<<<<<<< HEAD
 int id textView 0x7f06003a
 int id textView1 0x7f06000b
 int id textView2 0x7f06001f
@@ -239,6 +310,16 @@ int id userLocation 0x7f060046
 int id userName 0x7f060045
 int id userProfilePicture 0x7f060044
 int id userRelationship 0x7f060049
+=======
+int id textView 0x7f06002b
+int id textView1 0x7f06000b
+int id userDateOfBirth 0x7f060039
+int id userGender 0x7f060038
+int id userLocation 0x7f060037
+int id userName 0x7f060036
+int id userProfilePicture 0x7f060035
+int id userRelationship 0x7f06003a
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
 int integer google_play_services_version 0x7f080000
 int layout about_activity 0x7f030000
 int layout activity_campus_info_search 0x7f030001

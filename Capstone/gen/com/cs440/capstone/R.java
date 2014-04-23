@@ -454,6 +454,7 @@ containing a value of this type.
         public static final int ic_action_search=0x7f020045;
         public static final int ic_action_settings=0x7f020046;
         public static final int ic_action_video=0x7f020047;
+<<<<<<< HEAD
         public static final int ic_building=0x7f020048;
         public static final int ic_drawer=0x7f020049;
         public static final int ic_launcher=0x7f02004a;
@@ -466,6 +467,20 @@ containing a value of this type.
         public static final int login_button_focused=0x7f020051;
         public static final int login_button_normal=0x7f020052;
         public static final int login_button_pressed=0x7f020053;
+=======
+        public static final int ic_drawer=0x7f020048;
+        public static final int ic_launcher=0x7f020049;
+        public static final int ic_plusone_medium_off_client=0x7f02004a;
+        public static final int ic_plusone_small_off_client=0x7f02004b;
+        public static final int ic_plusone_standard_off_client=0x7f02004c;
+        public static final int ic_plusone_tall_off_client=0x7f02004d;
+        public static final int launcher=0x7f02004e;
+        public static final int layer_card_background=0x7f02004f;
+        public static final int login_button_focused=0x7f020050;
+        public static final int login_button_normal=0x7f020051;
+        public static final int login_button_pressed=0x7f020052;
+        public static final int map=0x7f020053;
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
         public static final int table_round_shape=0x7f020054;
         public static final int ups=0x7f020055;
         public static final int upslogo=0x7f020056;
@@ -473,6 +488,7 @@ containing a value of this type.
         public static final int user2=0x7f020058;
     }
     public static final class id {
+<<<<<<< HEAD
         public static final int action_settings=0x7f06004b;
         public static final int bSearch=0x7f06000f;
         public static final int camera_layout=0x7f060020;
@@ -527,17 +543,72 @@ containing a value of this type.
         public static final int normal=0x7f060001;
         public static final int overlay_layout=0x7f060021;
         public static final int picker_subtitle=0x7f060031;
+=======
+        public static final int action_settings=0x7f06003c;
+        public static final int camera_layout=0x7f060011;
+        public static final int com_facebook_login_activity_progress_bar=0x7f060015;
+        public static final int com_facebook_picker_activity_circle=0x7f060014;
+        public static final int com_facebook_picker_checkbox=0x7f060017;
+        public static final int com_facebook_picker_checkbox_stub=0x7f06001b;
+        public static final int com_facebook_picker_divider=0x7f06001f;
+        public static final int com_facebook_picker_done_button=0x7f06001e;
+        public static final int com_facebook_picker_image=0x7f060018;
+        public static final int com_facebook_picker_list_section_header=0x7f06001c;
+        public static final int com_facebook_picker_list_view=0x7f060013;
+        public static final int com_facebook_picker_profile_pic_stub=0x7f060019;
+        public static final int com_facebook_picker_row_activity_circle=0x7f060016;
+        public static final int com_facebook_picker_search_text=0x7f060024;
+        public static final int com_facebook_picker_title=0x7f06001a;
+        public static final int com_facebook_picker_title_bar=0x7f060021;
+        public static final int com_facebook_picker_title_bar_stub=0x7f060020;
+        public static final int com_facebook_picker_top_bar=0x7f06001d;
+        public static final int com_facebook_search_bar_view=0x7f060023;
+        public static final int com_facebook_usersettingsfragment_login_button=0x7f060027;
+        public static final int com_facebook_usersettingsfragment_logo_image=0x7f060025;
+        public static final int com_facebook_usersettingsfragment_profile_name=0x7f060026;
+        public static final int drawer_icon=0x7f060029;
+        public static final int drawer_itemName=0x7f06002a;
+        public static final int drawer_layout=0x7f060009;
+        public static final int eventbutton=0x7f060010;
+        public static final int frag1_icon=0x7f06002d;
+        public static final int frag1_text=0x7f06002e;
+        public static final int frag2_icon=0x7f060031;
+        public static final int frag2_text=0x7f060032;
+        public static final int frag3_icon=0x7f06002f;
+        public static final int frag3_text=0x7f060030;
+        public static final int hybrid=0x7f060004;
+        public static final int imageView1=0x7f06002c;
+        public static final int imageViewParse=0x7f06000f;
+        public static final int itemLayout=0x7f060028;
+        public static final int large=0x7f060006;
+        public static final int left=0x7f060007;
+        public static final int left_drawer=0x7f06000c;
+        public static final int linearlayout=0x7f06000e;
+        public static final int loginButton=0x7f060034;
+        public static final int login_fragment=0x7f060033;
+        public static final int logoutButton=0x7f06003b;
+        public static final int map=0x7f06000d;
+        public static final int none=0x7f060000;
+        public static final int normal=0x7f060001;
+        public static final int overlay_layout=0x7f060012;
+        public static final int picker_subtitle=0x7f060022;
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
         public static final int right=0x7f060008;
         public static final int rl_view_info=0x7f060019;
         public static final int satellite=0x7f060002;
         public static final int scrollView=0x7f06000a;
+<<<<<<< HEAD
         public static final int search=0x7f06004c;
+=======
+        public static final int search=0x7f06003d;
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
         public static final int small=0x7f060005;
         public static final int tableRow1=0x7f060010;
         public static final int tableRow2=0x7f060015;
         public static final int tableRow3=0x7f060016;
         public static final int tableRow4=0x7f060017;
         public static final int terrain=0x7f060003;
+<<<<<<< HEAD
         public static final int textView=0x7f06003a;
         public static final int textView1=0x7f06000b;
         public static final int textView2=0x7f06001f;
@@ -550,6 +621,16 @@ containing a value of this type.
         public static final int userName=0x7f060045;
         public static final int userProfilePicture=0x7f060044;
         public static final int userRelationship=0x7f060049;
+=======
+        public static final int textView=0x7f06002b;
+        public static final int textView1=0x7f06000b;
+        public static final int userDateOfBirth=0x7f060039;
+        public static final int userGender=0x7f060038;
+        public static final int userLocation=0x7f060037;
+        public static final int userName=0x7f060036;
+        public static final int userProfilePicture=0x7f060035;
+        public static final int userRelationship=0x7f06003a;
+>>>>>>> ecd0f47cce413a7fd5497919db0e44481b913fc8
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;

@@ -263,7 +263,7 @@ public class MainActivity extends Activity implements
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// Add Drawer Item to dataList
-		dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
+		dataList.add(new DrawerItem("Map", R.drawable.map));
 		dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
 		dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {

@@ -33,7 +33,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +58,8 @@ public class BuildingInfoActivity extends Activity {
 	public String name;
 	List<DrawerItem> dataList;
 	private Bitmap bitmap;
+	private LinearLayout ll;
+	private Button button;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) // where our app sets up
@@ -65,6 +70,7 @@ public class BuildingInfoActivity extends Activity {
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		setContentView(R.layout.building_info_actvity);
+		ll = (LinearLayout)findViewById(R.id.linearlayout);
 		image = (ParseImageView) findViewById(R.id.imageViewParse);
 		image.setPlaceholder(getResources().getDrawable(
 				R.drawable.ic_action_cloud));
@@ -78,7 +84,33 @@ public class BuildingInfoActivity extends Activity {
 		initDrawer(savedInstanceState);
 		queryPhoto();
 		text.setText(description);
+		button = (Button)findViewById(R.id.eventbutton);
+		button.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		        makeEvents();
+		    }
+		});
+	}
+	
+	public void makeEvents(){
+		Log.d("events","make Events!");
+		final int N = 10; // total number of textviews to add
 
+		final ExpandableTextView[] myTextViews = new ExpandableTextView[N]; // create an empty array;
+
+		for (int i = 0; i < N; i++) {
+		    // create a new textview
+		    final ExpandableTextView rowTextView = new ExpandableTextView(this);
+		    rowTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.layer_card_background));
+		    // set some properties of rowTextView or something
+		   // rowTextView.setPaddingRelative(15, 15, 15, 15);
+		    rowTextView.setText("This is row #" + i);
+		    ll.addView(rowTextView);
+
+		    // save a reference to the textview for later
+		    myTextViews[i] = rowTextView;
+		}
 	}
 
 	public void queryPhoto() {
@@ -159,7 +191,7 @@ public class BuildingInfoActivity extends Activity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// Add Drawer Item to dataList
-		dataList.add(new DrawerItem("Map", R.drawable.ic_action_email));
+		dataList.add(new DrawerItem("Map", R.drawable.map));
 		dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
 		dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
 		dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
