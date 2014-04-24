@@ -1,5 +1,6 @@
 package com.cs440.capstone;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +12,12 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -30,6 +33,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -40,6 +44,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -61,14 +66,19 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.os.ParseAsyncTask;
@@ -136,7 +146,7 @@ public class MainActivity extends Activity implements
 		campusInfo = new CampusInfo(map, this);
 		// CampusInfo.createMarkers();
 
-		initDrawer(savedInstanceState);
+		
 		map.setOnMapLongClickListener(new OnMapLongClickListener() {
 
 			@Override
@@ -214,6 +224,16 @@ public class MainActivity extends Activity implements
 			finish();
 			cameraActivity();
 		}
+		initDrawer(savedInstanceState);
+		
+		if(ParseFacebookUtils.getSession()!=null){
+			
+			
+			ParseException err= null;
+			
+			friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+			}
+			
 		
 	}
 
@@ -266,13 +286,19 @@ public class MainActivity extends Activity implements
 		dataList.add(new DrawerItem("Map", R.drawable.map));
 		dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
 		dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser) && ParseFacebookUtils.getSession().isOpened()) {
 			dataList.add(new DrawerItem("Log Out Of Facebook",
 					R.drawable.ic_action_cloud));
-		} else {
+		} 
+		else if((currentUser != null)&& ParseFacebookUtils.isLinked(currentUser) &&!ParseFacebookUtils.getSession().isOpened()){
 			dataList.add(new DrawerItem("Log In To Facebook",
 					R.drawable.ic_action_cloud));
+		}else{
+			dataList.add(new DrawerItem("Log In To Facebook",
+					R.drawable.ic_action_cloud));
+			
 		}
+		dataList.add(new DrawerItem("Share Location", R.drawable.ic_action_about));
 		dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
 		dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
 		dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
@@ -325,6 +351,14 @@ public class MainActivity extends Activity implements
 
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
+	}
+	public void searchActivity() // what allows us to switch to the camera
+	// activity on button click
+	{
+
+		Intent intent = new Intent(this, CampusInfoSearch.class);
+		startActivity(intent);
+	
 	}
 
 	public void settingsActivity() // what allows us to switch to the camera
@@ -416,6 +450,13 @@ public class MainActivity extends Activity implements
 			cameraActivity();
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
+		if (dataList.get(possition).getItemName().contentEquals("Share Location")) {
+			Log.d("Test", "share prompt");
+			sharePrompt();
+			
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
+		
 		if (dataList.get(possition).getItemName().contentEquals("About")) {
 			Log.d("Test", "About screen");
 			aboutActivity();
@@ -431,30 +472,27 @@ public class MainActivity extends Activity implements
 			helpActivity();
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
-
 		if (dataList.get(possition).getItemName()
-				.contentEquals("Log In To Facebook")
-				&& ParseFacebookUtils.getSession() == null) {
+				.contentEquals("Log In To Facebook")) {
 			Log.d("Test", "facebook in");
+			
+			login(possition);
 
-			login();
+		 
+			}else{
+		if (dataList.get(possition).getItemName()
+				.contentEquals("Log Out Of Facebook")) {
+			Log.d("Test", "facebook out ");
 
-			Log.d("Test", "facebook should have fqled");
-			dataList.get(possition).setItemName("Log Out Of Facebook");
+			ParseUser.logOut();
 
-		} else {
-			if (dataList.get(possition).getItemName()
-					.contentEquals("Log Out Of Facebook")) {
-				Log.d("Test", "facebook out ");
-
-				ParseUser.logOut();
-
-				dataList.get(possition).setItemName("Log In To Facebook");
-			}
-
+			dataList.get(possition).setItemName("Log In To Facebook");
 		}
-		mDrawerList.setItemChecked(possition, false);
+		
+		
 
+	}
+		mDrawerList.setItemChecked(possition, false);
 	}
 
 	@Override
@@ -542,10 +580,12 @@ public class MainActivity extends Activity implements
 					if(lastqueryloc==null){
 						lastqueryloc=new LatLng(0,0);
 					}
-					Double distance= Math.abs(myLocation.latitude-lastqueryloc.longitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
-					if(distance>.5){
-					ParseException err= null;
+					Double distance= Math.abs(myLocation.latitude-lastqueryloc.latitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
 					
+					if(distance>1){
+						Log.d("dis", distance+"");
+					ParseException err= null;
+					lastqueryloc=myLocation;
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
 					}
 					}
@@ -606,7 +646,7 @@ public class MainActivity extends Activity implements
 	}
 
 	public void call(Session session, SessionState state, Exception exception) {
-
+		if(ParseFacebookUtils.getSession().isOpened()){
 		String fqlQuery =
 
 		"SELECT name, pic,venue, description, start_time,end_time, eid "
@@ -663,19 +703,22 @@ public class MainActivity extends Activity implements
 						}
 					}
 				});
-		lastqueryloc=myLocation;
+		
+	
 		Request.executeBatchAsync(request);
 		for (Event e : CampusInfo.events) {
 			e.makeMarker();
 
 		}
+		}
 
 	}
 	
 	public void friendcall(Session session, SessionState state, Exception exception) {
-
-		String fqlQuery = "SELECT uid FROM user WHERE  uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
-
+		
+		String fqlQuery = "SELECT uid, name FROM user WHERE  is_app_user  AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
+		final List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+		final ArrayList<String> uids = new ArrayList<String>();
 		Bundle params = new Bundle();
 
 		params.putString("q", fqlQuery);
@@ -694,28 +737,130 @@ public class MainActivity extends Activity implements
 
 							// loop
 							for (int i = 0; i < array.length(); i++) {
-								JSONObject obj = array.getJSONObject(i);
 								
-								String uid = obj.getString("uid");
 								
-								Log.d("fql",uid);
+								String uid =array.getJSONObject(i).getString("uid");
+								String name =array.getJSONObject(i).getString("name");
+								Log.d("uid", uid+"");
+								ParseQuery<ParseUser> query = ParseUser.getQuery();
+								query.whereEqualTo("Uid", uid).whereEqualTo("shareLocation", true);
+								
+								query.findInBackground(new FindCallback<ParseUser>() {
+									  public void done(List<ParseUser> objects, ParseException e)  {Log.d("share","Inside done"+objects.size());
+											  
+								            Log.d("query", "Retrieved " + objects.size() + " friends locations");
+								            for (int i = 0; i < objects.size(); i++) {
+								            	//String id = results.get(i).getObjectId();
+								            	Log.d("share","inside the for loop");
+								            	String name = objects.get(i).getString("Name");
+												String loctext = objects.get(i).getString("locationText");
+												double sharelat = objects.get(i).getParseGeoPoint("Location").getLatitude();
+												double sharelong = objects.get(i).getParseGeoPoint("Location").getLongitude();
+												Log.d("share",name+"    "+loctext);
+												CampusInfo.map.addMarker(new MarkerOptions().title(name)
+														.snippet(loctext).position(new LatLng(sharelat,sharelong)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+
+												
+						  
+									  }
+						  }
+						});
+								Log.d("share",name+" " +uid);
 							}
 
+							
+								
+							
+								
+							
+										  			
+												
+								
 						} catch (Throwable t) {
 							t.printStackTrace();
 						}
 					}
 				});
-
+		
+		
 		Request.executeBatchAsync(request);
 		for (Event e : CampusInfo.events) {
 			e.makeMarker();
 
 		}
+		
+		
+		
+
+	}
+	
+public void storecall(Session session, SessionState state, Exception exception) {
+		
+		String fqlQuery = "SELECT uid,name FROM user WHERE uid = me() ";
+		
+		Bundle params = new Bundle();
+
+		params.putString("q", fqlQuery);
+		
+		Session session1 = Session.getActiveSession();
+		
+		Request request = new Request(session1, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						// Log.i("fql", "Got results: " + response.toString());
+
+						try {
+							GraphObject go = response.getGraphObject();
+							JSONObject jso = go.getInnerJSONObject();
+							JSONArray array = jso.getJSONArray("data");
+
+							// loop
+							for (int i = 0; i < array.length(); i++) {
+								String uid =array.getJSONObject(i).getString("uid");
+								String name =array.getJSONObject(i).getString("name");
+								ParseUser user = ParseUser.getCurrentUser();
+								 Log.d("share", uid+"");
+									
+									
+									if (ParseUser.getCurrentUser() != null) {
+										user.put("Uid", uid);
+										user.put("Name", name);
+										user.saveInBackground(new SaveCallback() {
+											public void done(com.parse.ParseException e) {
+												if (e == null) {
+													// Save was successful!
+													Log.d("parse", "upload uid");
+												} else {
+													// Save failed. Inspect e for details.
+													Log.d("parse", "failed to upload uid");
+												}
+											}
+											
+										});
+										
+								
+								Log.d("fql1",uid+"");
+							}
+
+							
+							
+								
+						} }
+							catch (Throwable t) {
+								t.printStackTrace();
+							}
+					}
+				});
+		
+		
+		Request.executeBatchAsync(request);
+		
+		
+		
 
 	}
 
-	public void login() {
+	public void login(final int possition) {
 
 		List<String> permissions = Arrays
 				.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
@@ -726,25 +871,48 @@ public class MainActivity extends Activity implements
 				if (user == null) {
 					Log.d("facebook",
 							"Uh oh. The user cancelled the Facebook login.");
+					Log.d("Test", "facebook should have fqled");
+					dataList.get(possition).setItemName("Log In To Facebook");
+					
 				} else if (user.isNew()) {
 					Log.d("facebook",
 							"User signed up and logged in through Facebook!");
-					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
+					Log.d("Test", "facebook should have fqled");
+					dataList.get(possition).setItemName("Log Out Of Facebook");
+					storecall(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
-					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
-							.getSession().getState(), err);
-					ParseFacebookUtils.saveLatestSessionData(currentUser);
-
-				} else {
-					Log.d("facebook", "User logged in through Facebook!");
 					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
 					
+					ParseFacebookUtils.saveLatestSessionData(currentUser);
+					
+					
+					
+
+				} else {
+					Log.d("facebook", "User logged in through Facebook!");
+					Log.d("Test", "facebook should have fqled");
+					dataList.get(possition).setItemName("Log Out Of Facebook");
+					storecall(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
+					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
+					
+					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
+							.getSession().getState(), err);
+					
+					
 				}
 			}
 		});
+		if(ParseFacebookUtils.getSession().isOpened()){
+			dataList.get(possition).setItemName("Log Out Of Facebook");
+		}
+		else{
+			dataList.get(possition).setItemName("Log In To Facebook");
+		}
 
 	}
 
@@ -798,5 +966,54 @@ public class MainActivity extends Activity implements
 		this.getCurrentFocus().clearFocus();
 		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		mgr.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
+	}
+	
+	
+	public void sharePrompt(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Title");
+		alert.setMessage("Message");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  ParseUser user = ParseUser.getCurrentUser();
+		  String valstring= value.toString();
+			ParseGeoPoint geo = new ParseGeoPoint();
+			geo.setLatitude(myLocation.latitude);
+			geo.setLongitude(myLocation.longitude);
+			if (ParseUser.getCurrentUser() != null) {
+				user.put("Location", geo);
+				user.put("locationText", valstring);
+				user.put("shareLocation", true);
+				user.saveInBackground(new SaveCallback() {
+					public void done(com.parse.ParseException e) {
+						if (e == null) {
+							// Save was successful!
+							Log.d("parse", "upload location and text");
+						} else {
+							// Save failed. Inspect e for details.
+							Log.d("parse", "failed to upload location");
+						}
+					}
+				});
+				querytimer = System.currentTimeMillis();
+
+			}
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
 	}
 }
