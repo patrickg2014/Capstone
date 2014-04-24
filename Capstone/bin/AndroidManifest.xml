@@ -9,9 +9,9 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-+ 	
++ 	
     <uses-feature android:name="android.hardware.camera" />
-+ 	
++ 	
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -38,6 +38,12 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.cs440.capstone.CameraActivity"
@@ -117,15 +123,16 @@
         <activity
             android:name="com.cs440.capstone.CampusInfoSearch"
             android:label="@string/title_activity_campus_info_search" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+
 
              
-            </intent-filter>
+          
+
         </activity>
         <activity
             android:name="com.cs440.capstone.ViewCampusInfoFromDB"
-            android:label="@string/title_activity_view_campus_info_from_db" >
+            android:label="@string/title_activity_view_campus_info_from_db"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
@@ -135,7 +142,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
      The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended.
+     Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

@@ -34,13 +34,16 @@ public class ViewCampusInfoFromDB extends Activity {
 			TextView tvBuildingName = (TextView) findViewById(R.id.tv_building_name);
 			TextView tvBuildingType = (TextView) findViewById(R.id.tv_building_type);
 			ImageView ivIcon = (ImageView) findViewById(R.id.info_icon);
+			TextView tvBuildingInfo = (TextView) findViewById(R.id.tvBuildingInfo);
 			
 			String name = tdb.getBuildingName(c);
 			String type = tdb.getBuildingType(c);
 			String image = tdb.getBuildingImage(c);
+			String info = tdb.getBuildingInfo(c);
 			
 			tvBuildingName.setText(name);
 			tvBuildingType.setText(type);
+			tvBuildingInfo.setText(info);
 			ivIcon.setImageResource(tdb.intPic);
 			ivIcon.bringToFront();
 		

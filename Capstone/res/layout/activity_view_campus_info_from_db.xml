@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#800000"
+    android:screenOrientation="landscape"
     tools:context=".MainActivity" >
 
     <FrameLayout
@@ -60,12 +61,35 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <RelativeLayout
+                    android:id="@+id/rvScrollViewHolder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/rlEvents"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/tv_building_type"
+                    android:layout_marginTop="7dp" >
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/tvBuildingInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </ScrollView>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/rlEvents"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/tv_building_type"
-                    android:layout_marginTop="10dp" >
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true" 
+                    android:layout_marginTop = "7dp"
+                    android:layout_marginBottom = "7dp">
 
                     <ImageView
                         android:id="@+id/event_icon"
@@ -107,16 +131,6 @@
                         android:text="Click to View"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
                 </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/rlEvents"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="10dp"
-                    android:text="Building information" />
             </RelativeLayout>
         </RelativeLayout>
         <!-- End -->
