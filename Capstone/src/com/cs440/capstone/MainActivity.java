@@ -457,15 +457,11 @@ public class MainActivity extends Activity implements
 			Log.d("Test", "share prompt");
 			
 			if(ParseUser.getCurrentUser()!=null && !ParseFacebookUtils.getSession().isClosed()){
-				MainActivity.this.runOnUiThread(new Runnable() {
-
-		            @Override
-		            public void run() {
-		            	
+				
 		            	sharePrompt();
 
-		            }
-		        });
+		            
+		        
 				
 			}
 			
