@@ -593,7 +593,7 @@ public class MainActivity extends Activity implements
 					}
 					}
 			}
-			
+			if(shareloc!=null && shareTime !=0){
 			if(System.currentTimeMillis()-shareTime>10000000|| Math.abs(myLocation.latitude-shareloc.latitude)-Math.abs(myLocation.longitude-shareloc.longitude)>.001){
 				ParseUser user = ParseUser.getCurrentUser();
 			
@@ -611,7 +611,8 @@ public class MainActivity extends Activity implements
 							}
 						}
 					});
-				}
+				
+				}}
 			}
 		}
 	}
