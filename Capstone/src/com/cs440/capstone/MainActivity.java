@@ -455,8 +455,23 @@ public class MainActivity extends Activity implements
 		}
 		if (dataList.get(possition).getItemName().contentEquals("Share Location")) {
 			Log.d("Test", "share prompt");
-			sharePrompt();
 			
+			if(ParseUser.getCurrentUser()!=null && !ParseFacebookUtils.getSession().isClosed()){
+				MainActivity.this.runOnUiThread(new Runnable() {
+
+		            @Override
+		            public void run() {
+		            	
+		            	sharePrompt();
+
+		            }
+		        });
+				
+			}
+			
+			if(ParseUser.getCurrentUser()==null||ParseFacebookUtils.getSession().isClosed()){
+				Toast.makeText(this, "You Need to be logged in to Facebook to share your location with Friends", Toast.LENGTH_LONG).show();
+			}
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 		
@@ -483,9 +498,10 @@ public class MainActivity extends Activity implements
 		if (dataList.get(possition).getItemName()
 				.contentEquals("Log In To Facebook")) {
 			Log.d("Test", "facebook in");
-			
+			if(ParseUser.getCurrentUser()==null||ParseFacebookUtils.getSession().isClosed()){
 			login(possition);
-
+			}
+			dataList.get(possition).setItemName("Log Out Of Facebook");
 		 
 			}else{
 		if (dataList.get(possition).getItemName()
@@ -913,7 +929,8 @@ public void storecall(Session session, SessionState state, Exception exception) 
 	}
 
 	public void login(final int possition) {
-
+		if(ParseUser.getCurrentUser()==null||ParseFacebookUtils.getSession().isClosed()){
+				
 		List<String> permissions = Arrays
 				.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
 		ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
@@ -964,6 +981,7 @@ public void storecall(Session session, SessionState state, Exception exception) 
 		}
 		else{
 			dataList.get(possition).setItemName("Log In To Facebook");
+		}
 		}
 
 	}
@@ -1022,11 +1040,13 @@ public void storecall(Session session, SessionState state, Exception exception) 
 	
 	
 	public void sharePrompt(){
+		
+
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		if(ParseUser.getCurrentUser()==null ||!ParseFacebookUtils.getSession().isOpened())
-		{
-			Toast.makeText(this, "You Need to be logged in to Facebook to share your location with Friends", Toast.LENGTH_LONG).show();
-		}else{
+		Log.d("prompt", "this should happen every time");
+		
+			
+			
 		alert.setTitle("Share your location");
 		alert.setMessage("Message");
 
@@ -1073,6 +1093,7 @@ public void storecall(Session session, SessionState state, Exception exception) 
 		});
 
 		alert.show();
+	
 	}
-	}
+	
 }
