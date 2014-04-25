@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements
 	private SensorManager mSensorManager;
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
-
+	public long shareTime;
 	static GoogleMap map = null;
 	public static ParseUser currentUser;
 	public LatLng lastqueryloc =null;
@@ -112,6 +112,8 @@ public class MainActivity extends Activity implements
 	private SearchView searchView;
 	private CampusInfo campusInfo;
 	private MenuItem searchMenuItem;
+	private LatLng shareloc;
+	public ArrayList<String> uids=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) // where our app sets up
@@ -573,7 +575,7 @@ public class MainActivity extends Activity implements
 						}
 					});
 					querytimer = System.currentTimeMillis();
-
+					
 				}
 				
 				if(ParseFacebookUtils.getSession()!=null&& myLocation!=null){
@@ -581,14 +583,35 @@ public class MainActivity extends Activity implements
 						lastqueryloc=new LatLng(0,0);
 					}
 					Double distance= Math.abs(myLocation.latitude-lastqueryloc.latitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
-					
+					ParseException err= null;
+					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
 					if(distance>1){
 						Log.d("dis", distance+"");
-					ParseException err= null;
+					
 					lastqueryloc=myLocation;
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
 					}
 					}
+			}
+			
+			if(System.currentTimeMillis()-shareTime>10000000|| Math.abs(myLocation.latitude-shareloc.latitude)-Math.abs(myLocation.longitude-shareloc.longitude)>.001){
+				ParseUser user = ParseUser.getCurrentUser();
+			
+				if (ParseUser.getCurrentUser() != null) {
+					
+					user.put("shareLocation", false);
+					user.saveInBackground(new SaveCallback() {
+						public void done(com.parse.ParseException e) {
+							if (e == null) {
+								// Save was successful!
+								Log.d("parse", "upload location and text");
+							} else {
+								// Save failed. Inspect e for details.
+								Log.d("parse", "failed to upload location");
+							}
+						}
+					});
+				}
 			}
 		}
 	}
@@ -718,7 +741,7 @@ public class MainActivity extends Activity implements
 		
 		String fqlQuery = "SELECT uid, name FROM user WHERE  is_app_user  AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
 		final List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-		final ArrayList<String> uids = new ArrayList<String>();
+		uids = new ArrayList<String>();
 		Bundle params = new Bundle();
 
 		params.putString("q", fqlQuery);
@@ -980,6 +1003,8 @@ public void storecall(Session session, SessionState state, Exception exception) 
 		alert.setView(input);
 
 		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+		
+
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  ParseUser user = ParseUser.getCurrentUser();
@@ -1002,7 +1027,8 @@ public void storecall(Session session, SessionState state, Exception exception) 
 						}
 					}
 				});
-				querytimer = System.currentTimeMillis();
+				shareTime = System.currentTimeMillis();
+				shareloc=myLocation;
 
 			}
 		  }
