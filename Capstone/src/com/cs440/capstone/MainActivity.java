@@ -290,17 +290,18 @@ public class MainActivity extends Activity implements
 		dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser) && ParseFacebookUtils.getSession().isOpened()) {
 			dataList.add(new DrawerItem("Log Out Of Facebook",
-					R.drawable.ic_action_cloud));
+					R.drawable.facebooklogosmall));
 		} 
 		else if((currentUser != null)&& ParseFacebookUtils.isLinked(currentUser) &&!ParseFacebookUtils.getSession().isOpened()){
 			dataList.add(new DrawerItem("Log In To Facebook",
-					R.drawable.ic_action_cloud));
+					R.drawable.facebooklogosmall));
 		}else{
 			dataList.add(new DrawerItem("Log In To Facebook",
-					R.drawable.ic_action_cloud));
+					R.drawable.facebooklogosmall));
 			
 		}
-		dataList.add(new DrawerItem("Share Location", R.drawable.ic_action_about));
+		dataList.add(new DrawerItem("Share Location", R.drawable.ic_action_place));
+		dataList.add(new DrawerItem("Remove Your Location", R.drawable.ic_action_place));
 		dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
 		dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
 		dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
@@ -464,6 +465,11 @@ public class MainActivity extends Activity implements
 			aboutActivity();
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
+		
+		if (dataList.get(possition).getItemName().contentEquals("Remove Your Location")) {
+			Log.d("Test", "Remove Location");
+			removeLocation();
+		}
 		if (dataList.get(possition).getItemName().contentEquals("Settings")) {
 			Log.d("Test", "Settings screen");
 			settingsActivity();
@@ -495,6 +501,28 @@ public class MainActivity extends Activity implements
 
 	}
 		mDrawerList.setItemChecked(possition, false);
+	}
+
+	private void removeLocation() {
+		// TODO Auto-generated method stub
+		ParseUser user = ParseUser.getCurrentUser();
+		if (ParseUser.getCurrentUser() != null) {
+			user.put("shareLocation", false);
+
+			user.saveInBackground(new SaveCallback() {
+				public void done(com.parse.ParseException e) {
+					if (e == null) {
+						// Save was successful!
+						Log.d("parse", "upload location");
+					} else {
+						// Save failed. Inspect e for details.
+						Log.d("parse", "failed to upload location");
+					}
+				}
+			});
+			Toast.makeText(this, "No longer sharing your location.", Toast.LENGTH_SHORT).show();
+			
+		}
 	}
 
 	@Override
@@ -995,8 +1023,11 @@ public void storecall(Session session, SessionState state, Exception exception) 
 	
 	public void sharePrompt(){
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Title");
+		if(ParseUser.getCurrentUser()==null ||!ParseFacebookUtils.getSession().isOpened())
+		{
+			Toast.makeText(this, "You Need to be logged in to Facebook to share your location with Friends", Toast.LENGTH_LONG).show();
+		}else{
+		alert.setTitle("Share your location");
 		alert.setMessage("Message");
 
 		// Set an EditText view to get user input 
@@ -1042,5 +1073,6 @@ public void storecall(Session session, SessionState state, Exception exception) 
 		});
 
 		alert.show();
+	}
 	}
 }

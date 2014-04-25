@@ -83,7 +83,10 @@ protected void onDraw(Canvas canvas) {
 		Log.d("Test", nearList.size() +"this should be how many things are in the near list");
 		for(int i=0; i<(nearList.size()); i++){
 			Log.d("Test", nearList.size() +"");
-			
+			paint.setColor(Color.DKGRAY);
+	        paint.setStrokeWidth(50);
+	        paint.setStyle(Paint.Style.STROKE);
+			canvas.drawRect(100, yPos.get(i)+100,200,yPos.get(i)-100 , paint);
 			canvas.drawBitmap(bmp, (float) (xPos.get(i)-(bmp.getWidth())),(float) (yPos.get(i)-(bmp.getHeight()/2)), paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);

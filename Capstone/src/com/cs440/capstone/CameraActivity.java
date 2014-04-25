@@ -121,7 +121,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	        
 	    };
 	    if(lm.isProviderEnabled("GPS_PROVIDER")){
-	    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, onLocationChange);
+	    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000, 0, onLocationChange);
 	    }
 	    else{
 	    	 lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 0, onLocationChange);
