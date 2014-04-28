@@ -630,6 +630,7 @@ public class MainActivity extends Activity implements
 				}
 				
 				if(ParseFacebookUtils.getSession()!=null&& myLocation!=null){
+
 					if(lastqueryloc==null){
 						lastqueryloc=new LatLng(0,0);
 					}
@@ -643,12 +644,29 @@ public class MainActivity extends Activity implements
 					
 					lastqueryloc=myLocation;
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+					if (ParseFacebookUtils.getSession().isOpened()) {
+						if (lastqueryloc == null) {
+							lastqueryloc = new LatLng(0, 0);
+						}
+						
+						
+						friendcall(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						if (distance > 1) {
+							Log.d("dis", distance + "");
+
+							lastqueryloc = myLocation;
+							call(ParseFacebookUtils.getSession(),
+									ParseFacebookUtils.getSession().getState(),
+									err);
+						}
+
 					}
 					}
 			}
 			if(shareloc!=null && shareTime !=0){
 			if(System.currentTimeMillis()-shareTime>10000000|| Math.abs(myLocation.latitude-shareloc.latitude)-Math.abs(myLocation.longitude-shareloc.longitude)>.001){
-				ParseUser user = ParseUser.getCurrentUser();
+				user = ParseUser.getCurrentUser();
 			
 				if (ParseUser.getCurrentUser() != null) {
 					
@@ -668,6 +686,7 @@ public class MainActivity extends Activity implements
 				}}
 			}
 		}
+	}
 	}
 
 	@Override
@@ -723,7 +742,7 @@ public class MainActivity extends Activity implements
 	}
 
 	public void call(Session session, SessionState state, Exception exception) {
-		if(ParseFacebookUtils.getSession().isOpened()){
+		if(ParseFacebookUtils.getSession().isOpened() && myLocation != null){
 		String fqlQuery =
 
 		"SELECT name, pic,venue, description, start_time,end_time, eid "
