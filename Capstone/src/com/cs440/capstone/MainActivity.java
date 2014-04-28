@@ -74,12 +74,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.parse.os.ParseAsyncTask;
 
@@ -121,6 +125,8 @@ public class MainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
+		PushService.setDefaultPushCallback(this, MainActivity.class);
+		ParseAnalytics.trackAppOpened(getIntent());
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
 
@@ -234,6 +240,11 @@ public class MainActivity extends Activity implements
 			ParseException err= null;
 			
 			friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+			
+			ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+			installation.put("user",ParseUser.getCurrentUser());
+			installation.saveInBackground();
+			
 			}
 			
 		
@@ -624,7 +635,9 @@ public class MainActivity extends Activity implements
 					}
 					Double distance= Math.abs(myLocation.latitude-lastqueryloc.latitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
 					ParseException err= null;
+					/*if(ParseFacebookUtils.getSession().isOpened()){
 					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+					}*/
 					if(distance>1){
 						Log.d("dis", distance+"");
 					
@@ -806,6 +819,7 @@ public class MainActivity extends Activity implements
 								String uid =array.getJSONObject(i).getString("uid");
 								String name =array.getJSONObject(i).getString("name");
 								Log.d("uid", uid+"");
+								
 								ParseQuery<ParseUser> query = ParseUser.getQuery();
 								query.whereEqualTo("Uid", uid).whereEqualTo("shareLocation", true);
 								
@@ -824,6 +838,7 @@ public class MainActivity extends Activity implements
 												CampusInfo.map.addMarker(new MarkerOptions().title(name)
 														.snippet(loctext).position(new LatLng(sharelat,sharelong)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
 
+												
 												
 						  
 									  }
@@ -884,11 +899,16 @@ public void storecall(Session session, SessionState state, Exception exception) 
 								String name =array.getJSONObject(i).getString("name");
 								ParseUser user = ParseUser.getCurrentUser();
 								 Log.d("share", uid+"");
-									
+								 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+									installation.put("uid",uid);
+									installation.saveInBackground();
 									
 									if (ParseUser.getCurrentUser() != null) {
 										user.put("Uid", uid);
+										
 										user.put("Name", name);
+										// Store app language and version
+										
 										user.saveInBackground(new SaveCallback() {
 											public void done(com.parse.ParseException e) {
 												if (e == null) {
@@ -901,8 +921,10 @@ public void storecall(Session session, SessionState state, Exception exception) 
 											}
 											
 										});
-										
-								
+//										
+//										ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//										installation.put("uid",uid);
+//										installation.saveInBackground();
 								Log.d("fql1",uid+"");
 							}
 
@@ -952,7 +974,9 @@ public void storecall(Session session, SessionState state, Exception exception) 
 							.getSession().getState(), err);
 					
 					ParseFacebookUtils.saveLatestSessionData(currentUser);
-					
+					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					installation.put("user",ParseUser.getCurrentUser());
+					installation.saveInBackground();
 					
 					
 
@@ -967,7 +991,9 @@ public void storecall(Session session, SessionState state, Exception exception) 
 					
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
-					
+					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					installation.put("user",ParseUser.getCurrentUser());
+					installation.saveInBackground();
 					
 				}
 			}
@@ -1066,13 +1092,21 @@ public void storecall(Session session, SessionState state, Exception exception) 
 				user.put("shareLocation", true);
 				user.saveInBackground(new SaveCallback() {
 					public void done(com.parse.ParseException e) {
-						if (e == null) {
+						
 							// Save was successful!
 							Log.d("parse", "upload location and text");
-						} else {
-							// Save failed. Inspect e for details.
-							Log.d("parse", "failed to upload location");
-						}
+							
+							
+							 
+							
+							
+							ParsePush parsePush = new ParsePush();
+							ParseQuery pQuery = ParseInstallation.getQuery(); // <-- Installation query
+							pQuery.whereEqualTo("uid", 766136288); // <-- you'll probably want to target someone that's not the current user, so modify accordingly
+							parsePush.sendMessageInBackground("will it work?", pQuery);
+							Log.d("parse", "should push...");
+							
+						 
 					}
 				});
 				shareTime = System.currentTimeMillis();
