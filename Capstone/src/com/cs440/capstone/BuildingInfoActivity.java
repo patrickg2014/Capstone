@@ -60,6 +60,8 @@ public class BuildingInfoActivity extends Activity {
 	private Bitmap bitmap;
 	private LinearLayout ll;
 	private Button button;
+	private ArrayList<Event> events;
+	private boolean eventsShown = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) // where our app sets up
@@ -88,29 +90,49 @@ public class BuildingInfoActivity extends Activity {
 		button.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
-		        makeEvents();
+		    	if(!eventsShown){
+		    		makeEvents();
+		    	}
 		    }
 		});
 	}
 	
 	public void makeEvents(){
 		Log.d("events","make Events!");
-		final int N = 10; // total number of textviews to add
-
-		final ExpandableTextView[] myTextViews = new ExpandableTextView[N]; // create an empty array;
-
-		for (int i = 0; i < N; i++) {
-		    // create a new textview
-		    final ExpandableTextView rowTextView = new ExpandableTextView(this);
-		    rowTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.layer_card_background));
-		    // set some properties of rowTextView or something
-		   // rowTextView.setPaddingRelative(15, 15, 15, 15);
-		    rowTextView.setText("This is row #" + i);
-		    ll.addView(rowTextView);
-
-		    // save a reference to the textview for later
-		    myTextViews[i] = rowTextView;
-		}
+		//final int N = 10; // total number of textviews to add
+		events = CampusInfo.events;
+		int numberOfEvents = events.size();
+		//final ExpandableTextView[] myTextViews = new ExpandableTextView[numberOfEvents]; // create an empty array;
+		
+		for(Event e: CampusInfo.events)	//loops through all a markers to see which ones are within a certain radius of us
+   		{	
+   			if(e.m.getPosition()!=null){
+   			Log.d("test", "1");
+   			double longi= e.m.getPosition().longitude; //converting locations to Doubles as to allow comparison
+   			double lati = e.m.getPosition().latitude;
+   			Building host = CampusInfo.getBuilding(name);
+   			double longi1= host.bound.getCenter().longitude;
+   			double lati1 =host.bound.getCenter().latitude;
+   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
+   			if(distance<=.00075)	//check to make sure they are in the radius
+//   					(longi1+lati1)-(longi-lati)<=.001)
+   			{
+   				Log.d("test", "2");
+   			// create a new textview
+				final ExpandableTextView rowTextView = new ExpandableTextView(
+						this);
+				rowTextView.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.layer_card_background));
+				// set some properties of rowTextView or something
+				// rowTextView.setPaddingRelative(15, 15, 15, 15);
+				rowTextView.setText(e.snipit);
+				ll.addView(rowTextView);
+   						}
+   			}
+   		}
+		
+		
+		eventsShown = true;
 	}
 
 	public void queryPhoto() {

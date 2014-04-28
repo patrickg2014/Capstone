@@ -275,6 +275,15 @@ public class CampusInfo {
 		return all;
 	}
 	
+	static public Building getBuilding(String name){
+		for(Building b: all){
+			if(b.title.contentEquals(name)){
+				return b;
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<Marker> getCurrentlyVisableList(){
 		return currentlyvisable;
 	}
