@@ -160,6 +160,14 @@ public class HelpActivity extends Activity{
 		Intent intent = new Intent(this, CameraActivity.class);
 		startActivity(intent);
 	}
+	
+	public void searchActivity() // what allows us to switch to the camera
+	// activity on button click
+	{
+
+		Intent intent = new Intent(this, CampusInfoSearch.class);
+		startActivity(intent);
+	}
 
 	public void aboutActivity() // what allows us to switch to the camera
 								// activity on button click
@@ -244,6 +252,11 @@ public class HelpActivity extends Activity{
 	public void selectItem(int possition) {
 
 		mDrawerList.setItemChecked(possition, true);
+		if (dataList.get(possition).getItemName().contentEquals("Search")) {
+			Log.d("Test", "search time");
+			searchActivity();
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
 		if (dataList.get(possition).getItemName().contentEquals("Camera")) {
 			Log.d("Test", "CameraTiime");
 			cameraActivity();

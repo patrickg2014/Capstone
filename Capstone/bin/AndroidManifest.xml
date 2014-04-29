@@ -8,12 +8,30 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+<<<<<<< HEAD
 + 	
     <uses-feature android:name="android.hardware.camera" />
 + 	
+=======
+    <uses-feature android:name="android.hardware.camera" />
+>>>>>>> 221520369f4e1310c89c5deeee23f02a7ab6e342
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE" />
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+ 
+<!--
+  IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
+  to match your app's package name + ".permission.C2D_MESSAGE".
+-->
+<permission android:protectionLevel="signature"
+    android:name="com.cs440.capstone.permission.C2D_MESSAGE" />
+<uses-permission android:name="com.cs440.capstone.permission.C2D_MESSAGE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/launcher"
@@ -31,6 +49,10 @@
             android:configChanges="orientation|screenSize|keyboard"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                   <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -119,14 +141,43 @@
         </activity>
         <activity
             android:name="com.cs440.capstone.CampusInfoSearch"
+<<<<<<< HEAD
             android:label="@string/title_activity_campus_info_search"
             android:screenOrientation="portrait" >
+=======
+            android:label="@string/title_activity_campus_info_search" >
+
+
+             
+          
+
+>>>>>>> 221520369f4e1310c89c5deeee23f02a7ab6e342
         </activity>
         <activity
             android:name="com.cs440.capstone.ViewCampusInfoFromDB"
             android:label="@string/title_activity_view_campus_info_from_db"
             android:screenOrientation="portrait" >
         </activity>
+        
+        <service android:name="com.parse.PushService" />
+<receiver android:name="com.parse.ParseBroadcastReceiver">
+  <intent-filter>
+    <action android:name="android.intent.action.BOOT_COMPLETED" />
+    <action android:name="android.intent.action.USER_PRESENT" />
+  </intent-filter>
+</receiver>
+<receiver android:name="com.parse.GcmBroadcastReceiver"
+    android:permission="com.google.android.c2dm.permission.SEND">
+  <intent-filter>
+    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+ 
+    <!--
+      IMPORTANT: Change "com.parse.starter" to match your app's package name.
+    -->
+    <category android:name="com.cs440.capstone" />
+  </intent-filter>
+</receiver>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
