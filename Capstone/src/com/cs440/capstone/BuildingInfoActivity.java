@@ -20,6 +20,7 @@ import com.parse.ParseQueryAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -72,7 +74,7 @@ public class BuildingInfoActivity extends Activity {
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
 		setContentView(R.layout.building_info_actvity);
-		ll = (LinearLayout)findViewById(R.id.linearlayout);
+		ll = (LinearLayout) findViewById(R.id.linearlayout);
 		image = (ParseImageView) findViewById(R.id.imageViewParse);
 		image.setPlaceholder(getResources().getDrawable(
 				R.drawable.ic_action_cloud));
@@ -86,53 +88,94 @@ public class BuildingInfoActivity extends Activity {
 		initDrawer(savedInstanceState);
 		queryPhoto();
 		text.setText(description);
-		button = (Button)findViewById(R.id.eventbutton);
+		button = (Button) findViewById(R.id.eventbutton);
 		button.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	if(!eventsShown){
-		    		makeEvents();
-		    	}
-		    }
+			@Override
+			public void onClick(View v) {
+				if (!eventsShown) {
+					makeEvents();
+				}
+			}
 		});
 	}
-	
-	public void makeEvents(){
-		Log.d("events","make Events!");
-		//final int N = 10; // total number of textviews to add
+
+	public void makeEvents() {
+		Log.d("events", "make Events!");
+		// final int N = 10; // total number of textviews to add
 		events = CampusInfo.events;
 		int numberOfEvents = events.size();
-		//final ExpandableTextView[] myTextViews = new ExpandableTextView[numberOfEvents]; // create an empty array;
+		// final ExpandableTextView[] myTextViews = new
+		// ExpandableTextView[numberOfEvents]; // create an empty array;
+
+		for (int i = 0; i < CampusInfo.events.size() / 2; i++) // loops through
+																// all a markers
+																// to see which
+																// ones are
+																// within a
+																// certain
+																// radius of us
+		{
+			Event e = CampusInfo.events.get(i);
+			if (e.m.getPosition() != null) {
+				Log.d("test", "1");
+				double longi = e.m.getPosition().longitude; // converting
+															// locations to
+															// Doubles as to
+															// allow comparison
+				double lati = e.m.getPosition().latitude;
+				Building host = CampusInfo.getBuilding(name);
+				double longi1 = host.bound.getCenter().longitude;
+				double lati1 = host.bound.getCenter().latitude;
+				double distance = Math.abs(longi - longi1)
+						+ Math.abs(lati - lati1);
+				if (distance <= .00075) // check to make sure they are in the
+										// radius
+				// (longi1+lati1)-(longi-lati)<=.001)
+				{
+					eventsShown = true;
+					Log.d("test", "2");
+					// create a new textview
+					final ExpandableTextView rowTextView = new ExpandableTextView(
+							this);
+					rowTextView.setBackgroundDrawable(getResources()
+							.getDrawable(R.drawable.layer_card_background));
+					// set some properties of rowTextView or something
+					rowTextView.setPaddingRelative(15, 15, 15, 15);
+					final String title = e.title;
+					final String snipit = e.snipit;
+					rowTextView.setText(title + "\n\n" + snipit);
+					ll.addView(rowTextView);
+					rowTextView.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							Log.d("events", "just clicked ");
+							eventActivity(title, snipit);
+
+						}
+
+					});
+				}else{
+					Context context = getApplicationContext();
+					CharSequence text = "There are no events.";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+					break;
+				}
+			}
+		}
+
 		
-		for(Event e: CampusInfo.events)	//loops through all a markers to see which ones are within a certain radius of us
-   		{	
-   			if(e.m.getPosition()!=null){
-   			Log.d("test", "1");
-   			double longi= e.m.getPosition().longitude; //converting locations to Doubles as to allow comparison
-   			double lati = e.m.getPosition().latitude;
-   			Building host = CampusInfo.getBuilding(name);
-   			double longi1= host.bound.getCenter().longitude;
-   			double lati1 =host.bound.getCenter().latitude;
-   			double distance= Math.abs(longi-longi1)+Math.abs(lati-lati1);
-   			if(distance<=.00075)	//check to make sure they are in the radius
-//   					(longi1+lati1)-(longi-lati)<=.001)
-   			{
-   				Log.d("test", "2");
-   			// create a new textview
-				final ExpandableTextView rowTextView = new ExpandableTextView(
-						this);
-				rowTextView.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.layer_card_background));
-				// set some properties of rowTextView or something
-				// rowTextView.setPaddingRelative(15, 15, 15, 15);
-				rowTextView.setText(e.snipit);
-				ll.addView(rowTextView);
-   						}
-   			}
-   		}
-		
-		
-		eventsShown = true;
+	}
+
+	public void eventActivity(String eventname, String snippet) {
+		Intent intent = new Intent(this, EventInfoActivity.class);
+		intent.putExtra("Name", eventname);
+		intent.putExtra("Snippet", snippet);
+		startActivity(intent);
 	}
 
 	public void queryPhoto() {
@@ -162,7 +205,7 @@ public class BuildingInfoActivity extends Activity {
 				}
 			}
 		});
-		//text.setText(textField);
+		// text.setText(textField);
 
 	}
 
@@ -317,5 +360,5 @@ public class BuildingInfoActivity extends Activity {
 
 		}
 	}
-	
+
 }
