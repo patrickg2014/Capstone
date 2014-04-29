@@ -33,5 +33,6 @@
     <string name="title_activity_view_search_results">ViewSearchResults</string>
     <string name="title_activity_campus_info_search">CampusInfoSearch</string>
     <string name="title_activity_view_campus_info_from_db">ViewCampusInfoFromDB</string>
+    <string name="title_activity_zrandom">ZRandom</string>
 
 </resources>

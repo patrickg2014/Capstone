@@ -1,14 +1,15 @@
 package com.cs440.capstone;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 public class CampusDatabase {
@@ -31,6 +32,9 @@ public class CampusDatabase {
 	// Set up images
 	public String image = ((Integer) R.drawable.ic_building).toString();
 	public Integer intPic = R.drawable.ic_building;
+	
+	public String[] columns = new String[] { KEY_ROW, KEY_NAME, KEY_TYPE, KEY_IMAGE, KEY_INFO };
+	
 
 	// Constructor
 	public CampusDatabase(Context c) {
@@ -58,39 +62,49 @@ public class CampusDatabase {
 	}
 
 	public Cursor getAllRows() {
-		String[] columns = new String[] { KEY_ROW, KEY_NAME, KEY_TYPE,
-				KEY_IMAGE, KEY_INFO };
-		Cursor c = ourDatabase.query(DATABASE_TABLE, columns, null, null, null,
-				null, null);
+		Cursor c = ourDatabase.query(DATABASE_TABLE, columns, null, null, null,null, null);
 		return c;
 	}
 
+	//Do a search through the database by building name
 	public Cursor searchByName(String searchKey) {
-		fillDatabase(); //YOU WILL NEED TO FIX THIS //TODO
-		
-		String[] columns = new String[] { KEY_ROW, KEY_NAME, KEY_TYPE, KEY_IMAGE, KEY_INFO };
-
 		searchKey = searchKey.toLowerCase(Locale.US); // set search name into all lower case to make searching easier for the user
+	    Log.d("Chris", ""+searchKey.length());
+	    Log.d("Chris", "%" + searchKey + "%");
+		
+	    String newSearchKey = "";
+	    
+	    if (searchKey.length() != 0) {
+	        newSearchKey = "%" + searchKey + "%";
+	        
+	        Log.d("Chris","search key is now: " + newSearchKey);
+	    }
+	    Log.d("Chris", "About to crash??");
+	    String selectQuery = " select * from buildingTable where building_name like '" + newSearchKey + "'";
+	    Log.d("Chris", "selectQuery: " + selectQuery);
 
-		Cursor c = getAllRows();
-
+	    Cursor cursor = ourDatabase.rawQuery(selectQuery, null);
+	    
+	    if(cursor == null){
+	    	Log.d("Chirs", "Is a nuller");
+	    }
+	    
+	    return cursor;
+	}
+	
+	public long findRowIDFromBuildingName(String BuildingName){
+		Cursor c = getAllRows(); //get all of the rows currently in our database
 		int iName = c.getColumnIndex(KEY_NAME);
-		Integer iterations = 1;
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 
 			String currentVal = c.getString(iName);
-
-			currentVal = currentVal.toLowerCase(Locale.US);
-			
-			if (searchKey.contains(currentVal) || currentVal.contains(searchKey)) { // if we have found the value in the database
-				Cursor returnCursor = ourDatabase.query(DATABASE_TABLE,columns, KEY_ROW + "=" + iterations, null, null, null,null);
-				
-				return returnCursor;
+			if (BuildingName.contentEquals(currentVal)) { // if we have found the value in the database
+				return c.getLong(c.getColumnIndex(KEY_ROW));
 			}
-			iterations = iterations + 1;
 		}
-		return null;
+		return 0;
 	}
+	
 
 	// Delete all entries in the table. //TODO might want to get rid of this one...
 	public void clearDatabase() {
@@ -133,10 +147,7 @@ public class CampusDatabase {
 	}
 
 	public Cursor getRow(long rowId) {
-		String[] columns = new String[] { KEY_ROW, KEY_NAME, KEY_TYPE,
-				KEY_IMAGE, KEY_INFO };
-		Cursor c = ourDatabase.query(DATABASE_TABLE, columns, KEY_ROW + "="
-				+ rowId, null, null, null, null);
+		Cursor c = ourDatabase.query(DATABASE_TABLE, columns, KEY_ROW + "=" + rowId, null, null, null, null);
 		return c;
 	}
 

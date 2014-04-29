@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements
 
 	static GoogleMap map = null;
 	public static ParseUser currentUser;
-	public LatLng lastqueryloc =null;
+	public LatLng lastqueryloc = null;
 	static LatLng myLocation = null;
 	boolean maptouch = false;
 	private String[] mOptionTitles;
@@ -214,7 +214,7 @@ public class MainActivity extends Activity implements
 			finish();
 			cameraActivity();
 		}
-		
+
 	}
 
 	public void initDrawer(Bundle savedInstanceState) {
@@ -396,7 +396,6 @@ public class MainActivity extends Activity implements
 		return true;
 	}
 
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -421,6 +420,12 @@ public class MainActivity extends Activity implements
 			aboutActivity();
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
+		
+		if(dataList.get(possition).getItemName().contentEquals("Search")){ //Go to the seach activity when "Search" is pressed
+			Log.d("Test", "Search screen");
+			searchActivity();
+		}
+		
 		if (dataList.get(possition).getItemName().contentEquals("Settings")) {
 			Log.d("Test", "Settings screen");
 			settingsActivity();
@@ -456,6 +461,11 @@ public class MainActivity extends Activity implements
 		mDrawerList.setItemChecked(possition, false);
 
 	}
+	
+	public void searchActivity(){
+		Intent i = new Intent(this, CampusInfoSearch.class);
+		startActivity(i);
+	}
 
 	@Override
 	public void setTitle(CharSequence title) {
@@ -484,7 +494,6 @@ public class MainActivity extends Activity implements
 
 		if (System.currentTimeMillis() - timer > 150 && !maptouch) {
 
-			
 			int heading = ((Math.round(event.values[0] + event.values[2])) % 360); // Rounds
 																					// the
 																					// current
@@ -537,18 +546,23 @@ public class MainActivity extends Activity implements
 					querytimer = System.currentTimeMillis();
 
 				}
-				
-				if(ParseFacebookUtils.getSession()!=null&& myLocation!=null){
-					if(lastqueryloc==null){
-						lastqueryloc=new LatLng(0,0);
+
+				if (ParseFacebookUtils.getSession() != null
+						&& myLocation != null) {
+					if (lastqueryloc == null) {
+						lastqueryloc = new LatLng(0, 0);
 					}
-					Double distance= Math.abs(myLocation.latitude-lastqueryloc.longitude)+Math.abs(myLocation.longitude-lastqueryloc.longitude);
-					if(distance>.5){
-					ParseException err= null;
-					
-					call(ParseFacebookUtils.getSession(), ParseFacebookUtils.getSession().getState(),err);
+					Double distance = Math.abs(myLocation.latitude
+							- lastqueryloc.longitude)
+							+ Math.abs(myLocation.longitude
+									- lastqueryloc.longitude);
+					if (distance > .5) {
+						ParseException err = null;
+
+						call(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
 					}
-					}
+				}
 			}
 		}
 	}
@@ -588,7 +602,7 @@ public class MainActivity extends Activity implements
 		mSensorManager.registerListener(this,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
 				SensorManager.SENSOR_DELAY_GAME);
-		
+
 	}
 
 	static void centerMapOnMyLocation() {
@@ -663,7 +677,7 @@ public class MainActivity extends Activity implements
 						}
 					}
 				});
-		lastqueryloc=myLocation;
+		lastqueryloc = myLocation;
 		Request.executeBatchAsync(request);
 		for (Event e : CampusInfo.events) {
 			e.makeMarker();
@@ -671,8 +685,9 @@ public class MainActivity extends Activity implements
 		}
 
 	}
-	
-	public void friendcall(Session session, SessionState state, Exception exception) {
+
+	public void friendcall(Session session, SessionState state,
+			Exception exception) {
 
 		String fqlQuery = "SELECT uid FROM user WHERE  uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
 
@@ -695,10 +710,10 @@ public class MainActivity extends Activity implements
 							// loop
 							for (int i = 0; i < array.length(); i++) {
 								JSONObject obj = array.getJSONObject(i);
-								
+
 								String uid = obj.getString("uid");
-								
-								Log.d("fql",uid);
+
+								Log.d("fql", uid);
 							}
 
 						} catch (Throwable t) {
@@ -729,19 +744,19 @@ public class MainActivity extends Activity implements
 				} else if (user.isNew()) {
 					Log.d("facebook",
 							"User signed up and logged in through Facebook!");
-					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
-							.getSession().getState(), err);
+					friendcall(ParseFacebookUtils.getSession(),
+							ParseFacebookUtils.getSession().getState(), err);
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
 					ParseFacebookUtils.saveLatestSessionData(currentUser);
 
 				} else {
 					Log.d("facebook", "User logged in through Facebook!");
-					friendcall(ParseFacebookUtils.getSession(), ParseFacebookUtils
-							.getSession().getState(), err);
+					friendcall(ParseFacebookUtils.getSession(),
+							ParseFacebookUtils.getSession().getState(), err);
 					call(ParseFacebookUtils.getSession(), ParseFacebookUtils
 							.getSession().getState(), err);
-					
+
 				}
 			}
 		});
@@ -770,7 +785,7 @@ public class MainActivity extends Activity implements
 		ArrayList<Building> theAllList = campusInfo.getAllList();
 		// ArrayList<Marker> currentlyVisable =
 		// campusInfo.getCurrentlyVisableList();
-		
+
 		Log.d("Search", "Size: " + theAllList.size());
 
 		for (int i = 0; i < theAllList.size(); i++) {
@@ -778,25 +793,26 @@ public class MainActivity extends Activity implements
 					+ "?");
 
 			if (theAllList.get(i).getTitle().toLowerCase().contains(arg0)) {
-				buildingActivity(theAllList.get(i).getTitle(), theAllList.get(i).getSnipit());
+				buildingActivity(theAllList.get(i).getTitle(), theAllList
+						.get(i).getSnipit());
 				break;
 			}
-			if (i == theAllList.size()-1) {
-				Toast.makeText(this, "Nothing found.", Toast.LENGTH_LONG).show();
+			if (i == theAllList.size() - 1) {
+				Toast.makeText(this, "Nothing found.", Toast.LENGTH_LONG)
+						.show();
 			}
 		}
 		Log.d("Search", arg0);
 
 		return false;
 	}
-	
-	
-	
-	public void hideKeys(){
+
+	public void hideKeys() {
 		searchView.setIconified(true);
 		searchMenuItem.collapseActionView();
 		this.getCurrentFocus().clearFocus();
 		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		mgr.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
+		mgr.hideSoftInputFromWindow(findViewById(android.R.id.content)
+				.getWindowToken(), 0);
 	}
 }

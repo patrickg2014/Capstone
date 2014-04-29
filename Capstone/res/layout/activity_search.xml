@@ -62,7 +62,7 @@
                             android:layout_height="match_parent" >
 
                             <ImageView
-                                android:id="@+id/item_icon"
+                                android:id="@+id/unique_item_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
@@ -71,30 +71,30 @@
                                 android:src="@drawable/launcher" />
 
                             <TextView
-                                android:id="@+id/tv_building_name"
+                                android:id="@+id/clickToView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
+                                android:layout_alignBottom="@+id/unique_item_icon"
                                 android:layout_alignParentRight="true"
                                 android:text="Click to View"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <TextView
-                                android:id="@+id/item_type"
+                                android:id="@+id/unique_item_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
+                                android:layout_alignBottom="@+id/unique_item_icon"
+                                android:layout_alignLeft="@+id/unique_item_name"
                                 android:text="Building Type"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/item_name"
+                                android:id="@+id/unique_item_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
+                                android:layout_above="@+id/clickToView"
                                 android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
+                                android:layout_toRightOf="@+id/unique_item_icon"
                                 android:text="Name"
                                 android:textAppearance="?android:attr/textAppearanceLarge" />
                         </RelativeLayout>
@@ -110,7 +110,7 @@
                             android:layout_height="match_parent" >
 
                             <ImageView
-                                android:id="@+id/item_icon"
+                                android:id="@+id/unique_item_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
@@ -119,30 +119,30 @@
                                 android:src="@drawable/launcher" />
 
                             <TextView
-                                android:id="@+id/tv_building_name"
+                                android:id="@+id/clickToView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
+                                android:layout_alignBottom="@+id/unique_item_icon"
                                 android:layout_alignParentRight="true"
                                 android:text="Click to View"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <TextView
-                                android:id="@+id/item_type"
+                                android:id="@+id/unique_item_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
+                                android:layout_alignBottom="@+id/unique_item_icon"
+                                android:layout_alignLeft="@+id/unique_item_name"
                                 android:text="Building Type"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/item_name"
+                                android:id="@+id/unique_item_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
+                                android:layout_above="@+id/clickToView"
                                 android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
+                                android:layout_toRightOf="@+id/unique_item_icon"
                                 android:text="Name"
                                 android:textAppearance="?android:attr/textAppearanceLarge" />
                         </RelativeLayout>
@@ -158,7 +158,7 @@
                             android:layout_height="match_parent" >
 
                             <ImageView
-                                android:id="@+id/item_icon"
+                                android:id="@+id/unique_item_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
@@ -167,30 +167,30 @@
                                 android:src="@drawable/launcher" />
 
                             <TextView
-                                android:id="@+id/tv_building_name"
+                                android:id="@+id/clickToView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
+                                android:layout_alignBottom="@+id/unique_item_icon"
                                 android:layout_alignParentRight="true"
                                 android:text="Click to View"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <TextView
-                                android:id="@+id/item_type"
+                                android:id="@+id/unique_item_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
+                                android:layout_alignBottom="@+id/unique_item_icon"
+                                android:layout_alignLeft="@+id/unique_item_name"
                                 android:text="Building Type"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/item_name"
+                                android:id="@+id/unique_item_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
+                                android:layout_above="@+id/clickToView"
                                 android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
+                                android:layout_toRightOf="@+id/unique_item_icon"
                                 android:text="Name"
                                 android:textAppearance="?android:attr/textAppearanceLarge" />
                         </RelativeLayout>
@@ -206,7 +206,7 @@
                             android:layout_height="match_parent" >
 
                             <ImageView
-                                android:id="@+id/item_icon"
+                                android:id="@+id/unique_item_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
@@ -215,30 +215,30 @@
                                 android:src="@drawable/launcher" />
 
                             <TextView
-                                android:id="@+id/tv_building_name"
+                                android:id="@+id/clickToView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
+                                android:layout_alignBottom="@+id/unique_item_icon"
                                 android:layout_alignParentRight="true"
                                 android:text="Click to View"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <TextView
-                                android:id="@+id/item_type"
+                                android:id="@+id/unique_item_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
+                                android:layout_alignBottom="@+id/unique_item_icon"
+                                android:layout_alignLeft="@+id/unique_item_name"
                                 android:text="Building Type"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/item_name"
+                                android:id="@+id/unique_item_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
+                                android:layout_above="@+id/clickToView"
                                 android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
+                                android:layout_toRightOf="@+id/unique_item_icon"
                                 android:text="Name"
                                 android:textAppearance="?android:attr/textAppearanceLarge" />
                         </RelativeLayout>
@@ -254,7 +254,7 @@
                             android:layout_height="match_parent" >
 
                             <ImageView
-                                android:id="@+id/item_icon"
+                                android:id="@+id/unique_item_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
@@ -263,30 +263,30 @@
                                 android:src="@drawable/launcher" />
 
                             <TextView
-                                android:id="@+id/tv_building_name"
+                                android:id="@+id/clickToView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
+                                android:layout_alignBottom="@+id/unique_item_icon"
                                 android:layout_alignParentRight="true"
                                 android:text="Click to View"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <TextView
-                                android:id="@+id/item_type"
+                                android:id="@+id/unique_item_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
+                                android:layout_alignBottom="@+id/unique_item_icon"
+                                android:layout_alignLeft="@+id/unique_item_name"
                                 android:text="Building Type"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/item_name"
+                                android:id="@+id/unique_item_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
+                                android:layout_above="@+id/clickToView"
                                 android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
+                                android:layout_toRightOf="@+id/unique_item_icon"
                                 android:text="Name"
                                 android:textAppearance="?android:attr/textAppearanceLarge" />
                         </RelativeLayout>

@@ -3,7 +3,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#800000"
+    android:background="#778899"
     tools:context=".MainActivity" >
 
     <FrameLayout
@@ -14,19 +14,25 @@
             android:id="@+id/scrollView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
+        </ScrollView>
 
-            <!-- All the fun relativelayout stuff goes here!!! -->
+        <!-- All the fun relativelayout stuff goes here!!! -->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- This is the search bar at the top -->
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="456dp" >
-
-                <!-- This is the search bar at the top -->
+                android:id="@+id/rlSearchBarHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
                 <LinearLayout
-                    android:id="@+id/linearLayout1"
+                    android:id="@+id/llSearchBar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal" >
 
                     <EditText
@@ -34,7 +40,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
-                        android:hint="Search Campus" />
+                        android:hint="Search Campus"
+                        android:textColorHint="#000000" />
 
                     <Button
                         android:id="@+id/bSearch"
@@ -42,258 +49,22 @@
                         android:layout_height="wrap_content"
                         android:text="Search" />
                 </LinearLayout>
-
-                <!-- End search bar stuff -->
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/linearLayout1"
-                    android:paddingTop="20dp" >
-
-                    <TableRow
-                        android:id="@+id/tableRow1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="This is gunna work" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ImageView
-                                android:id="@+id/item_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:maxHeight="75dp"
-                                android:maxWidth="75dp"
-                                android:src="@drawable/launcher" />
-
-                            <TextView
-                                android:id="@+id/tv_building_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignParentRight="true"
-                                android:text="Click to View"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:id="@+id/item_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
-                                android:text="Building Type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/item_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
-                                android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
-                        </RelativeLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ImageView
-                                android:id="@+id/item_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:maxHeight="75dp"
-                                android:maxWidth="75dp"
-                                android:src="@drawable/launcher" />
-
-                            <TextView
-                                android:id="@+id/tv_building_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignParentRight="true"
-                                android:text="Click to View"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:id="@+id/item_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
-                                android:text="Building Type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/item_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
-                                android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
-                        </RelativeLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ImageView
-                                android:id="@+id/item_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:maxHeight="75dp"
-                                android:maxWidth="75dp"
-                                android:src="@drawable/launcher" />
-
-                            <TextView
-                                android:id="@+id/tv_building_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignParentRight="true"
-                                android:text="Click to View"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:id="@+id/item_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
-                                android:text="Building Type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/item_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
-                                android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
-                        </RelativeLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ImageView
-                                android:id="@+id/item_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:maxHeight="75dp"
-                                android:maxWidth="75dp"
-                                android:src="@drawable/launcher" />
-
-                            <TextView
-                                android:id="@+id/tv_building_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignParentRight="true"
-                                android:text="Click to View"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:id="@+id/item_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
-                                android:text="Building Type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/item_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
-                                android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
-                        </RelativeLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/tableRow3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ImageView
-                                android:id="@+id/item_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:maxHeight="75dp"
-                                android:maxWidth="75dp"
-                                android:src="@drawable/launcher" />
-
-                            <TextView
-                                android:id="@+id/tv_building_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignParentRight="true"
-                                android:text="Click to View"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:id="@+id/item_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignBottom="@+id/item_icon"
-                                android:layout_alignLeft="@+id/item_name"
-                                android:text="Building Type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                            <TextView
-                                android:id="@+id/item_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/tv_building_name"
-                                android:layout_marginLeft="14dp"
-                                android:layout_toRightOf="@+id/item_icon"
-                                android:text="Name"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
-                        </RelativeLayout>
-                    </TableRow>
-                </TableLayout>
             </RelativeLayout>
-        </ScrollView>
+            <!-- End search bar stuff -->
+
+            <RelativeLayout
+                android:id="@+id/rlListHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlSearchBarHolder" >
+
+                <ListView
+                    android:id="@+id/lvTheList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </ListView>
+            </RelativeLayout>
+        </RelativeLayout>
     </FrameLayout>
 
     <!-- The navigation drawer -->

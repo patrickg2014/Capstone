@@ -30,7 +30,6 @@ public class ViewSearchResults extends Activity {
 		
 		popluateListViewFromDB();
 		registerListClickCallback();
-		Log.d("Chirs", "done.");
 	}
 
 	public void popluateListViewFromDB() {
@@ -38,10 +37,6 @@ public class ViewSearchResults extends Activity {
 		db.open();
 		Cursor cursor = db.searchByName(searchKey);
 		
-		if(cursor == null){
-			Toast.makeText(this, "Cursor is null!", Toast.LENGTH_LONG).show();
-		}
-
 		// Allow activity to manage lifetime of cursor
 		startManagingCursor(cursor);
 
@@ -49,7 +44,7 @@ public class ViewSearchResults extends Activity {
 		String[] fromFeildNames = new String[] { CampusDatabase.KEY_NAME,
 				CampusDatabase.KEY_TYPE, CampusDatabase.KEY_IMAGE, CampusDatabase.KEY_INFO};
 
-		int[] toViewIDs = new int[] { R.id.item_name, R.id.item_type,R.id.item_icon };
+		int[] toViewIDs = new int[] { R.id.unique_item_name, R.id.unique_item_type,R.id.unique_item_icon };
 
 		SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.item_layout, cursor, fromFeildNames, toViewIDs);
 
@@ -63,9 +58,7 @@ public class ViewSearchResults extends Activity {
 		myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View viewClicked,
-					int position, long idInDB) {
-				
+			public void onItemClick(AdapterView<?> parent, View viewClicked,int position, long idInDB) {
 				CampusDatabase tdb = new CampusDatabase(ViewSearchResults.this);
 				tdb.open();
 				Cursor c = tdb.getRow(idInDB);
@@ -74,12 +67,10 @@ public class ViewSearchResults extends Activity {
 					Intent intentBuildingInfo = new Intent(ViewSearchResults.this, ViewCampusInfoFromDB.class);
 					intentBuildingInfo.putExtra(ROW_ID , rowid);
 					startActivity(intentBuildingInfo);
-					
 				}
 			}
 		
-		});
-		
+		});	
 	}
 
 	@Override
@@ -87,6 +78,14 @@ public class ViewSearchResults extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.view_search_results, menu);
 		return true;
+	}
+	
+	// Let's go back to the main activity when we press
+	// the back button.
+	@Override
+	public void onBackPressed() {
+		Intent i = new Intent(this, CampusInfoSearch.class);
+		startActivity(i);
 	}
 
 }
