@@ -41,7 +41,6 @@ public class ViewCampusInfoFromDB extends Activity {
 
 			String name = tdb.getBuildingName(c);
 			String type = tdb.getBuildingType(c);
-			String image = tdb.getBuildingImage(c);
 			String info = tdb.getBuildingInfo(c);
 
 			tvBuildingName.setText(name);
@@ -52,11 +51,6 @@ public class ViewCampusInfoFromDB extends Activity {
 
 		}
 		tdb.close();
-	}
-	
-	public void heyMyImageGotClickedWhoHoo(View v){
-		Log.d("Chirs", "WhoHoo");
-		Toast.makeText(this, "What's up guys", Toast.LENGTH_SHORT).show();
 	}
 
 	// Let's go back to the main activity when we press

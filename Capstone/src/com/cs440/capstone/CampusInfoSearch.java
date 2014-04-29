@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,9 @@ public class CampusInfoSearch extends Activity implements OnClickListener {
 	}
 
 	public void popluateListView() {
+		
+		Log.d("Chris", "populating list view in Campusinfoseach");
+		
 		CampusDatabase db = new CampusDatabase(this);
 		db.open();
 
@@ -47,12 +51,9 @@ public class CampusInfoSearch extends Activity implements OnClickListener {
 		// Setup mapping from cursor to view feilds
 		String[] fromFeildNames = new String[] { CampusDatabase.KEY_NAME, CampusDatabase.KEY_TYPE, CampusDatabase.KEY_IMAGE };
 
-		int[] toViewIDs = new int[] { R.id.event_name, R.id.event_time,
-				R.id.event_icon };
+		int[] toViewIDs = new int[] { R.id.event_name, R.id.event_time,R.id.event_icon };
 
-		SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,
-				R.layout.horizontal_scroll_item_layout, cursor, fromFeildNames,
-				toViewIDs);
+		SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.horizontal_scroll_item_layout, cursor, fromFeildNames,toViewIDs);
 
 		ListView myList = (ListView) findViewById(R.id.lvTheList);
 		myList.setAdapter(myCursorAdapter);

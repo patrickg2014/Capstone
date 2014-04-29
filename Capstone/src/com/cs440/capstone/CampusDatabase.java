@@ -68,6 +68,7 @@ public class CampusDatabase {
 
 	//Do a search through the database by building name
 	public Cursor searchByName(String searchKey) {
+		fillDatabase();
 		searchKey = searchKey.toLowerCase(Locale.US); // set search name into all lower case to make searching easier for the user
 	    Log.d("Chris", ""+searchKey.length());
 	    Log.d("Chris", "%" + searchKey + "%");
@@ -84,10 +85,6 @@ public class CampusDatabase {
 	    Log.d("Chris", "selectQuery: " + selectQuery);
 
 	    Cursor cursor = ourDatabase.rawQuery(selectQuery, null);
-	    
-	    if(cursor == null){
-	    	Log.d("Chirs", "Is a nuller");
-	    }
 	    
 	    return cursor;
 	}
