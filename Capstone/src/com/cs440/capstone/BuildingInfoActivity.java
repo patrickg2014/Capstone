@@ -100,38 +100,22 @@ public class BuildingInfoActivity extends Activity {
 	}
 
 	public void makeEvents() {
-		Log.d("events", "make Events!");
+		Log.d("events", "make Events! " + CampusInfo.events.size());
 		// final int N = 10; // total number of textviews to add
+		final ArrayList<String> eventCount = new ArrayList<String>();
 		events = CampusInfo.events;
-		int numberOfEvents = events.size();
-		// final ExpandableTextView[] myTextViews = new
-		// ExpandableTextView[numberOfEvents]; // create an empty array;
-
-		for (int i = 0; i < CampusInfo.events.size() / 2; i++) // loops through
-																// all a markers
-																// to see which
-																// ones are
-																// within a
-																// certain
-																// radius of us
-		{
-			Event e = CampusInfo.events.get(i);
+		for (int i = 0; i < events.size() / 2; i++) {
+			Event e = events.get(i);
 			if (e.m.getPosition() != null) {
 				Log.d("test", "1");
-				double longi = e.m.getPosition().longitude; // converting
-															// locations to
-															// Doubles as to
-															// allow comparison
+				double longi = e.m.getPosition().longitude;
 				double lati = e.m.getPosition().latitude;
 				Building host = CampusInfo.getBuilding(name);
 				double longi1 = host.bound.getCenter().longitude;
 				double lati1 = host.bound.getCenter().latitude;
 				double distance = Math.abs(longi - longi1)
 						+ Math.abs(lati - lati1);
-				if (distance <= .00075) // check to make sure they are in the
-										// radius
-				// (longi1+lati1)-(longi-lati)<=.001)
-				{
+				if (distance <= .00075) {
 					eventsShown = true;
 					Log.d("test", "2");
 					// create a new textview
@@ -143,6 +127,7 @@ public class BuildingInfoActivity extends Activity {
 					rowTextView.setPaddingRelative(15, 15, 15, 15);
 					final String title = e.title;
 					final String snipit = e.snipit;
+					eventCount.add(title);
 					rowTextView.setText(title + "\n\n" + snipit);
 					ll.addView(rowTextView);
 					rowTextView.setOnClickListener(new OnClickListener() {
@@ -156,19 +141,20 @@ public class BuildingInfoActivity extends Activity {
 						}
 
 					});
-				}else{
-					Context context = getApplicationContext();
-					CharSequence text = "There are no events.";
-					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-					break;
 				}
 			}
 		}
-
 		
+		
+		 if(eventCount.size()==0){
+			Context context = getApplicationContext();
+			CharSequence text = "There are no events.";
+			int duration = Toast.LENGTH_SHORT;
+
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
+
 	}
 
 	public void eventActivity(String eventname, String snippet) {
