@@ -50,6 +50,11 @@
             android:configChanges="orientation|screenSize|keyboard"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -127,22 +132,21 @@
         </activity>
         <activity
             android:name="com.cs440.capstone.ViewSearchResults"
-            android:label="@string/title_activity_view_search_results"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cs440.capstone.CampusInfoSearch"
-            android:label="@string/title_activity_campus_info_search"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.cs440.capstone.ViewCampusInfoFromDB"
-            android:label="@string/title_activity_view_campus_info_from_db"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
 
