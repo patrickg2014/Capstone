@@ -201,12 +201,20 @@ public class CameraActivity extends Activity implements SensorEventListener{
 		
 	}
     
-	public void buildingActivity(String buildingName, String snippet){
+    public void buildingActivity(String buildingName, String snippet) {
 		Intent intent = new Intent(this, BuildingInfoActivity.class);
 		intent.putExtra("Name", buildingName);
 		intent.putExtra("Snippet", snippet);
 		startActivity(intent);
 	}
+
+	public void eventActivity(String eventname, String snippet) {
+		Intent intent = new Intent(this, EventInfoActivity.class);
+		intent.putExtra("Name", eventname);
+		intent.putExtra("Snippet", snippet);
+		startActivity(intent);
+	}
+
 
 	private void releaseCamera(){
         if (mainCam != null){
@@ -340,7 +348,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNear.get(i).m);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float)(height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
+   				camover.yPos.add((float)(camover.yPos.size()*200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }
@@ -454,7 +462,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNearEvents.get(i).m);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float)(height-(myloc.distanceTo(location)*5+200))); //make sure that the text doesn't overlap
+   				camover.yPos.add((float)(camover.yPos.size()*200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }

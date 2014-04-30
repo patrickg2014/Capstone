@@ -83,10 +83,7 @@ protected void onDraw(Canvas canvas) {
 		Log.d("Test", nearList.size() +"this should be how many things are in the near list");
 		for(int i=0; i<(nearList.size()); i++){
 			Log.d("Test", nearList.size() +"");
-			paint.setColor(Color.DKGRAY);
-	        paint.setStrokeWidth(50);
-	        paint.setStyle(Paint.Style.STROKE);
-			canvas.drawRect(100, yPos.get(i)+100,200,yPos.get(i)-100 , paint);
+			
 			canvas.drawBitmap(bmp, (float) (xPos.get(i)-(bmp.getWidth())),(float) (yPos.get(i)-(bmp.getHeight()/2)), paint);
 			 paint.setStrokeWidth(0);
 			 paint.setColor(Color.WHITE);
@@ -145,7 +142,23 @@ protected void onDraw(Canvas canvas) {
 	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).getTitle().length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
 	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    				boolean building = false;
+	    				for (Building b : CampusInfo.all) {
+	    					if (b.m.getTitle().compareTo(nearList.get(i).getTitle())==0) {
+	    						
+	    						camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    						building = true;
+	    						break;
+	    					}
+	    				}
+	    				if (!building) {
+	    					for (Event e : CampusInfo.events) {
+	    						if (e.m.getTitle().compareTo(nearList.get(i).getTitle())==0) {
+	    							camActivity.eventActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    							break;
+	    						}
+	    					}
+	    				}
 	    			}
 	    		}
 	    	}
@@ -169,7 +182,25 @@ protected void onDraw(Canvas canvas) {
 	    		if(x >= xPos.get(i)-100 && x <= xPos.get(i) + (nearList.get(i).getTitle().length()*25)){
 	    			if(y >= yPos.get(i)-50 && y <= yPos.get(i)+100){
 	    				Log.d("Touch", nearList.get(i).getTitle()+"  it worked>>>>>>.");
-	    				camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    				boolean building = false;
+	    				for (Building b : CampusInfo.all) {
+	    					if (b.m.getTitle().compareTo(nearList.get(i).getTitle())==0) {
+	    						
+	    						camActivity.buildingActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    						building = true;
+	    						break;
+	    					}
+	    				}
+	    				if (!building) {
+	    					for (Event e : CampusInfo.events) {
+	    						if (e.m.getTitle().compareTo(nearList.get(i).getTitle())==0) {
+	    							camActivity.eventActivity(nearList.get(i).getTitle(), nearList.get(i).getSnippet());
+	    							break;
+	    						}
+	    					}
+	    				}
+
+	    				
 	    			}
 	    		}
 	    	}
@@ -184,7 +215,7 @@ protected void onDraw(Canvas canvas) {
 		
 	}
 	
-
+	
 	
 
 }

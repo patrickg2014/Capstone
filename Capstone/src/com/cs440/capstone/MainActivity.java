@@ -1,11 +1,10 @@
 package com.cs440.capstone;
 
-import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,22 +12,18 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.hardware.SensorEvent;
-import android.location.Location;
-import android.os.Bundle;
-import android.provider.SyncStateContract.Constants;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -36,7 +31,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,11 +58,9 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
@@ -85,7 +77,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
-import com.parse.os.ParseAsyncTask;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity implements
@@ -227,10 +218,7 @@ public class MainActivity extends Activity implements
 		});
 
 		int orientation = display.getRotation();
-		if (orientation == 3 || orientation == 1) {
-			finish();
-			cameraActivity();
-		}
+		
 		initDrawer(savedInstanceState);
 
 		if (ParseFacebookUtils.getSession() != null) {
@@ -768,7 +756,7 @@ public class MainActivity extends Activity implements
 		if (ParseFacebookUtils.getSession().isOpened() && myLocation != null) {
 			String fqlQuery =
 
-			"SELECT name, pic,venue, description, start_time,end_time, eid "
+			"SELECT name, pic_big,venue, description, start_time, end_time, eid "
 					+ "FROM event " + "WHERE eid IN (" + "SELECT eid "
 					+ "FROM event_member " + "WHERE (uid IN (" + "SELECT uid2 "
 					+ "FROM friend " + "WHERE uid1 = me())  "
@@ -805,7 +793,43 @@ public class MainActivity extends Activity implements
 									JSONObject jb1 = new JSONObject(obj
 											.getString("venue"));
 									String name = obj.getString("name");
-									String pic = obj.getString("pic");
+									String pic = obj.getString("pic_big");
+								
+									String startTime = obj.getString("start_time");
+									if(startTime.length()<=10){
+										
+										startTime="there is no set start time";
+									
+									}
+									else
+									{
+										
+										SimpleDateFormat incomingFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+										Date date = incomingFormat.parse(startTime);
+
+										SimpleDateFormat outgoingFormat1 = new SimpleDateFormat("EEEE MMMM dd", java.util.Locale.getDefault());
+										SimpleDateFormat outgoingFormat2 = new SimpleDateFormat("hh:mm", java.util.Locale.getDefault());
+										startTime=outgoingFormat2.format(date) +" on "+ outgoingFormat1.format(date);
+										
+									
+									}
+									
+									String endTime = obj.getString("end_time");
+									if(endTime.length()<=10){
+										
+										endTime="there is no set end time";
+								
+									}else{
+									
+										
+										
+										SimpleDateFormat incomingFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+										Date date = incomingFormat.parse(endTime);
+
+										SimpleDateFormat outgoingFormat1 = new SimpleDateFormat("EEEE MMMM dd", java.util.Locale.getDefault());
+										SimpleDateFormat outgoingFormat2 = new SimpleDateFormat("hh:mm", java.util.Locale.getDefault());
+										endTime=outgoingFormat2.format(date) +" on "+ outgoingFormat1.format(date);
+									}
 									String description = obj
 											.getString("description");
 
@@ -814,7 +838,7 @@ public class MainActivity extends Activity implements
 									CampusInfo.events.add(new Event(name,
 											description, new LatLng(Double
 													.parseDouble(lat), Double
-													.parseDouble(longi)), pic));
+													.parseDouble(longi)), pic, startTime, endTime));
 									Log.d("fql", name + " " + description + " ");
 								}
 

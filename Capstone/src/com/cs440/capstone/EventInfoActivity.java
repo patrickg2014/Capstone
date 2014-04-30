@@ -67,16 +67,24 @@ public class EventInfoActivity extends Activity {
 		text.setText(" ");
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");
+		
 		String description = intent.getStringExtra("Snippet")+"\n \n";
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
-		text.setText(description);
+		
 		for(Event E: CampusInfo.events)
 		{
 			Log.d("imageload", "should have looped to loaded");
 			Log.d("imageload", E.title+"  "+name);
 			if(E.title.equals(name)){
+				if(E.start!=E.end){
+					description=  "Starts at  "+E.start+"\n\n"+"Ends at  "+E.end+"\n\n"+description;
+					}
+					else{
+						description=  "Starts at  "+E.start+"\n\n"+description;
+					}
+				text.setText(description);
 				try {
 					Log.d("imageload", E.pic + "");
 				    URL myFileUrl = new URL (E.pic);

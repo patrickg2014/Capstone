@@ -3,10 +3,9 @@ package com.cs440.capstone;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
+
 import com.parse.FindCallback;
-import com.parse.GetCallback;
+
 import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -15,7 +14,7 @@ import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
+
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -23,10 +22,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.NavUtils;
+
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -36,11 +35,10 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -127,8 +125,16 @@ public class BuildingInfoActivity extends Activity {
 					rowTextView.setPaddingRelative(15, 15, 15, 15);
 					final String title = e.title;
 					final String snipit = e.snipit;
+					final String start = e.start;
+					final String end = e.start;
+					
 					eventCount.add(title);
-					rowTextView.setText(title + "\n\n" + snipit);
+					if(start!=end){
+					rowTextView.setText(title+"\n\n" + "Starts at  "+start+"\n\nEnds at  "+end+"\n\n" + snipit);
+					}
+					else{
+						rowTextView.setText(title+"\n\n" + "Starts at  "+start+"\n\n" + snipit);
+					}
 					ll.addView(rowTextView);
 					rowTextView.setOnClickListener(new OnClickListener() {
 
