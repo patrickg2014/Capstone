@@ -613,7 +613,7 @@ public class MainActivity extends Activity implements
 				geo.setLongitude(myLocation.longitude);
 				if (ParseUser.getCurrentUser() != null) {
 					user.put("Location", geo);
-
+					user.put("LocationString", myLocation.latitude+","+myLocation.longitude);
 					user.saveInBackground(new SaveCallback() {
 						public void done(com.parse.ParseException e) {
 							if (e == null) {
@@ -1166,6 +1166,7 @@ public class MainActivity extends Activity implements
 				geo.setLongitude(myLocation.longitude);
 				if (ParseUser.getCurrentUser() != null) {
 					user.put("Location", geo);
+					user.put("LocationString", myLocation.latitude+","+myLocation.longitude);
 					user.put("locationText", valstring);
 					user.put("shareLocation", true);
 					user.saveInBackground(new SaveCallback() {
