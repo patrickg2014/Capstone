@@ -397,7 +397,7 @@ public class MainActivity extends Activity implements
 							lat,
 							lng))
 			.icon(BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+					.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 			}
 		
 		

@@ -113,7 +113,7 @@ public class BuildingInfoActivity extends Activity {
 				double lati1 = host.bound.getCenter().latitude;
 				double distance = Math.abs(longi - longi1)
 						+ Math.abs(lati - lati1);
-				if (distance <= .00075) {
+				if (distance <= .00075 && !eventCount.contains(e.title)) {
 					eventsShown = true;
 					Log.d("test", "2");
 					// create a new textview
