@@ -510,12 +510,6 @@ public class MainActivity extends Activity implements
 
 		mDrawerList.setItemChecked(possition, true);
 		
-		if(dataList.get(possition).getItemName().contentEquals("Search")){
-			Log.d("Test", "Search time");
-			searchActivity();
-			mDrawerLayout.closeDrawer(mDrawerList);
-		}
-		
 		
 		if (dataList.get(possition).getItemName().contentEquals("Camera")) {
 			Log.d("Test", "CameraTiime");

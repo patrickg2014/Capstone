@@ -33,7 +33,7 @@ public class CameraOverlay extends ViewGroup {
 	public ArrayList<Marker> nearList=new ArrayList<Marker> ();
 	public ArrayList<Float> xPos=new ArrayList<Float> ();
 	public ArrayList<Float> yPos=new ArrayList<Float> ();
-	private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ups);
+	private Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bubble);
 	public CameraActivity camActivity;
 
 	

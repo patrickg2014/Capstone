@@ -16,6 +16,7 @@
 
 package com.facebook.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,8 @@ import java.util.List;
  * 
  * <p>The methods in this class are not thread-safe.</p>
  */
-class FacebookFragment extends Fragment {
+@SuppressLint("ValidFragment")
+public class FacebookFragment extends Fragment {
 
     private SessionTracker sessionTracker;
 
