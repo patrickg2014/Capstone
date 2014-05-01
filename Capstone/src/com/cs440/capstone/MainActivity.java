@@ -4,9 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -61,21 +63,22 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.PushService;
 import com.parse.SaveCallback;
 
 @SuppressLint("NewApi")
@@ -109,6 +112,7 @@ public class MainActivity extends Activity implements
 	private MenuItem searchMenuItem;
 	private LatLng shareloc;
 	public ArrayList<String> uids = null;
+	public LatLng lastPlacesQuery = new LatLng(0,0);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) // where our app sets up
@@ -116,7 +120,6 @@ public class MainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		Parse.initialize(this, "bh3zRUQ5KI43dx5dcES5s5RelhfunoxR1Q9p0MFa",
 				"GeAe5yOfQPOZ3FwYOCHSJGn6ldAUIkRuXjY8koHD");
-		PushService.setDefaultPushCallback(this, MainActivity.class);
 		ParseAnalytics.trackAppOpened(getIntent());
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
@@ -234,6 +237,7 @@ public class MainActivity extends Activity implements
 			installation.saveInBackground();
 
 		}
+		
 
 	}
 
@@ -340,6 +344,63 @@ public class MainActivity extends Activity implements
 
 		mDrawerLayout.openDrawer(mDrawerList);
 
+	}
+	
+	public void placesQuery(HashMap<String,Object> params){
+		Log.d("places", "yay");
+	
+		if (myLocation!=null) {
+			params.put("location", myLocation.latitude + ","
+					+ myLocation.longitude);
+			ParseCloud.callFunctionInBackground("placesRequest", params,
+					new FunctionCallback<Object>() {
+
+						@Override
+						public void done(Object object, ParseException e) {
+							// TODO Auto-generated method stub
+							try {
+								JSONObject jo= new JSONObject((String)object);
+								parseJSON((JSONObject) jo);
+							} catch (JSONException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							Log.d("places", object.toString());
+						}
+					});
+		}
+	}
+	
+	public void parseJSON(JSONObject jsonob) throws JSONException{
+		
+		
+		JSONArray array = jsonob.getJSONArray("results");
+		Log.d("places1",array.length()+"");
+		// loop
+		for (int i = 0; i < array.length(); i++) {
+			JSONObject obj = array.getJSONObject(i);
+			JSONObject jb1 = new JSONObject(obj
+					.getString("geometry"));
+			JSONObject jb2 = new JSONObject(jb1.getString("location"));
+			double lat= jb2.getDouble("lat");
+			double lng= jb2.getDouble("lng");
+			String name = obj.getString("name");
+			String pic = obj.getString("icon");
+			Building b = new Building(name, "", true, new LatLngBounds(new LatLng(lat,lng), new LatLng(lat,lng)));
+			campusInfo.all.add(b);
+			Log.d("places1", name);
+			campusInfo.map.addMarker(new MarkerOptions()
+			.title(name)
+			.snippet("")
+			.position(
+					new LatLng(
+							lat,
+							lng))
+			.icon(BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+			}
+		
+		
 	}
 
 	public void cameraActivity() // what allows us to switch to the camera
@@ -571,11 +632,14 @@ public class MainActivity extends Activity implements
 
 		}
 	}
+	
+
 
 	public void onSensorChanged(SensorEvent event) {
 
 		if (System.currentTimeMillis() - timer > 150 && !maptouch) {
-
+			
+			
 			int heading = ((Math.round(event.values[0] + event.values[2])) % 360); // Rounds
 																					// the
 																					// current
@@ -586,6 +650,18 @@ public class MainActivity extends Activity implements
 			Log.d("map", heading + "");
 			centerMapOnMyLocation();
 			if (myLocation != null) {
+				Location temp = new Location("Location");
+				temp.setLatitude(myLocation.latitude);
+				temp.setLongitude(myLocation.longitude);
+				Location temp2 = new Location("PlacesLocation");
+				temp2.setLatitude(lastPlacesQuery.latitude);
+				temp2.setLongitude(lastPlacesQuery.longitude);
+				Log.d("places", temp.distanceTo(temp2) + "");
+				if (temp.distanceTo(temp2)>400) {
+					HashMap<String, Object> params = new HashMap<String, Object>();
+					placesQuery(params);
+					lastPlacesQuery = myLocation;
+				}
 				CameraPosition cameraPosition = new CameraPosition.Builder()
 						.target(new LatLng(myLocation.latitude,
 								myLocation.longitude)) // Sets the center of the
@@ -1175,12 +1251,7 @@ public class MainActivity extends Activity implements
 							// Save was successful!
 							Log.d("parse", "upload location and text");
 
-							ParsePush parsePush = new ParsePush();
-							ParseQuery pQuery = ParseInstallation.getQuery(); // <-- Installation query
-							pQuery.whereEqualTo("uid", 766136288); // <-- you'll probably want to target someone that's not the current user, so modify accordingly
-							parsePush.sendMessageInBackground("will it work?",
-									pQuery);
-							Log.d("parse", "should push...");
+							
 
 						}
 					});
