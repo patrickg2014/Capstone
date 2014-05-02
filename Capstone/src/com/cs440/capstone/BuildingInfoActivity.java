@@ -74,6 +74,7 @@ public class BuildingInfoActivity extends Activity {
 	private Button button;
 	private ArrayList<Event> events;
 	private boolean eventsShown = false;
+	private boolean isParseBuilding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) // where our app sets up
@@ -93,10 +94,14 @@ public class BuildingInfoActivity extends Activity {
 		Intent intent = getIntent();
 		name = intent.getStringExtra("Name");
 		String description = intent.getStringExtra("Snippet");
+		isParseBuilding = intent.getBooleanExtra("ParseBuilding", false);
 		ActionBar ab = getActionBar();
 		ab.setTitle(name);
 		initDrawer(savedInstanceState);
-		queryPhoto();
+		
+		if (isParseBuilding) {
+			queryPhoto();
+		}
 		text.setText(description);
 		button = (Button) findViewById(R.id.eventbutton);
 		button.setOnClickListener(new View.OnClickListener() {
