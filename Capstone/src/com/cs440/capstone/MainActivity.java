@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements
 	private CampusInfo campusInfo;
 	private MenuItem searchMenuItem;
 	static LatLng shareloc;
-	public static ArrayList<String> uids = null;
+	public ArrayList<String> uids = null;
 	public LatLng lastPlacesQuery = new LatLng(0,0);
 
 	@Override
@@ -863,6 +863,8 @@ public class MainActivity extends Activity implements
 									JSONObject jb1 = new JSONObject(obj
 											.getString("venue"));
 									String name = obj.getString("name");
+									Log.d("wtf", name);
+									
 									String pic = obj.getString("pic_big");
 								
 									String startTime = obj.getString("start_time");
@@ -932,7 +934,7 @@ public class MainActivity extends Activity implements
 
 		String fqlQuery = "SELECT uid, name FROM user WHERE  is_app_user  AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
 		final List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-		uids = new ArrayList<String>();
+		
 		Bundle params = new Bundle();
 
 		params.putString("q", fqlQuery);

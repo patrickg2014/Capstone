@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import com.cs440.capstone.MainActivity.DrawerItemClickListener;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.parse.FindCallback;
 
 import com.parse.GetDataCallback;
@@ -117,14 +118,10 @@ public class BuildingInfoActivity extends Activity {
 			Event e = events.get(i);
 			if (e.m.getPosition() != null) {
 				Log.d("test", "1");
-				double longi = e.m.getPosition().longitude;
-				double lati = e.m.getPosition().latitude;
 				Building host = CampusInfo.getBuilding(name);
-				double longi1 = host.bound.getCenter().longitude;
-				double lati1 = host.bound.getCenter().latitude;
-				double distance = Math.abs(longi - longi1)
-						+ Math.abs(lati - lati1);
-				if (distance <= .00075 && !eventCount.contains(e.title)) {
+				LatLngBounds bounds = host.bound;
+				
+				if (bounds.contains(e.m.getPosition()) && !eventCount.contains(e.title)) {
 					eventsShown = true;
 					Log.d("test", "2");
 					// create a new textview
