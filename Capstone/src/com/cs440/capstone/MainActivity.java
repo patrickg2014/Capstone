@@ -391,7 +391,7 @@ public class MainActivity extends Activity implements
 			Log.d("places1", name);
 			campusInfo.map.addMarker(new MarkerOptions()
 			.title(name)
-			.snippet("")
+			.snippet("Google Places Query Marker")
 			.position(
 					new LatLng(
 							lat,
