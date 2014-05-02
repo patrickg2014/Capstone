@@ -15,17 +15,19 @@ public class Building{
 	public String snipit;
 	public LatLng llng;
 	public ArrayList<Marker> insidePoints;
+	public boolean isParseBuilding;
 
 
 
 
-	public Building(String title, String snipit,Boolean building, LatLngBounds bounds) {
+	public Building(String title, String snipit,Boolean building, LatLngBounds bounds, Boolean parseStatus) {
 
 		this.title=title;
 		this.snipit=snipit;
 		insideList= new ArrayList();
 		bound=bounds;
 		llng= bound.getCenter();
+		isParseBuilding = parseStatus;
 		makeMarker();
 
 		if( !CampusInfo.all.contains(this)&&building){
@@ -39,6 +41,7 @@ public class Building{
 		this.title=title;
 		this.snipit=snipit;
 		llng=latlng;
+		makeMarker();
 
 	}
 	public void makeMarker(){
@@ -78,6 +81,10 @@ public class Building{
 	 
 	 public String getSnipit(){
 		 return snipit;
+	 }
+	 
+	 public boolean getParseStatus(){
+		 return isParseBuilding;
 	 }
 
 }

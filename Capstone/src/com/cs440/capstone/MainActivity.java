@@ -165,6 +165,7 @@ public class MainActivity extends Activity implements
 			@Override
 			public boolean onMarkerClick(Marker arg0) {
 				// TODO Auto-generated method stub
+				Log.d("Marker",arg0.getTitle() + "");
 				if (maptouch == false) {
 					Context context = getApplicationContext();
 					CharSequence text = "Free to roam!";
@@ -386,18 +387,12 @@ public class MainActivity extends Activity implements
 			double lng= jb2.getDouble("lng");
 			String name = obj.getString("name");
 			String pic = obj.getString("icon");
-			Building b = new Building(name, "", true, new LatLngBounds(new LatLng(lat,lng), new LatLng(lat,lng)));
+			LatLng ll = new LatLng(lat,lng);
+			LatLngBounds llb = new LatLngBounds(ll,ll);
+			Building b = new Building(name, "The Google Places Marker", true, llb,false);
 			campusInfo.all.add(b);
 			Log.d("places1", name);
-			campusInfo.map.addMarker(new MarkerOptions()
-			.title(name)
-			.snippet("Google Places Marker")
-			.position(
-					new LatLng(
-							lat,
-							lng))
-			.icon(BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+			
 			}
 		
 		
@@ -442,10 +437,11 @@ public class MainActivity extends Activity implements
 		startActivity(intent);
 	}
 
-	public void buildingActivity(String buildingName, String snippet) {
+	public void buildingActivity(String buildingName, String snippet, boolean isParseBuilding) {
 		Intent intent = new Intent(this, BuildingInfoActivity.class);
 		intent.putExtra("Name", buildingName);
 		intent.putExtra("Snippet", snippet);
+		intent.putExtra("ParseBuilding", isParseBuilding);
 		startActivity(intent);
 	}
 
@@ -776,7 +772,7 @@ public class MainActivity extends Activity implements
 		boolean building = false;
 		for (Building b : CampusInfo.all) {
 			if (b.m.equals(arg0)) {
-				buildingActivity(arg0.getTitle(), arg0.getSnippet());
+				buildingActivity(arg0.getTitle(), arg0.getSnippet(),b.isParseBuilding);
 				building = true;
 				break;
 			}
@@ -1193,7 +1189,7 @@ public class MainActivity extends Activity implements
 
 			if (theAllList.get(i).getTitle().toLowerCase().contains(arg0)) {
 				buildingActivity(theAllList.get(i).getTitle(), theAllList
-						.get(i).getSnipit());
+						.get(i).getSnipit(), theAllList.get(i).isParseBuilding);
 				break;
 			}
 			if (i == theAllList.size() - 1) {
