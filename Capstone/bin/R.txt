@@ -202,7 +202,7 @@ int id event_name 0x7f060025
 int id event_name2 0x7f06002a
 int id event_time 0x7f060026
 int id event_time2 0x7f06002b
-int id eventbutton 0x7f060031
+int id eventheader 0x7f060031
 int id filler 0x7f06002d
 int id frag1_icon 0x7f06004e
 int id frag1_text 0x7f06004f

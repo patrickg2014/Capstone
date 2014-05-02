@@ -513,7 +513,7 @@ containing a value of this type.
         public static final int event_name2=0x7f06002a;
         public static final int event_time=0x7f060026;
         public static final int event_time2=0x7f06002b;
-        public static final int eventbutton=0x7f060031;
+        public static final int eventheader=0x7f060031;
         public static final int filler=0x7f06002d;
         public static final int frag1_icon=0x7f06004e;
         public static final int frag1_text=0x7f06004f;

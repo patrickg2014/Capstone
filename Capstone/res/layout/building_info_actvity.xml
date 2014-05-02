@@ -1,18 +1,18 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
     tools:context=".MainActivity" >
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent" >
 
         <ScrollView
             android:id="@+id/scrollView"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <LinearLayout
@@ -43,13 +43,15 @@
                     android:text="Loading..."
                     android:textSize="15sp" />
 
-                <Button
-                    android:id="@+id/eventbutton"
+                <TextView
+                    android:id="@+id/eventheader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:padding="15dp"
                     android:text="EVENTS"
+                    android:background="@drawable/layer_card_background"
+                    android:gravity="center"
                     android:textSize="20sp" />
 
                 <LinearLayout

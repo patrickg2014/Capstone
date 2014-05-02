@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 
+
 import com.cs440.capstone.MainActivity.DrawerItemClickListener;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.parse.FindCallback;
-
 import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -24,6 +24,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -32,10 +33,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
@@ -47,10 +46,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
+import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -71,7 +69,7 @@ public class BuildingInfoActivity extends Activity {
 	List<DrawerItem> dataList;
 	private Bitmap bitmap;
 	private LinearLayout ll;
-	private Button button;
+	private TextView eventHeader;
 	private ArrayList<Event> events;
 	private boolean eventsShown = false;
 	private boolean isParseBuilding;
@@ -103,15 +101,8 @@ public class BuildingInfoActivity extends Activity {
 			queryPhoto();
 		}
 		text.setText(description);
-		button = (Button) findViewById(R.id.eventbutton);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!eventsShown) {
-					makeEvents();
-				}
-			}
-		});
+		eventHeader = (TextView) findViewById(R.id.eventheader);
+		makeEvents();
 	}
 
 	public void makeEvents() {
@@ -119,7 +110,7 @@ public class BuildingInfoActivity extends Activity {
 		// final int N = 10; // total number of textviews to add
 		final ArrayList<String> eventCount = new ArrayList<String>();
 		events = CampusInfo.events;
-		for (int i = 0; i < events.size() / 2; i++) {
+		for (int i = 0; i < events.size(); i++) {
 			Event e = events.get(i);
 			if (e.m.getPosition() != null) {
 				Log.d("test", "1");
