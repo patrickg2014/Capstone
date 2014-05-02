@@ -348,7 +348,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNear.get(i).m);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float)(camover.yPos.size()*200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float)((camover.yPos.size()+1)*200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }
@@ -462,7 +462,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
    				
    				camover.nearList.add(currentlyNearEvents.get(i).m);
    				camover.xPos.add((float) (((locHead - headingOptimized)+angleOfView/2)%angleOfView)*(theScale)-theScale*2);	//hopefully DIP based
-   				camover.yPos.add((float)(camover.yPos.size()*200)); //make sure that the text doesn't overlap
+   				camover.yPos.add((float)((camover.yPos.size()+1)*200)); //make sure that the text doesn't overlap
    				camover.invalidate();
    				
    				  }

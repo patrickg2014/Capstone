@@ -88,7 +88,7 @@ public class BuildingInfoActivity extends Activity {
 		ll = (LinearLayout) findViewById(R.id.linearlayout);
 		image = (ParseImageView) findViewById(R.id.imageViewParse);
 		image.setPlaceholder(getResources().getDrawable(
-				R.drawable.ic_action_cloud));
+				R.drawable.launcher));
 		text = (ExpandableTextView) findViewById(R.id.textView1);
 		text.setText("");
 		Intent intent = getIntent();
