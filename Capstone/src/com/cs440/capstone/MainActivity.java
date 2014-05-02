@@ -91,7 +91,7 @@ public class MainActivity extends Activity implements
 	private SensorManager mSensorManager;
 	ArrayList<Marker> allMarkers = new ArrayList();
 	ArrayList<Marker> currentlyvisable = new ArrayList();
-	public long shareTime;
+	public static long shareTime;
 	static GoogleMap map = null;
 	public static ParseUser currentUser;
 	public LatLng lastqueryloc = null;
@@ -110,8 +110,8 @@ public class MainActivity extends Activity implements
 	private SearchView searchView;
 	private CampusInfo campusInfo;
 	private MenuItem searchMenuItem;
-	private LatLng shareloc;
-	public ArrayList<String> uids = null;
+	static LatLng shareloc;
+	public static ArrayList<String> uids = null;
 	public LatLng lastPlacesQuery = new LatLng(0,0);
 
 	@Override
@@ -617,7 +617,7 @@ public class MainActivity extends Activity implements
 		mDrawerToggle.syncState();
 	}
 
-	private class DrawerItemClickListener implements
+	public class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -822,7 +822,7 @@ public class MainActivity extends Activity implements
 
 	}
 
-	public void call(Session session, SessionState state, Exception exception) {
+	public static void call(Session session, SessionState state, Exception exception) {
 		if (ParseFacebookUtils.getSession().isOpened() && myLocation != null) {
 			String fqlQuery =
 
@@ -927,7 +927,7 @@ public class MainActivity extends Activity implements
 
 	}
 
-	public void friendcall(Session session, SessionState state,
+	public static void friendcall(Session session, SessionState state,
 			Exception exception) {
 
 		String fqlQuery = "SELECT uid, name FROM user WHERE  is_app_user  AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
@@ -1023,7 +1023,7 @@ public class MainActivity extends Activity implements
 
 	}
 
-	public void storecall(Session session, SessionState state,
+	public static void storecall(Session session, SessionState state,
 			Exception exception) {
 
 		String fqlQuery = "SELECT uid,name FROM user WHERE uid = me() ";

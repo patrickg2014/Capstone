@@ -1,25 +1,34 @@
 package com.cs440.capstone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
+import com.cs440.capstone.MainActivity.DrawerItemClickListener;
 import com.parse.FindCallback;
 
 import com.parse.GetDataCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseImageView;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
@@ -28,6 +37,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +45,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -163,12 +174,6 @@ public class BuildingInfoActivity extends Activity {
 
 	}
 
-	public void eventActivity(String eventname, String snippet) {
-		Intent intent = new Intent(this, EventInfoActivity.class);
-		intent.putExtra("Name", eventname);
-		intent.putExtra("Snippet", snippet);
-		startActivity(intent);
-	}
 
 	public void queryPhoto() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Building");
@@ -250,17 +255,25 @@ public class BuildingInfoActivity extends Activity {
 		// Add Drawer Item to dataList
 		dataList.add(new DrawerItem("Map", R.drawable.map));
 		dataList.add(new DrawerItem("Camera", R.drawable.ic_action_camera));
-		dataList.add(new DrawerItem("Tour", R.drawable.ic_action_gamepad));
-		dataList.add(new DrawerItem("Navigate", R.drawable.ic_action_labels));
 		dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-		if ((MainActivity.currentUser != null)
-				&& ParseFacebookUtils.isLinked(MainActivity.currentUser)) {
+		if ((MainActivity.currentUser != null) && ParseFacebookUtils.isLinked(MainActivity.currentUser)
+				&& ParseFacebookUtils.getSession().isOpened()) {
 			dataList.add(new DrawerItem("Log Out Of Facebook",
-					R.drawable.ic_action_cloud));
+					R.drawable.facebooklogosmall));
+		} else if ((MainActivity.currentUser != null)
+				&& ParseFacebookUtils.isLinked(MainActivity.currentUser)
+				&& !ParseFacebookUtils.getSession().isOpened()) {
+			dataList.add(new DrawerItem("Log In To Facebook",
+					R.drawable.facebooklogosmall));
 		} else {
 			dataList.add(new DrawerItem("Log In To Facebook",
-					R.drawable.ic_action_cloud));
+					R.drawable.facebooklogosmall));
+
 		}
+		dataList.add(new DrawerItem("Share Location",
+				R.drawable.ic_action_place));
+		dataList.add(new DrawerItem("Remove Your Location",
+				R.drawable.ic_action_place));
 		dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
 		dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
 		dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
@@ -295,43 +308,283 @@ public class BuildingInfoActivity extends Activity {
 			selectItem(0);
 		}
 
-	}
+		
 
-	public void cameraActivity() // what allows us to switch to the camera
-									// activity on button click
-	{
-
-		Intent intent = new Intent(this, CameraActivity.class);
-		startActivity(intent);
 	}
+	
+
+	
 
 	public void selectItem(int possition) {
 
 		mDrawerList.setItemChecked(possition, true);
+		
+		
 		if (dataList.get(possition).getItemName().contentEquals("Camera")) {
 			Log.d("Test", "CameraTiime");
-			finish();
 			cameraActivity();
+			mDrawerLayout.closeDrawer(mDrawerList);
 		}
-		if (dataList.get(possition).getItemName().contentEquals("Facebook")) {
-			Log.d("Test", "CameraTiime");
-			// Intent intent = new Intent(MainActivity.this,
-			// LoginUsingLoginFragmentActivity.class);
-			// startActivity(intent);
+		if (dataList.get(possition).getItemName()
+				.contentEquals("Share Location")) {
+			Log.d("Test", "share prompt");
 
+			if (ParseUser.getCurrentUser() != null
+					&& !ParseFacebookUtils.getSession().isClosed()) {
+
+				sharePrompt();
+
+			}
+
+			if (ParseUser.getCurrentUser() == null
+					|| ParseFacebookUtils.getSession().isClosed()) {
+				Toast.makeText(
+						this,
+						"You Need to be logged in to Facebook to share your location with Friends",
+						Toast.LENGTH_LONG).show();
+			}
+			mDrawerLayout.closeDrawer(mDrawerList);
 		}
+
 		if (dataList.get(possition).getItemName().contentEquals("About")) {
-			Log.d("Test", "OPENGLLLLLLLLLLL");
-			// Intent intent = new Intent(MainActivity.this,
-			// OpenGlActivity.class);
-			// startActivity(intent);
+			Log.d("Test", "About screen");
+			aboutActivity();
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
+
+		if (dataList.get(possition).getItemName()
+				.contentEquals("Remove Your Location")) {
+			Log.d("Test", "Remove Location");
+			removeLocation();
+		}
+		if (dataList.get(possition).getItemName().contentEquals("Settings")) {
+			Log.d("Test", "Settings screen");
+			settingsActivity();
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
+		if (dataList.get(possition).getItemName().contentEquals("Help")) {
+			Log.d("test", "Help screen");
+			helpActivity();
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
+		if (dataList.get(possition).getItemName()
+				.contentEquals("Log In To Facebook")) {
+			Log.d("Test", "facebook in");
+			if (ParseUser.getCurrentUser() == null
+					|| ParseFacebookUtils.getSession().isClosed()) {
+				login(possition);
+			}
+			dataList.get(possition).setItemName("Log Out Of Facebook");
+
+		} else {
+			if (dataList.get(possition).getItemName()
+					.contentEquals("Log Out Of Facebook")) {
+				Log.d("Test", "facebook out ");
+
+				ParseUser.logOut();
+
+				dataList.get(possition).setItemName("Log In To Facebook");
+			}
 
 		}
 		mDrawerList.setItemChecked(possition, false);
-		mDrawerLayout.closeDrawer(mDrawerList);
+	}
+	
+	private void removeLocation() {
+		// TODO Auto-generated method stub
+		ParseUser user = ParseUser.getCurrentUser();
+		if (ParseUser.getCurrentUser() != null) {
+			user.put("shareLocation", false);
+
+			user.saveInBackground(new SaveCallback() {
+				public void done(com.parse.ParseException e) {
+					if (e == null) {
+						// Save was successful!
+						Log.d("parse", "upload location");
+					} else {
+						// Save failed. Inspect e for details.
+						Log.d("parse", "failed to upload location");
+					}
+				}
+			});
+			Toast.makeText(this, "No longer sharing your location.",
+					Toast.LENGTH_SHORT).show();
+
+		}
+	}
+
+	public void login(final int possition) {
+		if (ParseUser.getCurrentUser() == null
+				|| ParseFacebookUtils.getSession().isClosed()) {
+
+			List<String> permissions = Arrays
+					.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
+			ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+				@Override
+				public void done(ParseUser user, ParseException err) {
+
+					if (user == null) {
+						Log.d("facebook",
+								"Uh oh. The user cancelled the Facebook login.");
+						Log.d("Test", "facebook should have fqled");
+						dataList.get(possition).setItemName(
+								"Log In To Facebook");
+
+					} else if (user.isNew()) {
+						Log.d("facebook",
+								"User signed up and logged in through Facebook!");
+						Log.d("Test", "facebook should have fqled");
+						dataList.get(possition).setItemName(
+								"Log Out Of Facebook");
+						MainActivity.storecall(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						MainActivity.friendcall(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						MainActivity.call(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+
+						ParseFacebookUtils.saveLatestSessionData(MainActivity.currentUser);
+						ParseInstallation installation = ParseInstallation
+								.getCurrentInstallation();
+						installation.put("user", ParseUser.getCurrentUser());
+						installation.saveInBackground();
+
+					} else {
+						Log.d("facebook", "User logged in through Facebook!");
+						Log.d("Test", "facebook should have fqled");
+						dataList.get(possition).setItemName(
+								"Log Out Of Facebook");
+						MainActivity.storecall(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						MainActivity.friendcall(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						MainActivity.call(ParseFacebookUtils.getSession(),
+								ParseFacebookUtils.getSession().getState(), err);
+						ParseInstallation installation = ParseInstallation
+								.getCurrentInstallation();
+						installation.put("user", ParseUser.getCurrentUser());
+						installation.saveInBackground();
+
+					}
+				}
+			});
+			if (ParseFacebookUtils.getSession().isOpened()) {
+				dataList.get(possition).setItemName("Log Out Of Facebook");
+			} else {
+				dataList.get(possition).setItemName("Log In To Facebook");
+			}
+		}
 
 	}
 
+	
+	public void cameraActivity() // what allows us to switch to the camera
+	// activity on button click
+{
+
+Intent intent = new Intent(this, CameraActivity.class);
+startActivity(intent);
+}
+
+public void aboutActivity() // what allows us to switch to the camera
+// activity on button click
+{
+
+Intent intent = new Intent(this, AboutActivity.class);
+startActivity(intent);
+}
+
+public void searchActivity() {
+
+Intent intent = new Intent(this, CampusInfoSearch.class);
+startActivity(intent);
+
+}
+
+public void settingsActivity() // what allows us to switch to the camera
+	// activity on button click
+{
+
+Intent intent = new Intent(this, SettingsActivity.class);
+startActivity(intent);
+}
+
+public void helpActivity() // what allows us to switch to the camera
+// activity on button click
+{
+
+Intent intent = new Intent(this, HelpActivity.class);
+startActivity(intent);
+}
+
+public void buildingActivity(String buildingName, String snippet) {
+Intent intent = new Intent(this, BuildingInfoActivity.class);
+intent.putExtra("Name", buildingName);
+intent.putExtra("Snippet", snippet);
+startActivity(intent);
+}
+
+public void eventActivity(String eventname, String snippet) {
+Intent intent = new Intent(this, EventInfoActivity.class);
+intent.putExtra("Name", eventname);
+intent.putExtra("Snippet", snippet);
+startActivity(intent);
+}
+
+	public void sharePrompt() {
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		Log.d("prompt", "this should happen every time");
+
+		alert.setTitle("Share your location");
+		alert.setMessage("Message");
+
+		// Set an EditText view to get user input
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Editable value = input.getText();
+				ParseUser user = ParseUser.getCurrentUser();
+				String valstring = value.toString();
+				ParseGeoPoint geo = new ParseGeoPoint();
+				geo.setLatitude(MainActivity.myLocation.latitude);
+				geo.setLongitude(MainActivity.myLocation.longitude);
+				if (ParseUser.getCurrentUser() != null) {
+					user.put("Location", geo);
+					user.put("LocationString", MainActivity.myLocation.latitude+","+MainActivity.myLocation.longitude);
+					user.put("locationText", valstring);
+					user.put("shareLocation", true);
+					user.saveInBackground(new SaveCallback() {
+						public void done(com.parse.ParseException e) {
+
+							// Save was successful!
+							Log.d("parse", "upload location and text");
+
+							
+
+						}
+					});
+					MainActivity.shareTime = System.currentTimeMillis();
+					MainActivity.shareloc = MainActivity.myLocation;
+
+				}
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
+
+		alert.show();
+
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
