@@ -14,14 +14,30 @@
             android:id="@+id/scrollView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/linearlayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textViewmarker"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Help"
-                android:textSize="20sp" />
+                android:background="@drawable/layer_card_background"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/textViewunlock"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:background="@drawable/layer_card_background"
+                android:textSize="15sp" />
+            </LinearLayout>
         </ScrollView>
     </FrameLayout>
 

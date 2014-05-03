@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -41,6 +42,8 @@ public class HelpActivity extends Activity{
 	private CharSequence mTitle;
 	CustomDrawerAdapter adapter;
 	public static ParseUser currentUser;
+	public TextView markerInfo;
+	public TextView exitInfo;
 	
 	List<DrawerItem> dataList;
 	
@@ -54,10 +57,25 @@ public class HelpActivity extends Activity{
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
 		setContentView(R.layout.help_activity);
+		markerInfo = (TextView)findViewById(R.id.textViewmarker);
+		exitInfo = (TextView)findViewById(R.id.textViewunlock);
+		
+		setHelpInfo();
 
 		initDrawer(savedInstanceState);
 		
 		
+	}
+
+	private void setHelpInfo() {
+		markerInfo.setText("There are 4 types of markers in the map view.\n"
+				+ "The Red markers are buildings.\n"
+				+ "The Yellow markers are inside points of interest of buildings.\n"
+				+ "The Blue markers are Facebook events specific to you and public ones also.\n"
+				+ "The Purple markers are current locations of your friends that are using the app.");
+		exitInfo.setText("In order to roam free in the app, you can click on a marker or tap once on the screen. "
+				+ "You should be prompted by the UI that you are free to roam. If you want to lock back on your "
+				+ "location you can press the compass in the top right of the mapview.");
 	}
 
 	public void initDrawer(Bundle savedInstanceState) {
