@@ -283,8 +283,17 @@ public class CameraActivity extends Activity implements SensorEventListener{
    		currentlyvisable.clear();
    		camover.xPos.clear();
    		camover.yPos.clear();
+   		ArrayList<Building> temp = new ArrayList<Building>();
+   		for(Building B :CampusInfo.all)
+   		{
+   			if(!temp.contains(B)){
+   				temp.add(B);
+   			}
+   			
+   			
+   		}
    		
-   		for(Building b: CampusInfo.all)	//loops through all a markers to see which ones are within a certain radius of us
+   		for(Building b: temp)	//loops through all a markers to see which ones are within a certain radius of us
    		{	
    			Log.d("test", "1");
    			double longi= b.m.getPosition().longitude; //converting locations to Doubles as to allow comparison

@@ -829,16 +829,16 @@ public class MainActivity extends Activity implements
 					+ "FROM event " + "WHERE eid IN (" + "SELECT eid "
 					+ "FROM event_member " + "WHERE (uid IN (" + "SELECT uid2 "
 					+ "FROM friend " + "WHERE uid1 = me())  "
-					+ "OR uid = me())limit 10000) "
+					+ "OR uid = me())limit 2500) "
 					+ "AND  (end_time>now() OR start_time>now()) "
 					+ "AND venue.latitude > \""
-					+ (CampusInfo.map.getMyLocation().getLatitude() - .1)
+					+ (CampusInfo.map.getMyLocation().getLatitude() - 360)
 					+ "\"" + "AND venue.latitude < \""
-					+ (CampusInfo.map.getMyLocation().getLatitude() + .1)
+					+ (CampusInfo.map.getMyLocation().getLatitude() + 360)
 					+ "\"" + "AND venue.longitude < \""
-					+ (CampusInfo.map.getMyLocation().getLongitude() + .1)
+					+ (CampusInfo.map.getMyLocation().getLongitude() + 360)
 					+ "\"" + "AND venue.longitude  >\""
-					+ (CampusInfo.map.getMyLocation().getLongitude() - .1)
+					+ (CampusInfo.map.getMyLocation().getLongitude() - 360)
 					+ "\"";
 			Bundle params = new Bundle();
 
@@ -903,7 +903,7 @@ public class MainActivity extends Activity implements
 									}
 									String description = obj
 											.getString("description");
-
+									if(jb1.getString("latitude")!=null&& jb1.getString("longitude")!=null){
 									String lat = jb1.getString("latitude");
 									String longi = jb1.getString("longitude");
 									CampusInfo.events.add(new Event(name,
@@ -912,7 +912,7 @@ public class MainActivity extends Activity implements
 													.parseDouble(longi)), pic, startTime, endTime));
 									Log.d("fql", name + " " + description + " ");
 								}
-
+								}
 							} catch (Throwable t) {
 								t.printStackTrace();
 							}
