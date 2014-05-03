@@ -379,9 +379,12 @@ public class MainActivity extends Activity implements
 		Log.d("places1",array.length()+"");
 		// loop
 		for (int i = 0; i < array.length(); i++) {
+			String description = "";
 			JSONObject obj = array.getJSONObject(i);
 			JSONObject jb1 = new JSONObject(obj
 					.getString("geometry"));
+			String jbadress = obj.getString("vicinity");
+			description = jbadress;
 			JSONObject jb2 = new JSONObject(jb1.getString("location"));
 			double lat= jb2.getDouble("lat");
 			double lng= jb2.getDouble("lng");
@@ -389,7 +392,7 @@ public class MainActivity extends Activity implements
 			String pic = obj.getString("icon");
 			LatLng ll = new LatLng(lat,lng);
 			LatLngBounds llb = new LatLngBounds(ll,ll);
-			Building b = new Building(name, "The Google Places Marker", true, llb,false);
+			Building b = new Building(name, description, true, llb,false);
 			campusInfo.all.add(b);
 			Log.d("places1", name);
 			
