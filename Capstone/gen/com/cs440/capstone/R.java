@@ -479,7 +479,7 @@ containing a value of this type.
         public static final int user2=0x7f02005e;
     }
     public static final class id {
-        public static final int action_settings=0x7f06005e;
+        public static final int action_settings=0x7f060060;
         public static final int bSearch=0x7f060010;
         public static final int camera_layout=0x7f060032;
         public static final int clickToView=0x7f060017;
@@ -533,11 +533,11 @@ containing a value of this type.
         public static final int linearLayout1=0x7f060014;
         public static final int linearlayout=0x7f06002f;
         public static final int listViewFromDB=0x7f06002e;
-        public static final int llHorizontalScroll=0x7f060054;
+        public static final int llHorizontalScroll=0x7f060056;
         public static final int llSearchBar=0x7f06000e;
-        public static final int loginButton=0x7f060056;
-        public static final int login_fragment=0x7f060055;
-        public static final int logoutButton=0x7f06005d;
+        public static final int loginButton=0x7f060058;
+        public static final int login_fragment=0x7f060057;
+        public static final int logoutButton=0x7f06005f;
         public static final int lvTheList=0x7f060012;
         public static final int map=0x7f060013;
         public static final int none=0x7f060000;
@@ -553,7 +553,7 @@ containing a value of this type.
         public static final int rvScrollViewHolder=0x7f060020;
         public static final int satellite=0x7f060002;
         public static final int scrollView=0x7f06000a;
-        public static final int search=0x7f06005f;
+        public static final int search=0x7f060061;
         public static final int small=0x7f060005;
         public static final int tableRow1=0x7f060015;
         public static final int tableRow2=0x7f06001a;
@@ -562,6 +562,8 @@ containing a value of this type.
         public static final int terrain=0x7f060003;
         public static final int textView=0x7f06004c;
         public static final int textView1=0x7f06000b;
+        public static final int textViewmarker=0x7f060054;
+        public static final int textViewunlock=0x7f060055;
         public static final int tvBuildingInfo=0x7f060022;
         public static final int tv_building_type=0x7f06001f;
         public static final int tv_clicktoview=0x7f060027;
@@ -569,12 +571,12 @@ containing a value of this type.
         public static final int unique_item_icon=0x7f060016;
         public static final int unique_item_name=0x7f060019;
         public static final int unique_item_type=0x7f060018;
-        public static final int userDateOfBirth=0x7f06005b;
-        public static final int userGender=0x7f06005a;
-        public static final int userLocation=0x7f060059;
-        public static final int userName=0x7f060058;
-        public static final int userProfilePicture=0x7f060057;
-        public static final int userRelationship=0x7f06005c;
+        public static final int userDateOfBirth=0x7f06005d;
+        public static final int userGender=0x7f06005c;
+        public static final int userLocation=0x7f06005b;
+        public static final int userName=0x7f06005a;
+        public static final int userProfilePicture=0x7f060059;
+        public static final int userRelationship=0x7f06005e;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;

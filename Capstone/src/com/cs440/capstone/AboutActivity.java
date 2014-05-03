@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -41,6 +42,7 @@ public class AboutActivity extends Activity{
 	private CharSequence mTitle;
 	CustomDrawerAdapter adapter;
 	public static ParseUser currentUser;
+	public TextView tv;
 	
 	List<DrawerItem> dataList;
 	
@@ -54,9 +56,19 @@ public class AboutActivity extends Activity{
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
 		currentUser = ParseUser.getCurrentUser();
 		setContentView(R.layout.about_activity);
-
+		tv = (TextView) findViewById(R.id.textView1);
+		setAboutText();
 		initDrawer(savedInstanceState);
 		
+		
+	}
+
+	private void setAboutText() {
+		tv.setText("Imbue is a result of a senior capstone project from senior students from the "
+				+ "University of Puget Sound. The app is a virtual reality app to help provide "
+				+ "information about the building around you. Imbue uses Google Maps, Google Places, "
+				+ "Facebook and Parse.\n\n"
+				+ "Please contact capstonetours@gmail.com with any questions!");
 		
 	}
 
