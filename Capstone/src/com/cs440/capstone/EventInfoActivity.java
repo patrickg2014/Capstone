@@ -401,7 +401,7 @@ public class EventInfoActivity extends Activity {
 				|| ParseFacebookUtils.getSession().isClosed()) {
 
 			List<String> permissions = Arrays
-					.asList("user_photos, user_events, user_friends, user_location, user_activities, friends_events");
+					.asList("user_events, user_friends, friends_events");
 			ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
 				@Override
 				public void done(ParseUser user, ParseException err) {
