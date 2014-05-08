@@ -25,6 +25,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -111,7 +112,8 @@ public class MainActivity extends Activity implements
 	private CampusInfo campusInfo;
 	private MenuItem searchMenuItem;
 	static LatLng shareloc;
-	public ArrayList<String> uids = null;
+	public static HashMap<String,String> uids = new HashMap();
+	public static ArrayList<Marker> friends = new ArrayList();
 	public LatLng lastPlacesQuery = new LatLng(0,0);
 
 	@Override
@@ -143,6 +145,7 @@ public class MainActivity extends Activity implements
 																				// have
 				.getMap();
 		map.setOnInfoWindowClickListener(this);
+		
 		map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
 		campusInfo = new CampusInfo(map, this);
@@ -787,6 +790,16 @@ public class MainActivity extends Activity implements
 					break;
 				}
 			}
+			
+			if(uids.containsKey(arg0.getTitle())){
+				
+			
+					Log.d("facebook","should be going to facebook");
+					startActivity(new Intent(Intent.ACTION_VIEW,
+				              Uri.parse("fb://messaging/" +uids.get(arg0.getTitle()))));
+					
+				
+			}
 		}
 
 	}
@@ -958,11 +971,14 @@ public class MainActivity extends Activity implements
 								String name = array.getJSONObject(i).getString(
 										"name");
 								Log.d("uid", uid + "");
-
+								if(!uids.containsValue(uid)){
+									uids.put(name, uid);
+									}
 								ParseQuery<ParseUser> query = ParseUser
 										.getQuery();
 								query.whereEqualTo("Uid", uid).whereEqualTo(
 										"shareLocation", true);
+								
 
 								query.findInBackground(new FindCallback<ParseUser>() {
 									public void done(List<ParseUser> objects,
@@ -973,6 +989,10 @@ public class MainActivity extends Activity implements
 										Log.d("query",
 												"Retrieved " + objects.size()
 														+ " friends locations");
+										if(!friends.equals(null)){
+											friends.clear();
+										}
+										
 										for (int i = 0; i < objects.size(); i++) {
 											// String id = results.get(i).getObjectId();
 											Log.d("share",
@@ -993,16 +1013,17 @@ public class MainActivity extends Activity implements
 													.getLongitude();
 											Log.d("share", name + "    "
 													+ loctext);
-											CampusInfo.map
-													.addMarker(new MarkerOptions()
-															.title(name)
-															.snippet(loctext)
-															.position(
-																	new LatLng(
-																			sharelat,
-																			sharelong))
-															.icon(BitmapDescriptorFactory
-																	.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+											MarkerOptions temp = new MarkerOptions()
+											.title(name)
+											.snippet(loctext)
+											.position(
+													new LatLng(
+															sharelat,
+															sharelong))
+											.icon(BitmapDescriptorFactory
+													.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+											CampusInfo.map.addMarker(temp);
+											
 
 										}
 									}
@@ -1266,6 +1287,18 @@ public class MainActivity extends Activity implements
 
 		alert.show();
 
+	}
+	public static Intent getOpenFacebookIntent(Context context) {
+
+		try {
+		    context.getPackageManager()
+		            .getPackageInfo("com.facebook.katana", 0); //Checks if FB is even installed.
+		    return new Intent(Intent.ACTION_VIEW,
+		            Uri.parse("fb://profile/254175194653125")); //Trys to make intent with FB's URI
+		} catch (Exception e) {
+		    return new Intent(Intent.ACTION_VIEW,
+		            Uri.parse("https://www.facebook.com/sentiapps")); //catches and opens a url to the desired page
+		}
 	}
 
 }
