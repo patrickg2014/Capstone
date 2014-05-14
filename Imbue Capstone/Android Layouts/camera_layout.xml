@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:custom="http://schemas.android.com/apk/res/com.cs440.capstone"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+
+    <FrameLayout
+        android:id="@+id/camera_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" 
+    
+        >
+
+    </FrameLayout>
+    
+      <com.cs440.capstone.CameraOverlay
+        android:id="@+id/overlay_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        custom:labelPosition="left"
+        custom:showText="true" />
+    
+
+</RelativeLayout>

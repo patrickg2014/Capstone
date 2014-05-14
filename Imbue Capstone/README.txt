@@ -1,0 +1,4 @@
+README
+Within the Android src are the java files of the Android application. The MainActivity.java is the launcher of the project and contains the mapview code. The CameraActivity.java contains the augmented reality code. The other classes range from providing encapsulation to act as controllers to views. 
+Within the Android layouts folder, the points of interest are in the camera_layout, building_info_activity, and the main xml files. They are not too interesting but are important to the project and displaying information.
+The Android Manifest defines what permissions the application is requesting and permissions for each activity. It also determines which Activity is started up on launch.  The mainifest specifies the min sdk version and the target sdk this app is aimed at.

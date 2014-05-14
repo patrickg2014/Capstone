@@ -227,10 +227,11 @@ public class CameraActivity extends Activity implements SensorEventListener{
     }
     public void whatshouldwesee()
    	{	
+    	long start = System.currentTimeMillis();
    		//Location myloc= map.getMyLocation();
     	if(System.currentTimeMillis()-timer>200){
     	camover.nearList.clear();
-    	checkCurrentlyNearevents();
+    	//checkCurrentlyNearevents();
     	
     	checkCurrentlyNear();
     	
@@ -242,13 +243,16 @@ public class CameraActivity extends Activity implements SensorEventListener{
     		
     		insidecurrentlyVisable();
 	}
-    	checkCurrentlyVisableEvents();
+    	//checkCurrentlyVisableEvents();
    		camover.invalidate();
    		
    		
    		Log.d("heading","Heading: " + Float.toString(heading) + " degrees");
    		timer = System.currentTimeMillis();
    	}
+    	long end = System.currentTimeMillis();
+    	long total = end - start;
+    	Log.d("ourtime", total+" iweflehjl");
    	}
  
    		       
@@ -263,7 +267,7 @@ public class CameraActivity extends Activity implements SensorEventListener{
 	public void onSensorChanged(SensorEvent event) {
 		
 		heading =((Math.round(event.values[0]+event.values[2])+45)%360); //Rounds the current heading to full degrees
-		
+		Log.d("ourtime", "changing iweflehjl");
 		if(currentLocation != null) //make sure that we dont get a null pointer 
 		{
 			whatshouldwesee();// update the information about what we are near and what is in our view 
